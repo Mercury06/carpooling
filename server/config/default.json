@@ -1,0 +1,4 @@
+{
+    "serverPort": 9000,
+    "dbUrl": "mongodb+srv://username:cloud_project95@cluster1.zmlrt.mongodb.net/Cluster1?retryWrites=true&w=majority"
+}
