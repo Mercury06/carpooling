@@ -1,14 +1,17 @@
 const Router = require ("express");
 const User = require ("../models/User")
+const Role = require("../models/Role");
 const bcrypt = require ("bcryptjs") 
-const config = require ("config");
-const jwt = require("jsonwebtoken")
-const {check, validationResult} =  require ('express-validator')
+//const config = require ("config");
+//const jwt = require("jsonwebtoken")
+const {check, validationResult} =  require ('express-validator');
+
 //const authMiddleware = require ('../middleware/auth.middleware')
 
 
 const router = new Router()  //создаем объект
-const secretKey = config.get("secretKey");
+//const secretKey = config.get("secretKey");
+
 
 router.post('/registration', 
     [
@@ -16,7 +19,7 @@ router.post('/registration',
         check('password', 'Password must be longer than 3 and shorter than 12').isLength({min:3, max:12})
     ],    
     async (req, res) => {
-    console.log("from POST reg")
+    console.log("from POST registration")
     console.log(req.body)
     try {
         const errors = validationResult(req)
@@ -29,10 +32,11 @@ router.post('/registration',
         const candidate = await User.findOne({username}) // проверим существует ли пользователь с таким имэил в базе
 
         if (candidate) {
-            return res.status(400).json({message: `User with email ${username} already exist`})
+            return res.status(400).json({message: `User with login ${username} already exist`})
         }
-        const hashPassword = await bcrypt.hash(password, 8) // хэшируем пароль для безопасности
-        const user = new User ({username, password: hashPassword})
+        const hashPassword = bcrypt.hashSync(password, 8) // хэшируем пароль для безопасности
+        const userRole = await Role.findOne({value: "User"})
+        const user = new User ({username, password: hashPassword, roles: [userRole.value]})
         await user.save() //сохраним нового поьзователя в БД
         return res.json ({message: "User was created"});        
         
@@ -43,38 +47,56 @@ router.post('/registration',
      }
 })
 
-router.post('/login', 
+// router.post('/login', 
    
-async (req, res) => {
-try {
-    console.log("from login")
-    const { email, password } = req.body;
-    const user = await User.findOne ({email})
+// async (req, res) => {
+// try {
+//     console.log("from login")
+//     const { email, password } = req.body;
+//     const user = await User.findOne ({email})
     
-    if (!user) {
-        return res.status(400).json({ message: "User not found"})
-    }
+//     if (!user) {
+//         return res.status(400).json({ message: "User not found"})
+//     }
 
-    const isPassValid = bcrypt.compareSync(password, user.password)
+//     const isPassValid = bcrypt.compareSync(password, user.password)
 
-    if (!isPassValid) {
-        return res.status(400).json({message: "Password or email is incorrect"})
-    }
-    const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "1h" })
-    return res.json ({
-        token,
-        user: {
-            id: user.id,
-            email: user.email,           
-            avatar: user.avatar
-        }
-    })
-} catch (e) {
-    console.log(e)
-    //res.send({message: "Server error"})
-    res.status(500).json({ message: "Error message"})
-}
-})
+//     if (!isPassValid) {
+//         return res.status(400).json({message: "Password or email is incorrect"})
+//     }
+//     const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "1h" })
+//     return res.json ({
+//         token,
+//         user: {
+//             id: user.id,
+//             email: user.email,           
+//             avatar: user.avatar
+//         }
+//     })
+// } catch (e) {
+//     console.log(e)
+//     //res.send({message: "Server error"})
+//     res.status(500).json({ message: "Error message"})
+// }
+// })
+
+// router.get('/createroles',
+//     async (req, res) => {
+//         try {
+//             const userRole = new Role();
+//             const adminRole = new Role({value:"Admin"})
+//             await userRole.save()
+//             await adminRole.save()
+//             res.json("roles created")
+
+//         } catch (e) {
+//             console.log(e)
+//             //res.send({message: "Server error"})
+//             res.status(500).json({ message: "roles not created"})
+//         }
+//    })
+
+
 
 // router.get('/auth', authMiddleware,
 //     async (req, res) => {
