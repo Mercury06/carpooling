@@ -12,7 +12,7 @@ const secretKey = config.get("secretKey");
 
 router.post('/registration', 
     [
-        check('email', 'Uncorrect email').isEmail(),
+        //check('email', 'Uncorrect email').isEmail(),
         check('password', 'Password must be longer than 3 and shorter than 12').isLength({min:3, max:12})
     ],    
     async (req, res) => {
@@ -25,14 +25,14 @@ router.post('/registration',
                 errors: errors.array(),
                 message: "Uncorrect request"})
         }
-        const {email, password} = req.body; // получим имэил и пароль из тела запроса       
-        const candidate = await User.findOne({email}) // проверим существует ли пользователь с таким имэил в базе
+        const {username, password} = req.body; // получим имэил и пароль из тела запроса       
+        const candidate = await User.findOne({username}) // проверим существует ли пользователь с таким имэил в базе
 
         if (candidate) {
-            return res.status(400).json({message: `User with email ${email} already exist`})
+            return res.status(400).json({message: `User with email ${username} already exist`})
         }
         const hashPassword = await bcrypt.hash(password, 8) // хэшируем пароль для безопасности
-        const user = new User ({email, password: hashPassword})
+        const user = new User ({username, password: hashPassword})
         await user.save() //сохраним нового поьзователя в БД
         return res.json ({message: "User was created"});        
         
