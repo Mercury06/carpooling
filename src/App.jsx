@@ -1,13 +1,21 @@
-import { BrowserRouter } from "react-router-dom";
+
+import { Route, Routes, Navigate } from "react-router-dom";
+import Registration from "./components/autorization/Registration";
+import Navbar from "./components/navbar/navbar";
 
 
 function App() {
   return (
-    <BrowserRouter>
+  
       <div className="App">
-        <h1>Hello!</h1>
+        <Navbar />
+        <Routes>
+          <Route path="/registration" element={<Registration />} />
+
+        </Routes>
+        
       </div>
-    </BrowserRouter>
+
     
   );
 }

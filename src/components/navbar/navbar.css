@@ -1,0 +1,42 @@
+.navbar {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  height: 66px;
+  width: 100%;  
+  justify-content: center;  
+  background-color: rgb(255, 218, 240);
+  
+}
+.navbar__header {
+  font-size: 24px;
+  font-weight: 700;
+  color: rgb(97, 97, 97);
+  
+}
+.container {
+  width: 1140px; 
+  display: flex;  
+  align-items: center;
+  margin-right: 36px;
+}
+.navbar a {
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.navbar__login {
+  margin-left: auto;
+  margin-right: 56px;   
+  cursor: pointer;
+}
+.navbar__search {
+  width: 200px;
+  margin-left: 30px;
+  border: 1 solid; 
+  padding-left: 6px;
+}
+body {
+  margin: 0;
+}
+

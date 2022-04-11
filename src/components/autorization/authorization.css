@@ -1,0 +1,47 @@
+.authorization {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  align-items: center;
+  background-color: white;
+  border-radius: 20px;
+  padding: 30px;
+  align-self: center;
+  margin-top: 100px;
+}
+.authorization__header {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: rgb(145, 141, 141);
+}
+.authorization input {
+  height: 26px;
+  width: 180px;
+  margin: 10px 20px;
+  border-radius: 4px;
+  border: 1px solid gray;
+  padding-left: 16px;
+}
+.authorization input :focus {
+  border: 1px solid rgb(132, 255, 107);
+}
+.authorization__btn {
+  border: none;
+  background-color: #fa223f;
+  border-radius: 4px;
+  height: 26px;
+  width: 180px;
+  color: white;
+  font-weight: 700; 
+  margin-bottom: 24px;
+  cursor: pointer;  
+}
+.authorization_response {
+  color: red;
+  border: 1px solid red;
+}
+.result {
+  margin-top: 240px;
+  align-items: center;
+}
