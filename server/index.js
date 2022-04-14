@@ -13,6 +13,7 @@ app.use(express.json())
 app.use(logger)
 app.use("/api/auth", authRouter)
 
+
 const start = async () => {
     try{
         mongoose.connect(config.get("dbUrl"))
@@ -22,6 +23,7 @@ const start = async () => {
         })
 
         app.listen(PORT, () => {console.log("Server started on port", PORT)})
+        
     } catch (e) {
 
     }
