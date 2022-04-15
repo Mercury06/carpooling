@@ -82,24 +82,6 @@ router.post('/login',
     }
 })
 
-// router.get('/createroles',
-//     async (req, res) => {
-//         try {
-//             const userRole = new Role();
-//             const adminRole = new Role({value:"Admin"})
-//             await userRole.save()
-//             await adminRole.save()
-//             res.json("roles created")
-
-//         } catch (e) {
-//             console.log(e)
-//             //res.send({message: "Server error"})
-//             res.status(500).json({ message: "roles not created"})
-//         }
-//    })
-
-
-
 router.get('/auth', authMiddleware,
     async (req, res) => {
         try {
@@ -119,5 +101,21 @@ router.get('/auth', authMiddleware,
             res.send({ message: "Server error"})
         }
     })
+
+// router.get('/createroles',
+//     async (req, res) => {
+//         try {
+//             const userRole = new Role();
+//             const adminRole = new Role({value:"Admin"})
+//             await userRole.save()
+//             await adminRole.save()
+//             res.json("roles created")
+
+//         } catch (e) {
+//             console.log(e)
+//             //res.send({message: "Server error"})
+//             res.status(500).json({ message: "roles not created"})
+//         }
+//    })
 
 module.exports = router

@@ -6,6 +6,7 @@ import { auth } from "./components/api/users";
 import Login from "./components/autorization/Login";
 import Registration from "./components/autorization/Registration";
 import Navbar from "./components/navbar/navbar";
+import './App.css'
 
 
 function App() {
