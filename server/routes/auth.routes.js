@@ -5,7 +5,7 @@ const bcrypt = require ("bcryptjs")
 const config = require ("config");
 const jwt = require("jsonwebtoken")
 const {check, validationResult} =  require ('express-validator');
-//const authMiddleware = require('./../middleware/authMiddleware') //добавить 2м параметром к app.get("/users", authMiddleware, controller.getUsers)
+const authMiddleware = require('./../middleware/authMiddleware') //добавить 2м параметром к app.get("/users", authMiddleware, controller.getUsers)
 
 
 const router = new Router()  //создаем объект
@@ -100,25 +100,24 @@ router.post('/login',
 
 
 
-// router.get('/auth', authMiddleware,
-//     async (req, res) => {
-//         try {
-//             const user = await User.findOne({ _id: req.user.id })
-//             const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "1h" })
-//             return res.json ({
-//                 token,
-//                 user: {
-//                     id: user.id,
-//                     email: user.email,
-//                     diskSpace: user.diskSpace,
-//                     usedSpace: user.usedSpace,
-//                     avatar: user.avatar
-//                 }
-//             })
-//         } catch (e) {
-//             console.log(e)
-//             res.send({ message: "Server error"})
-//         }
-//     })
+router.get('/auth', authMiddleware,
+    async (req, res) => {
+        try {
+            const user = await User.findOne({ _id: req.user.id })
+            const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "1h" })
+            return res.json ({
+                token,
+                user: {
+                    id: user.id,
+                    username: user.username,
+                    
+                    avatar: user.avatar
+                }
+            })
+        } catch (e) {
+            console.log(e)
+            res.send({ message: "Server error"})
+        }
+    })
 
 module.exports = router
