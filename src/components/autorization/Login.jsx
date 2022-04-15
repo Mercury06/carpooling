@@ -16,7 +16,7 @@ const Login = () => {
         setForm({ ...form, [event.target.name]: event.target.value })
        // console.log(form)
     }
-    //const dispatch = useDispatch();   
+    const dispatch = useDispatch();   
 
     return (
         <div className='authorization'>
@@ -27,8 +27,8 @@ const Login = () => {
          
                 <input  onChange={changeHandler} type="password" name="password" placeholder="Password" />  <br></br>       
           
-                {/* <button className="authorization__btn" onClick={() => dispatch(login({...form}, setResponse))}>Sign in</button> */}
-                <button className="authorization__btn" onClick={() => login({...form})}>Sign in</button>
+                <button className="authorization__btn" onClick={() => dispatch(login({...form}))}>Sign in</button>
+                {/* <button className="authorization__btn" onClick={() => login({...form})}>Sign in</button> */}
                 {/* { response && <div className="authorization_response">{response}</div>} 
                 <div><NavLink to="/registration">Don`t have an account? Register</NavLink></div> */}
         </div>

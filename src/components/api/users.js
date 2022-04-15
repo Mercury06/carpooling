@@ -1,5 +1,5 @@
 import axios from 'axios';
-//import {setUser} from "../reducers/userReducer";
+import {setUser} from "../../reducers/userReducer";
 
 
 export const registration = async ({...form}, setResponse) => {
@@ -23,7 +23,7 @@ export const login = ({...form}) => {
             const response = await axios.post("http://localhost:9000/api/auth/login", { ...form})
             //setResponse(response.data.message)
                        
-            //dispatch(setUser(response.data.user))
+            dispatch(setUser(response.data.user))
             localStorage.setItem('token', response.data.token)
         } catch (e) {
             //alert(e.response.data.message)
