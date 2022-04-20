@@ -2,7 +2,7 @@ import axios from 'axios';
 import {setUser} from "../../reducers/userReducer";
 
 
-export const registration = async ({...form}, setResponse) => {
+export const registration = async ({...form}) => {
    //debugger
     try {        
         const response = await axios.post("http://localhost:9000/api/auth/registration", { ...form})
@@ -46,3 +46,14 @@ export const auth =  () => {
         }
     }
 }
+
+export const createLocality = async ({...form}) => {
+    //debugger
+     try {        
+         const response = await axios.post("http://localhost:9000/api/auth/registration", { ...form})
+         console.log(response.data.message)
+       
+     } catch (e) {
+         alert(e.response.data.message)
+      }  
+ }

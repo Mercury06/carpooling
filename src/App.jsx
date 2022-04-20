@@ -8,6 +8,7 @@ import Registration from "./components/autorization/Registration";
 import Header from "./components/header/header";
 import './App.css'
 import Navbar from "./components/Navbar/Navbar";
+import Settings from "./components/Control/Settings";
 
 
 function App() {
@@ -28,12 +29,14 @@ function App() {
         <Header />
         { isAuth && <Navbar /> }
         <div className="app-wrapper-content">
-          {!isAuth &&
+          
             <Routes>
-              <Route path="/registration" element={<Registration />} />
-              <Route path="/login" element={<Login />} />
+            {!isAuth && <Route path="/registration" element={<Registration />} />}
+              
+            {!isAuth &&  <Route path="/login" element={<Login />} />}
+              <Route path="/settings" element={<Settings />} />
           </Routes>
-          }
+          
         
         </div>
         

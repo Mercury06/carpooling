@@ -102,20 +102,4 @@ router.get('/auth', authMiddleware,
         }
     })
 
-// router.get('/createroles',
-//     async (req, res) => {
-//         try {
-//             const userRole = new Role();
-//             const adminRole = new Role({value:"Admin"})
-//             await userRole.save()
-//             await adminRole.save()
-//             res.json("roles created")
-
-//         } catch (e) {
-//             console.log(e)
-//             //res.send({message: "Server error"})
-//             res.status(500).json({ message: "roles not created"})
-//         }
-//    })
-
 module.exports = router

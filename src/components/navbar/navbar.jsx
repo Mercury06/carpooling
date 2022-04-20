@@ -2,28 +2,23 @@ import React from 'react';
 import s from './Navbar.module.css';
 import {NavLink} from "react-router-dom";
 
-import {ProfileIcon, MessagesIcon, UsersIcon, NewsIcon, MusicNoteIcon, SettingsIcon} from './../assets/Icons/Boxicons';
-
 const Navbar = () => {
     return (
        <nav className={s.nav}>
         <div className={s.item}>
-          <NavLink to="/profile" activeClassName={s.activeLink}><ProfileIcon />  Profile</NavLink>
+          <NavLink to="/profile" activeClassName={s.activeLink}> Book trip</NavLink>
         </div>
         <div className={s.item}>
-          <NavLink to="/dialogs" activeClassName={s.activeLink}><MessagesIcon />  Messages</NavLink>
+          <NavLink to="/dialogs" activeClassName={s.activeLink}> Find all trips</NavLink>
         </div>
         <div className={s.item}>
-          <NavLink to="/users" activeClassName={s.activeLink}><UsersIcon /> Users</NavLink>
+          <NavLink to="/users" activeClassName={s.activeLink}> Find trips by params</NavLink>
         </div>
         <div className={s.item}>
-        <NavLink to="/news" activeClassName={s.activeLink}><NewsIcon /> News</NavLink>          
-        </div>
-        <div className={s.item}>
-        <NavLink to="/music" activeClassName={s.activeLink}><MusicNoteIcon /> Music</NavLink>        
+        <NavLink to="/news" activeClassName={s.activeLink}> Create trip as captain</NavLink>          
         </div>        
         <div className={s.item}>
-        <NavLink to="/settings" activeClassName={s.activeLink}><SettingsIcon />  Settings</NavLink>        
+        <NavLink to="/settings" activeClassName={s.activeLink}>Settings</NavLink>        
         </div>
         
       </nav>)
