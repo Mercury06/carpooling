@@ -7,7 +7,7 @@ const Ride = new Schema ({
     seats: {type: Number},
     data: {type: String},
     time: [{type: String, ref: 'Role'}],
-    comment: {type: String}
+    comment: {type: String, minlength: 5}
 })
 
 module.exports = model ('Ride', Ride)

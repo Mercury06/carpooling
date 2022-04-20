@@ -1,4 +1,5 @@
-.navbar {
+.header {
+  grid-area: h;
   padding: 0;
   margin: 0;
   display: flex;
@@ -8,7 +9,7 @@
   background-color: rgb(255, 218, 240);
   
 }
-.navbar__header {
+.header__header {
   font-size: 24px;
   font-weight: 700;
   color: rgb(97, 97, 97);
@@ -18,24 +19,26 @@
   width: 1140px; 
   display: flex;  
   align-items: center;
+  justify-content: space-between;
   margin-right: 36px;
 }
-.navbar a {
+.header a {
   text-decoration: none;
   font-size: 18px;
 }
 
-.navbar__login {
+.header__login {
   margin-left: auto;
   margin-right: 56px;   
   cursor: pointer;
 }
-.navbar__search {
+.header__search {
   width: 200px;
   margin-left: 30px;
   border: 1 solid; 
   padding-left: 6px;
 }
+
 body {
   margin: 0;
 }

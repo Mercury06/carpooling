@@ -5,8 +5,8 @@ const User = new Schema ({
     password: {type: String, required: true},
     avatar: {type: String},
     rate: {type: Number},
-    feedbacks: [{type: String}],
+    feedbacks: [{type: String}],    
     roles: [{type: String, ref: 'Role'}] //указываем ссылку на сущность роли
-})
+}, {timestamps: true}) //User.createdAt; User.updatedAt
 
 module.exports = model ('User', User)

@@ -9,16 +9,19 @@ body {
 #root {
   width: 100%;
 }
-.app {
-  display: flex;
-  flex-direction:row;
-  align-items: center;
+.app-wrapper {
+  display: grid;
+  /*margin: auto;*/
+  min-height: 100vh;
+  grid-template-areas: "h h"
+                       "n c";
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 2fr 10fr;
 }
-.wrap {
-  width: 1140px;
-  display: flex;
-  flex-direction: row;
-  
-  justify-content: center;
-  align-content: space-between;
+.app-wrapper-content {
+  grid-area: c;
+  background-color: #eeeee4;
+  padding: 10px;
+  margin-top: 2px; 
+  overflow: hidden;
 }

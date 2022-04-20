@@ -5,8 +5,9 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { auth } from "./components/api/users";
 import Login from "./components/autorization/Login";
 import Registration from "./components/autorization/Registration";
-import Navbar from "./components/navbar/navbar";
+import Header from "./components/header/header";
 import './App.css'
+import Navbar from "./components/Navbar/Navbar";
 
 
 function App() {
@@ -23,9 +24,10 @@ function App() {
 
   return (
   
-      <div className="App">
-        <Navbar />
-        <div className="wrap">
+      <div className="app-wrapper">
+        <Header />
+        { isAuth && <Navbar /> }
+        <div className="app-wrapper-content">
           {!isAuth &&
             <Routes>
               <Route path="/registration" element={<Registration />} />
