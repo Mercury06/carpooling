@@ -5,9 +5,9 @@ const Ride = new Schema ({
     destination: {type: ObjectId, ref: 'Locality'},
     user: {type: ObjectId, ref: 'User'},
     seats: {type: Number},
-    data: {type: String},
+    data: {type: Date},
     time: [{type: String, ref: 'Role'}],
     comment: {type: String, minlength: 5}
-})
+}, {timestamps: true})
 
 module.exports = model ('Ride', Ride)

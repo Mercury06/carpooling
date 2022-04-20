@@ -9,6 +9,7 @@ import Header from "./components/header/header";
 import './App.css'
 import Navbar from "./components/Navbar/Navbar";
 import Settings from "./components/Control/Settings";
+import Bookride from "./components/Control/Bookride";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             {!isAuth && <Route path="/registration" element={<Registration />} />}
               
             {!isAuth &&  <Route path="/login" element={<Login />} />}
+              <Route path="/bookride" element={<Bookride />} />
               <Route path="/settings" element={<Settings />} />
           </Routes>
           

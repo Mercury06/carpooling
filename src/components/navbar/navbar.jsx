@@ -6,16 +6,16 @@ const Navbar = () => {
     return (
        <nav className={s.nav}>
         <div className={s.item}>
-          <NavLink to="/profile" activeClassName={s.activeLink}> Book trip</NavLink>
+          <NavLink to="/bookride" activeClassName={s.activeLink}> Book ride</NavLink>
         </div>
         <div className={s.item}>
-          <NavLink to="/dialogs" activeClassName={s.activeLink}> Find all trips</NavLink>
+          <NavLink to="/findall" activeClassName={s.activeLink}> Find all rides</NavLink>
         </div>
         <div className={s.item}>
-          <NavLink to="/users" activeClassName={s.activeLink}> Find trips by params</NavLink>
+          <NavLink to="/findby" activeClassName={s.activeLink}> Find rides by params</NavLink>
         </div>
         <div className={s.item}>
-        <NavLink to="/news" activeClassName={s.activeLink}> Create trip as captain</NavLink>          
+        <NavLink to="/createtrip" activeClassName={s.activeLink}> Create ride as captain</NavLink>          
         </div>        
         <div className={s.item}>
         <NavLink to="/settings" activeClassName={s.activeLink}>Settings</NavLink>        

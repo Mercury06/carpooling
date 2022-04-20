@@ -50,7 +50,7 @@ export const auth =  () => {
 export const createLocality = async ({...form}) => {
     //debugger
      try {        
-         const response = await axios.post("http://localhost:9000/api/auth/registration", { ...form})
+         const response = await axios.post("http://localhost:9000/api/settings/createlocality", { ...form})
          console.log(response.data.message)
        
      } catch (e) {

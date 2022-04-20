@@ -3,10 +3,9 @@ const Locality = require ("../models/Locality.js")
 const Role = require("../models/Role");
 const {check, validationResult} =  require ('express-validator');
 
-const config = require ("config");
-
-const router = new Router()  //создаем объект
-const secretKey = config.get("secretKey");
+const router = new Router()  
+// const config = require ("config");
+// const secretKey = config.get("secretKey");
 
 
 router.post('/createlocality', 
@@ -31,7 +30,7 @@ router.post('/createlocality',
             return res.status(400).json({message: `Locality ${locality} already exist`})
         }
         const point = new Locality ({locality, clarification})
-        await point.save()
+        await point.save()        
         return res.json ({message: "Locality was added"}); 
         
      } catch (e) {

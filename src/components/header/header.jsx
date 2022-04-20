@@ -22,7 +22,7 @@ const Header = () => {
         
             <div className="container">
               
-                <div className="header__header">MERCURY CLOUD</div>    
+                <div className="header__header"></div>    
                        
                     { !isAuth && <div className="header__login"><NavLink to="/login">Login</NavLink></div>}                
                     { !isAuth && <div className="navbar__registration"><NavLink to="/registration">Registration</NavLink></div>}                    
