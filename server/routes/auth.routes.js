@@ -36,7 +36,8 @@ router.post('/registration',
         }
         const hashPassword = bcrypt.hashSync(password, 8) // хэшируем пароль для безопасности
         const userRole = await Role.findOne({value: "User"})
-        const user = new User ({username, password: hashPassword, roles: [userRole.value]})
+        const created = new Date()
+        const user = new User ({username, password: hashPassword, created, roles: [userRole.value]})
         await user.save() //сохраним нового поьзователя в БД
         return res.json ({message: "User was created"});        
         

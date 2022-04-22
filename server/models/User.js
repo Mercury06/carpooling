@@ -5,6 +5,7 @@ const User = new Schema ({
     password: {type: String, required: true},
     phone: {type: String},
     email: {type: String},
+    created: {type: Date},
     //dateOfBirth: {type: Date},
     age: {type: Number}, //? заменить на function от dateOfBirth
     avatar: {type: String},
