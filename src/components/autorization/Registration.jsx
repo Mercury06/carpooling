@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { registration } from "./../api/users";
+import { registration } from "../api/actions";
 //import Input from "/code/use/cloud_storage_app/client/src/utils/input/Input";
 import "./authorization.css";
 import { Navigate } from "react-router-dom";

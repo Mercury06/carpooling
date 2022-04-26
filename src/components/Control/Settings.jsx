@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createLocality } from "../api/users";
+import { createLocality } from "../api/actions";
 import s from "./Settings.module.css"
 
 const Settings = () => {
@@ -13,6 +13,7 @@ const Settings = () => {
 
     return (
         <div>
+            <h3>Form add locality</h3>
             <input onChange={changeHandler} type="text" name="locality" placeholder="Enter locality" autoFocus="autofocus" /><br></br>           
             <input  onChange={changeHandler} type="text" name="clarification" placeholder="Add some clarification" /> <br></br>
             <button className={s.create__btn} onClick={() => createLocality({...form})}>Add</button>

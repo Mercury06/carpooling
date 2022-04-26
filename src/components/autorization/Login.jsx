@@ -1,6 +1,6 @@
 import React, { useState} from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../api/users";
+import { login } from "../api/actions";
 //import { login } from "./../../actions/users";
 //import {NavLink} from "react-router-dom";
 import "./authorization.css";

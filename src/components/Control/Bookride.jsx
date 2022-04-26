@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import s from './Bookride.module.css';
-import { createLocality } from "../api/users";
+import { createLocality } from "../api/actions";
 
 const Bookride = () => {
 

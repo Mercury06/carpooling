@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { auth } from "./components/api/users";
+import { auth } from "./components/api/actions";
 import Login from "./components/autorization/Login";
 import Registration from "./components/autorization/Registration";
 import Header from "./components/header/header";
@@ -37,14 +37,10 @@ function App() {
             {!isAuth &&  <Route path="/login" element={<Login />} />}
               <Route path="/bookride" element={<Bookride />} />
               <Route path="/settings" element={<Settings />} />
-          </Routes>
-          
+          </Routes>         
         
-        </div>
-        
+        </div>        
       </div>
-
-    
   );
 }
 

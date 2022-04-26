@@ -22,9 +22,7 @@ const start = async () => {
 
         app.get ("/", (req, res) => {
             res.send('Some text');
-            // res.redirect('https://google.com')
         })
-
         app.listen(PORT, () => {console.log("Server started on port", PORT)})
         
     } catch (e) {

@@ -1,6 +1,7 @@
 const Router = require ("express");
 const Locality = require ("../models/Locality.js")
 const Role = require("../models/Role");
+const Ride = require('../models/Ride')
 const {check, validationResult} =  require ('express-validator');
 
 const router = new Router()  
@@ -15,7 +16,7 @@ router.post('/createlocality',
     ],  
    
     async (req, res) => {
-    console.log("from POST registration")
+    console.log("from api create locality")
     console.log(req.body)
     try {
         const errors = validationResult(req)
@@ -31,13 +32,37 @@ router.post('/createlocality',
         }
         const point = new Locality ({locality, clarification})
         await point.save()        
-        return res.json ({message: "Locality was added"}); 
+        return res.status(201).json ({message: "Locality was added"}); 
         
      } catch (e) {
          console.log(e)         
          res.status(500).json({ message: "Error message"})
      }
 })
+
+router.post('/createride',
+    async (req, res) => {
+        console.log("from api create ride")
+        console.log(req.body)
+        try {
+            const {localityFrom, destination, date} = req.body;
+
+            // const userRole = new Role();
+            // const adminRole = new Role({value:"Admin"})
+            // await userRole.save()
+            // await adminRole.save()
+            //const date = new Date (when)
+
+            const ride = new Ride({localityFrom, destination, date})
+            await ride.save() 
+            res.status(201).json("new ride created")
+
+        } catch (e) {
+            console.log(e)
+            //res.send({message: "Server error"})
+            res.status(500).json({ message: "ride not created"})
+        }
+   })
 
 
 

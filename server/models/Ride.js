@@ -1,12 +1,14 @@
 const {Schema, model, ObjectId} = require ("mongoose")
 
 const Ride = new Schema ({
-    localityFrom: {type: ObjectId, ref: 'Locality'},
-    destination: {type: ObjectId, ref: 'Locality'},
+    // localityFrom: {type: ObjectId, ref: 'Locality', required: true},
+    // destination: {type: ObjectId, ref: 'Locality', required: true},
+    localityFrom: {type: String, required: true},
+    destination: {type: String, required: true},
     user: {type: ObjectId, ref: 'User'},
-    seats: {type: Number},
-    data: {type: Date},
-    time: [{type: String, ref: 'Role'}],
+    seats: {type: Number, default: 1},
+    date: {type: Date, required: true},
+    //time: [{type: String, ref: 'Role'}],
     comment: {type: String, minlength: 5}
 }, {timestamps: true})
 
