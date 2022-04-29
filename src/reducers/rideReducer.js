@@ -1,3 +1,5 @@
+import { findAllRides } from "../components/api/actions"
+
 const SET_RIDES = "SET_RIDES"
 
 
@@ -7,6 +9,7 @@ const defaultState = {
 }
 
 export default function rideReducer (state = defaultState, action) {
+    //debugger
     switch (action.type) {
         case SET_RIDES:         
             return {
@@ -19,4 +22,23 @@ export default function rideReducer (state = defaultState, action) {
     }
 }
 
+
 export const setRides = (rides) => ({ type: SET_RIDES, payload: rides })
+
+
+export const getRidesThunkCreator = () => {
+    //debugger
+    return async (dispatch) => {     
+        try {   
+            //dispatch(showLoader())
+            //const response = await booksAPI.getBooks({ ...form})
+            const rides = await findAllRides()
+            console.log(rides)
+            
+            dispatch (setRides (rides));
+            //console.log("from thunk:", response.items)
+            //dispatch(hideLoader())  
+        } catch (e) {
+            alert(e.response.data)
+        }  
+}}    

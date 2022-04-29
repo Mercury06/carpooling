@@ -82,4 +82,38 @@ router.get('/createroles',
         }
    })
 
+router.get('/findall',
+async (req, res) => {
+    try {
+        console.log("from api find all rides")        
+        const rides = await Ride.find()
+        //console.log(rides)
+        return res.status(200).json(rides)
+
+    } catch (e) {
+        console.log(e)
+        //res.send({message: "Server error"})
+        res.status(500).json({ message: "rides not found"})
+    }
+})
+
+// router.get('/params',
+// async (req, res) => {
+//     try {
+        
+//         console.dir(req.ip)
+//         console.log(req.method)
+//         console.log(req.protocol)
+//         console.log(req.route)
+//         console.dir(req.accepts('image/png'))
+        
+//         res.json("params received:")
+
+//     } catch (e) {
+//         console.log(e)
+//         //res.send({message: "Server error"})
+//         res.status(400).json({ message: "somthing wrong"})
+//     }
+// })
+
 module.exports = router

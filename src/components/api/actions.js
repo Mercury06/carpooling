@@ -42,6 +42,18 @@ export const auth =  () => {
     }
 }
 
+export const findAllRides = async () => {
+    //debugger
+     try {        
+         const response = await axios.get("http://localhost:9000/api/settings/findall")
+         const data = response.data
+         console.dir(data)
+         return data      
+     } catch (e) {
+         alert(e.response.data.message)
+      }  
+}
+
 /****** перенести из users */
 export const createLocality = async ({...form}) => {
     //debugger
@@ -53,3 +65,4 @@ export const createLocality = async ({...form}) => {
          alert(e.response.data.message)
       }  
  }
+

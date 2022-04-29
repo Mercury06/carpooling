@@ -10,6 +10,7 @@ import './App.css'
 import Navbar from "./components/Navbar/Navbar";
 import Settings from "./components/Control/Settings";
 import Bookride from "./components/Control/Bookride";
+import FindAllRides from "./components/ridesSearch/ridesSearch";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
             {!isAuth &&  <Route path="/login" element={<Login />} />}
               <Route path="/bookride" element={<Bookride />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/findall" element={<FindAllRides />} />
           </Routes>         
         
         </div>        
