@@ -64,5 +64,26 @@ export const createLocality = async ({...form}) => {
      } catch (e) {
          alert(e.response.data.message)
       }  
- }
+}
+
+export const findLocality = async (e) => {
+    //debugger
+    try {        
+        const response = await axios.post("http://localhost:9000/api/settings/findlocality", {
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({payload: e.value })
+        })
+            // .then(res => res.json()).then(data => {
+            // let payload = data.payload;
+            // if(payload.length < 1){
+
+            // }
+            
+        return response.json()       
+       
+    } catch (e) {
+        alert(e.response.data.message)
+    }  
+}
+
 

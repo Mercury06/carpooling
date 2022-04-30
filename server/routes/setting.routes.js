@@ -84,8 +84,7 @@ router.get('/createroles',
 
 router.get('/findall',
 async (req, res) => {
-    try {
-        console.log("from api find all rides")        
+    try {    
         const rides = await Ride.find()
         //console.log(rides)
         return res.status(200).json(rides)
@@ -96,6 +95,27 @@ async (req, res) => {
         res.status(500).json({ message: "rides not found"})
     }
 })
+
+router.post('/findlocality',
+    async (req, res) => {
+        try {    
+            // const searchName = req.query.search
+            // let locality = await Locality.find({})
+            // locality = locality.filter(item => item.locality.includes(searchName))
+            // return res.json(locality)
+            // let payload = req.body.payload.trim();
+            let payload = req.body.payload;
+            console.dir(payload)
+            let search = await Locality.find({locality: {$regex: new RegExp ('^'+payload+'.*','i')}}).exec();
+            search = search.slice(0,10);
+            res.send({payload: search});
+        } catch (e) {
+            console.log(e)
+            //res.send({message: "Server error"})
+            res.status(400).json({ message: "search error"})
+        }
+    }
+)
 
 // router.get('/params',
 // async (req, res) => {
