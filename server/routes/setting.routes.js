@@ -103,12 +103,12 @@ router.post('/findlocality',
             // let locality = await Locality.find({})
             // locality = locality.filter(item => item.locality.includes(searchName))
             // return res.json(locality)
-            // let payload = req.body.payload.trim();
+            //let payload = req.body.payload.trim();
             let payload = req.body.payload;
             console.dir(payload)
             let search = await Locality.find({locality: {$regex: new RegExp ('^'+payload+'.*','i')}}).exec();
             search = search.slice(0,10);
-            res.send({payload: search});
+            res.status(200).json({payload: search});
         } catch (e) {
             console.log(e)
             //res.send({message: "Server error"})

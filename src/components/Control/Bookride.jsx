@@ -4,12 +4,14 @@ import { createLocality, findLocality } from "../api/actions";
 
 const Bookride = () => {
 
-    const[form, setForm] = useState({locality: "", clarification: ""})   
+    const[form, setForm] = useState({locality: "", clarification: ""})  
+    const [locality, setLocality] = useState([])
+    
 
     const changeHandler = e => {
         setForm({ ...form, [e.target.name]: e.target.value })
         findLocality(e.target.value)
-        //console.log(form)
+        console.dir("received from server:", locality) 
     }
 
     return (
