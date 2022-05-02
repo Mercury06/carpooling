@@ -1,17 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import s from './Bookride.module.css';
-import { createLocality, findLocality } from "../api/actions";
+import { createLocality } from "../api/actions";
+import axios from "axios";
 
 const Bookride = () => {
 
-    const[form, setForm] = useState({locality: "", clarification: ""})  
-    const [locality, setLocality] = useState([])
+    const[form, setForm] = useState({locality: "", clarification: ""});
+    const[inputValue, setInputValue] = useState('');
+    const [localities, setLocalities] = useState([]);
+
+    useEffect(() => {
+        const suggest = async() => {
+            debugger
+            const response = await axios.post('http://localhost:9000/api/settings/findlocality', {inputValue});
+            console.log(response.data)
+            setLocalities(response.data)
+        }
+        suggest();
+    }, [inputValue])
     
 
     const changeHandler = e => {
         setForm({ ...form, [e.target.name]: e.target.value })
-        findLocality(e.target.value)
-        console.dir("received from server:", locality) 
+        setInputValue(e.target.value)
+        //console.dir("received from server:", localities) 
+        console.log("inputed:", inputValue)
     }
 
     return (
