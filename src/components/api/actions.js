@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { setSuggestedRides } from '../../reducers/rideReducer';
 import {setUser} from "../../reducers/userReducer";
 
 
@@ -67,28 +68,24 @@ export const createLocality = async ({...form}) => {
       }  
 }
 
-export const findLocality = async (payload) => {
+export function findLocality (search) {
 
-    //debugger
-    try {        
-        // const response = await axios.post("http://localhost:9000/api/settings/findlocality", {
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({payload: e.value })
-        // })
-        let payload = { locality: 'К' };
-        //const response = await axios.post("http://localhost:9000/api/settings/findlocality", {locality: payload})
-        const response = await axios.post("http://localhost:9000/api/settings/findlocality", payload)
-            // .then(res => res.json()).then(data => {
-            // let payload = data.payload;
-            // if(payload.length < 1){
-
-            // }
+    return async dispatch => {
+        try {        
             
-        return response.json()       
-       
-    } catch (e) {
-        alert(e.response)
-    }  
-}
+            //const response = await axios.post("http://localhost:9000/api/settings/findlocality", {locality: payload})
+            const response = await axios.get(`http://localhost:9000/api/settings/findlocality?search=${search}`)
+                // .then(res => res.json()).then(data => {
+                // let payload = data.payload;
+                // if(payload.length < 1){
 
+                // }
+            dispatch(setSuggestedRides(response.data))    
+            return response.json()       
+        
+        } catch (e) {
+            alert(e.response)
+        }  
+    }
+}
 

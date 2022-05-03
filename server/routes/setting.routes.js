@@ -96,21 +96,22 @@ async (req, res) => {
     }
 })
 
-router.post('/findlocality',
+router.get('/findlocality',
     
     async (req, res) => {
-        debugger
+        
         try {    
             // const searchName = req.query.search
             // let locality = await Locality.find({})
             // locality = locality.filter(item => item.locality.includes(searchName))
             // return res.json(locality)
-            //let payload = req.body.payload.trim();
-            let {payload} = req.body;
-            console.dir(payload)
+            // let payload = req.body.payload.trim();
+            // let {payload} = req.body;
+            let payload = req.query.search;
+            console.log("from router:", payload)            
             let search = await Locality.find({locality: {$regex: new RegExp ('^'+payload+'.*','i')}}).exec();
             search = search.slice(0,10);
-            res.status(200).json({payload: search});
+            return res.status(200).json({payload: search});
         } catch (e) {
             console.log(e)
             //res.send({message: "Server error"})
