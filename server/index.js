@@ -23,6 +23,9 @@ app.use("/api/settings", settingsRouter)
 const start = async () => {
     try{
         mongoose.connect(config.get("dbUrl"))
+        const db = mongoose.connection
+        db.on('error', error => console.error(error))
+        db.once('open', () => {console.log('connected to mongoose')})
 
         app.get ("/", (req, res) => {
             res.send('Some text');
