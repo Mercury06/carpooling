@@ -96,10 +96,10 @@ async (req, res) => {
     }
 })
 
-router.get('/findby',
+router.post('/findby',
 async (req, res) => {
     try {
-        let date = req.query.date    
+        let date = req.body.date    
         const rides = await Ride.find({date: date})
         console.log(rides)
         return res.status(200).json(rides)

@@ -56,12 +56,13 @@ export const findAllRides = async () => {
       }  
 }
 
-export const findRidesBy = async (date) => {
-    //debugger
+export const findRidesBy = async (startDateISO) => {
+    debugger
      try {        
-         const response = await axios.get(`http://localhost:9000/api/settings/findby?date=${date}`)
+         //const response = await axios.get(`http://localhost:9000/api/settings/findby?date=${startDateISO}`)
+         const response = await axios.get("http://localhost:9000/api/settings/findby", {date: startDateISO})
          const data = response.data
-         console.dir(data)
+         console.log(data)
          return data      
      } catch (e) {
          alert(e.response.data.message)

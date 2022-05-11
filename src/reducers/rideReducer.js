@@ -54,14 +54,14 @@ export const getRidesThunkCreator = () => {
     }
 }    
 
-export const findByThunkCreator = (date) => {
-    //debugger
+export const findByThunkCreator = (startDateISO) => {
+    debugger
     return async (dispatch) => {     
         try {   
             //dispatch(showLoader())
             //const response = await booksAPI.getBooks({ ...form})
-            const rides = await findRidesBy(date)
-            console.log(rides)
+            const rides = await findRidesBy(startDateISO)
+            console.log("from thunk:", rides)
             
             dispatch (setRides (rides));
             //console.log("from thunk:", response.items)
