@@ -51,10 +51,11 @@ export const getRidesThunkCreator = () => {
         } catch (e) {
             alert(e.response.data)
         }  
-}}    
+    }
+}    
 
 export const findByThunkCreator = (date) => {
-    debugger
+    //debugger
     return async (dispatch) => {     
         try {   
             //dispatch(showLoader())
@@ -68,4 +69,5 @@ export const findByThunkCreator = (date) => {
         } catch (e) {
             alert(e.response.data)
         }  
-}}    
+    }
+}    

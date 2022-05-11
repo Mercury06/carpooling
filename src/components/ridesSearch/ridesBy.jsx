@@ -13,6 +13,8 @@ const RidesBy = () => {
 
     const onChangeDateHandler = value => {
         setStartDate(value)
+        console.log(value)
+        //console.log(ISODate(value))
     }    
 
     return (
@@ -21,8 +23,9 @@ const RidesBy = () => {
                 selected={startDate} 
                 onChange={onChangeDateHandler} 
                 dateFormat="dd MMM yyy" 
+                minDate={new Date()}
             />
-            <button onClick={dispatch(findByThunkCreator(startDate))}>FindBy</button>
+            <button onClick={() => dispatch(findByThunkCreator(startDate))}>FindBy</button>
             <RidesList />
         </div>
     )

@@ -100,8 +100,8 @@ router.get('/findby',
 async (req, res) => {
     try {
         let date = req.query.date    
-        const rides = await Ride.find({date:{date}})
-        //console.log(rides)
+        const rides = await Ride.find({date: date})
+        console.log(rides)
         return res.status(200).json(rides)
 
     } catch (e) {
