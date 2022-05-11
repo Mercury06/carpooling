@@ -56,6 +56,18 @@ export const findAllRides = async () => {
       }  
 }
 
+export const findRidesBy = async (date) => {
+    //debugger
+     try {        
+         const response = await axios.get(`http://localhost:9000/api/settings/findby?date=${date}`)
+         const data = response.data
+         console.dir(data)
+         return data      
+     } catch (e) {
+         alert(e.response.data.message)
+      }  
+}
+
 /****** перенести из users */
 export const createLocality = async ({...form}) => {
     //debugger

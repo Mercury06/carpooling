@@ -11,6 +11,7 @@ import Navbar from "./components/Navbar/Navbar";
 import Settings from "./components/Control/Settings";
 import Bookride from "./components/Control/Bookride";
 import FindAllRides from "./components/ridesSearch/ridesSearch";
+import RidesBy from "./components/ridesSearch/ridesBy";
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
               <Route path="/bookride" element={<Bookride />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/findall" element={<FindAllRides />} />
+              <Route path="/findby" element={<RidesBy />} />
           </Routes>         
         
         </div>        

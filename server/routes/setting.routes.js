@@ -96,6 +96,21 @@ async (req, res) => {
     }
 })
 
+router.get('/findby',
+async (req, res) => {
+    try {
+        let date = req.query.date    
+        const rides = await Ride.find({date:{date}})
+        //console.log(rides)
+        return res.status(200).json(rides)
+
+    } catch (e) {
+        console.log(e)
+        //res.send({message: "Server error"})
+        res.status(500).json({ message: "rides not found"})
+    }
+})
+
 router.get('/findlocality',
     
     async (req, res) => {

@@ -1,4 +1,4 @@
-import { findAllRides } from "../components/api/actions"
+import { findAllRides, findRidesBy } from "../components/api/actions"
 
 const SET_RIDES = "SET_RIDES"
 const SET_SUGGEST_RIDES = "SET_SUGGEST_RIDES"
@@ -43,6 +43,23 @@ export const getRidesThunkCreator = () => {
             //dispatch(showLoader())
             //const response = await booksAPI.getBooks({ ...form})
             const rides = await findAllRides()
+            console.log(rides)
+            
+            dispatch (setRides (rides));
+            //console.log("from thunk:", response.items)
+            //dispatch(hideLoader())  
+        } catch (e) {
+            alert(e.response.data)
+        }  
+}}    
+
+export const findByThunkCreator = (date) => {
+    debugger
+    return async (dispatch) => {     
+        try {   
+            //dispatch(showLoader())
+            //const response = await booksAPI.getBooks({ ...form})
+            const rides = await findRidesBy(date)
             console.log(rides)
             
             dispatch (setRides (rides));
