@@ -1,5 +1,7 @@
 import React from "react"
 import { useSelector } from "react-redux";
+import "./rides.css"
+const moment = require ('moment');
 //import Loader from "../../assets/Loader/Loader";
 //import BookCard from "../BookCard/BookCard";
 
@@ -10,13 +12,14 @@ const RidesList = () => {
     return (
         <div>
             {/* { loader && <Loader />} */}
-            <h1>Found XXX results</h1>
+            <h1>Found {rides.length} results</h1>
             { rides && rides.length > 0
                 ? rides.map((item) => {
                     return (                      
-                        <div key={item.id}>
-                            <p>from: {item.localityFrom}</p>
-                            <p>toward: {item.destination}</p>
+                        <div className="ride_item" key={item.id}>
+                            <p><strong>from:</strong> {item.localityFrom}</p>
+                            <p><strong>toward:</strong> {item.destination}</p>
+                            <p><strong>date:</strong> {item.date}</p>
                         </div>
                         //           title={item.volumeInfo.title}
                         //           image={item.volumeInfo.imageLinks.smallThumbnail} />

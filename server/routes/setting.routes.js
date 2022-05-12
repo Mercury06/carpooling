@@ -64,8 +64,6 @@ router.post('/createride',
         }
    })
 
-
-
 router.get('/createroles',
     async (req, res) => {
         try {
@@ -96,13 +94,15 @@ async (req, res) => {
     }
 })
 
-router.post('/findby',
+router.get('/findridesby',
 async (req, res) => {
     try {
-        let date = req.body.date    
-        const rides = await Ride.find({date: date})
-        console.log(rides)
-        return res.status(200).json(rides)
+        let date = req.query.date    
+        //const search = await Ride.find({date: date})
+        //const search = await Ride.find({date:{$gte:"2022-06-06"}})
+        const search = await Ride.find({date: date})
+        console.log(search)
+        return res.status(200).json(search)
 
     } catch (e) {
         console.log(e)
