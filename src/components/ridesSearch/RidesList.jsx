@@ -19,7 +19,7 @@ const RidesList = () => {
                         <div className="ride_item" key={item.id}>
                             <p><strong>from:</strong> {item.localityFrom}</p>
                             <p><strong>toward:</strong> {item.destination}</p>
-                            <p><strong>date:</strong> {item.date}</p>
+                            <p><strong>date:</strong> {moment(item.date).format("DD-MMM-YYYY")}</p>
                         </div>
                         //           title={item.volumeInfo.title}
                         //           image={item.volumeInfo.imageLinks.smallThumbnail} />

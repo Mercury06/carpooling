@@ -18,6 +18,6 @@ module.exports = function (req, res, next) {
         next()
     } catch (e) {
         console.log(e)
-        return res.status(403).json({message:"User not authorized"})
+        return res.status(403).json({message:"User not authoryyyzed"})
     }
 }

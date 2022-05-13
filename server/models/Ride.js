@@ -8,6 +8,7 @@ const Ride = new Schema ({
     user: {type: ObjectId, ref: 'User'},
     seats: {type: Number, default: 1},
     date: {type: Date, required: true},
+    completed: {type: Boolean, default: false}, // ride status
     //time: [{type: String, ref: 'Role'}],
     comment: {type: String, minlength: 5}
 }, {timestamps: true})

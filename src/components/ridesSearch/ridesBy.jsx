@@ -35,7 +35,7 @@ const RidesBy = () => {
                 dateFormat="dd MMM yyy" 
                 minDate={new Date()}
             />
-            <button onClick={() => dispatch(findByThunkCreator())}>FindBy</button>
+            <button onClick={() => dispatch(findByThunkCreator(modifiedDate))}>FindBy</button>
             <RidesList />
         </div>
     )

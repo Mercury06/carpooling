@@ -56,13 +56,13 @@ export const findAllRides = async () => {
       }  
 }
 
-export const findRidesBy = async (startDateISO) => {
+export const findRidesBy = async (date) => {
     debugger
      try {        
          //const response = await axios.get(`http://localhost:9000/api/settings/findby?date=${startDateISO}`)
-         const response = await axios.get("http://localhost:9000/api/settings/findby", {date: startDateISO})
+         const response = await axios.get(`http://localhost:9000/api/settings/findridesby?date=${date}`)
          const data = response.data
-         console.log(data)
+         console.log("from action concatinated fetch:", data)
          return data      
      } catch (e) {
          alert(e.response.data.message)
