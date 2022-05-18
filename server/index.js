@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require ("mongoose");
 const config = require ("config");
-const bodyParser = require("body-parser");
 
 const corsMiddleware = require('./middleware/cors.middleware')
 const logger = require ('./middleware/logger.js');
@@ -14,7 +13,7 @@ const PORT = config.get('serverPort')
 
 app.use(corsMiddleware)
 app.use(express.json())
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.urlencoded({extended:true}));
 app.use(logger)
 app.use("/api/auth", authRouter)
 app.use("/api/settings", settingsRouter)
@@ -22,10 +21,24 @@ app.use("/api/settings", settingsRouter)
 
 const start = async () => {
     try{
-        mongoose.connect(config.get("dbUrl"))
+        mongoose.connect(config.get("dbUrl"), {
+            useNewUrlParser: true,
+            useUnifiedTopology: true       
+        })
         const db = mongoose.connection
-        db.on('error', error => console.error(error))
-        db.once('open', () => {console.log('connected to mongoose')})
+        db.on('error', error => console.error(error.message)) // заменить на logError()
+        db.on('open', () => {console.log('connected to mongoose')})
+        
+        db.on('disconnected', () => {
+            console.log('mongoose disconnecteed')
+        })
+        process.on('SIGINT', function(){ //не срабатывает прерывание процесса при ctrl+C
+            //mongoose.disconnect()
+            mongoose.connection.close(function(){                
+                console.log("Mongoose default connection is disconnected due to application termination");
+                process.exit(0)
+            });
+        });
 
         app.get ("/", (req, res) => {
             res.send('Some text');
@@ -33,7 +46,7 @@ const start = async () => {
         app.listen(PORT, () => {console.log("Server started on port", PORT)})
         
     } catch (e) {
-
+        console.error(e.message)
     }
 }
 
