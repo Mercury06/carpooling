@@ -6,8 +6,7 @@ const SET_SUGGEST_RIDES = "SET_SUGGEST_RIDES"
 
 const defaultState = {
     rides: [],
-    suggestedRides: []
-   
+    suggestedRides: []   
 }
 
 export default function rideReducer (state = defaultState, action) {

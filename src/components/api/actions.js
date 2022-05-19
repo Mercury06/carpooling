@@ -94,10 +94,10 @@ export function findLocality (search) {
 
                 // }
             dispatch(setSuggestedRides(response.data))    
-            return response.json()       
+            return response.data      
         
         } catch (e) {
-            alert(e.response)
+            alert(e.message)
         }  
     }
 }
