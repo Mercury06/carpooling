@@ -124,8 +124,8 @@ router.get('/findlocality',
             // let payload = req.body.payload.trim();
             // let {payload} = req.body;
             let payload = req.query.search;
-            console.log("from setting.routes.js:", payload)            
-            let search = await Locality.find({locality: {$regex: new RegExp ('^'+payload+'.*','i')}}).exec();
+            //console.log("from setting.routes.js:", payload)            
+            let search = payload ? await Locality.find({locality: {$regex: new RegExp ('^'+payload+'.*','i')}}).exec() : [];
             search = search.slice(0,10);
             return res.status(200).json({payload: search});
         } catch (e) {

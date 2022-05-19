@@ -5,26 +5,33 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Bookride = () => {
     
-    const[inputValue, setInputValue] = useState('');
+    const[fromInputValue, setFromInputValue] = useState('');
+    const[toInputValue, setToInputValue] = useState('');
 
-    const dispatch = useDispatch();
-         
+    const dispatch = useDispatch();         
     
 
-    const changeHandler = e => {
+    const changeHandlerFrom = e => {
         //setForm({ ...form, [e.target.name]: e.target.value })
-         setInputValue(e.target.value)        
-         dispatch(findLocality(inputValue))            
+        setFromInputValue(e.target.value)     
+        // console.log(inputValue)   
+        dispatch(findLocality(e.target.value))           
+    }
+    const changeHandlerTo = e => {
+        //setForm({ ...form, [e.target.name]: e.target.value })
+        setToInputValue(e.target.value)     
+        // console.log(inputValue)   
+        dispatch(findLocality(e.target.value))           
     }
     //console.log(inputValue)
-    const suggestedRides = useSelector( state => state.ride.suggestedRides )  
-    console.log("suggestedRides:", suggestedRides)
+    //const suggestedRides = useSelector( state => state.ride.suggestedRides )  
+    //console.log("suggestedRides:", suggestedRides)
 
     return (
         <div>
-            <div>from</div><input value={inputValue} onInput={changeHandler} type="text" name="locality" placeholder="Enter locality" autoFocus="autofocus" /><br></br>    
+            <div>from</div><input value={fromInputValue} onInput={changeHandlerFrom} type="text" name="locality" placeholder="Enter locality" autoFocus="autofocus" /><br></br>    
             {/* <p>{searchResults}</p>        */}
-            <div>to</div><input value={inputValue} onChange={changeHandler} type="text" name="locality" placeholder="Enter locality" autoFocus="autofocus" /><br></br>
+            <div>to</div><input value={toInputValue} onChange={changeHandlerTo} type="text" name="locality" placeholder="Enter locality" autoFocus="autofocus" /><br></br>
             {/* <p><input type='text' placeholder='dd/mm/yyyy' name='form[datetime]' id='datetime' /></p>    */}
             {/* <button className={s.create__btn} onClick={() => createLocality({...form})}>Add</button> */}
         </div>
