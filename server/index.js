@@ -26,7 +26,10 @@ const start = async () => {
             useUnifiedTopology: true       
         })
         const db = mongoose.connection
-        db.on('error', error => console.error(error.message)) // заменить на logError()
+        db.on('error', (error) => {
+            console.error(error.message)
+            mongoose.disconnect();
+        }) // заменить на logError()
         db.on('open', () => {console.log('connected to mongoose')})
         
         db.on('disconnected', () => {
