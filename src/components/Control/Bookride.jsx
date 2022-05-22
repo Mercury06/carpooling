@@ -23,14 +23,28 @@ const Bookride = () => {
         // console.log(inputValue)   
         dispatch(findLocality(e.target.value))           
     }
+    const onSuggestionSelected = e => {
+        // if (method === "enter") {
+        //   event.preventDefault();
+        // }
+        setFromInputValue(fromInputValue);        
+    }
     //console.log(inputValue)
-    //const suggestedRides = useSelector( state => state.ride.suggestedRides )  
+    const suggestedRides = useSelector( state => state.ride.suggestedRides )  
     //console.log("suggestedRides:", suggestedRides)
 
     return (
         <div>
             <div>from</div><input value={fromInputValue} onInput={changeHandlerFrom} type="text" name="locality" placeholder="Enter locality" autoFocus="autofocus" /><br></br>    
-            {/* <p>{searchResults}</p>        */}
+            { suggestedRides && suggestedRides.length > 0
+                ? suggestedRides.map((item) => {
+                    return (                      
+                        <div className="" key={item._id} onClick={onSuggestionSelected}>
+                            {item.locality}
+                        </div>
+                    )
+                }) : null}
+            
             <div>to</div><input value={toInputValue} onChange={changeHandlerTo} type="text" name="locality" placeholder="Enter locality" autoFocus="autofocus" /><br></br>
             {/* <p><input type='text' placeholder='dd/mm/yyyy' name='form[datetime]' id='datetime' /></p>    */}
             {/* <button className={s.create__btn} onClick={() => createLocality({...form})}>Add</button> */}
@@ -39,3 +53,14 @@ const Bookride = () => {
       )
     }
     export default Bookride;
+
+
+
+// ******** add with redux-form submit check value is not empty ******* // 
+    // suggestions={suggestions}
+    // onSuggestionsFetchRequested={async ({ value }) => {
+    //   if (!value) {
+    //     setSuggestions([]);
+    //     return;
+    //   } 
+    // }   
