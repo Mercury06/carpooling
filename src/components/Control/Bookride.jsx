@@ -1,33 +1,48 @@
 import React, { useState } from "react";
-import s from './Bookride.module.css'
+//import s from './Bookride.module.css';
 import { createLocality, findLocality } from "../api/actions";
 import { useDispatch, useSelector } from "react-redux";
+import { TextField } from "@mui/material";
+import { Stack } from "@mui/material";
+import {makeStyles} from "@emotion/styled"
+import { Autocomplete } from "@mui/material";
+import { Box } from "@mui/system";
 import { setSuggestedRides } from "../../reducers/rideReducer";
+
+// const useStyles = makeStyles({
+//     paper: {
+//       border: "4px solid black"
+//     }
+//   });
 
 const Bookride = () => {
     
     const[fromInputValue, setFromInputValue] = useState('');
     const[toInputValue, setToInputValue] = useState('');
+    const[selectedItem, setSelectedItem] = useState({});
 
-    const dispatch = useDispatch();         
+    const dispatch = useDispatch();     
+   
     
-    // const debounce =(func) => {
-    //     let timer;
-    //     return function (...args) {
-    //         const context = this;
-    //         if (timer) clearTimeout(timer)
-    //         timer = setTimeout( () => {
-    //             timer = null
-    //             func.apply(context, args);
-    //         }, 1000);
-    //     }
-    // }    
+    // const sugRides = [
+    //     {locality: "Rome"},
+    //     {locality: "Keln"},
+    //     {locality: "Chicago"},
+    //     {locality: "Brazil"},
+    //     {locality: "Columbia"}
+    // ]
+    
 
     const changeHandlerFrom = e => {
+        let value = e.target.value;
+        if (!value) {
+            dispatch(setSuggestedRides([]))
+        
+        };
         //setForm({ ...form, [e.target.name]: e.target.value })
-        setFromInputValue(e.target.value)     
+        setFromInputValue(value);     
         // console.log(inputValue)   
-        dispatch(findLocality(e.target.value))           
+        dispatch(findLocality(value));           
     }
     const changeHandlerTo = e => {
         //setForm({ ...form, [e.target.name]: e.target.value })
@@ -35,51 +50,57 @@ const Bookride = () => {
         // console.log(inputValue)   
         dispatch(findLocality(e.target.value))           
     }
-    const onSuggestionSelected = (e, item) => {
-        // if (method === "enter") {
-        //   event.preventDefault();
-        // }
-        e.stopPropagation();
-        setFromInputValue(item.locality);
-        dispatch(setSuggestedRides([]))        
-    }
     //console.log(inputValue)
     const suggestedRides = useSelector( state => state.ride.suggestedRides )  
     //console.log("suggestedRides:", suggestedRides)
-
-    //const debouncedHandler = debounce(changeHandlerFrom )
+    //console.log("fromInputValue:", fromInputValue)
+    const blurHandler = () => {
+        console.log("input blurred")
+    }
+    const onInputHandler = () => {
+        console.log("onReseted")
+    }
+    const onSuggestSelect = (e, {item}) => {
+        setSelectedItem(item)
+        setFromInputValue(item.locality)
+        dispatch(setSuggestedRides([]))
+    }
 
     return (
         <div>
-            <div>from</div><input className={s.search} list="from_input" value={fromInputValue} onChange={changeHandlerFrom} type="text" name="locality" placeholder="Enter locality" autoFocus="autofocus" /><br></br>    
-            { suggestedRides && suggestedRides.length > 0
-                ? <div className={s.autocomplete}>
-                    {suggestedRides.map((item, i) => {
-                    
-                    return (                      
-                        <div className={s.autocomplete_items} key={i} >
-                            <span onClick={ (e) => onSuggestionSelected(e, item)}>{item.locality}</span>
-                        </div>
-                    )})}
-                    </div>
-                : null}
-             
-            <div>to</div><input value={toInputValue} onChange={changeHandlerTo} type="text" name="locality" placeholder="Enter locality" autoFocus="autofocus" /><br></br>
-            {/* <p><input type='text' placeholder='dd/mm/yyyy' name='form[datetime]' id='datetime' /></p>    */}
+            <div>from</div><input value={fromInputValue} onChange={changeHandlerFrom} type="text" name="locality" placeholder="Enter locality" autoComplete="off" /><br></br>    
+            {suggestedRides && suggestedRides.length > 0
+                ? suggestedRides.map((item, i) => {
+                    return (  
+                        <p key={i} onClick={(e) => onSuggestSelect (e, {item})}>{item.locality}</p>
+                        )
+                    })
+                : <div > <h3>list is empty</h3></div>}      
+            <div>to</div><input value={toInputValue} onChange={changeHandlerTo} type="text" name="locality" placeholder="Enter locality" autoComplete="off" /><br></br>
+            {suggestedRides && suggestedRides.length > 0
+                ? suggestedRides.map((item, i) => {
+                    return (  
+                        <p key={i}>{item.locality}</p>
+                        )
+                    })
+                : <div > <h3>list is empty</h3></div>}
             {/* <button className={s.create__btn} onClick={() => createLocality({...form})}>Add</button> */}
-        </div>
         
+       
+            <Autocomplete
+            filterOptions={(x) => x}
+            style={{width: 300}}
+            onChange={changeHandlerFrom}
+            //noOptionsText="No Options found" 
+            //options={suggestedRides && suggestedRides > 0 ? suggestedRides.map((item) => item.locality) : []}
+            options={suggestedRides}
+            getOptionLabel={(options) => options.locality}
+            
+            renderInput={(params) => (
+                <TextField {...params} style={{width: 300, border: "1px solid gray"}} label="from" onChange={changeHandlerFrom} />
+            )}
+            />
+        </div>
       )
     }
     export default Bookride;
-
-
-
-// ******** add with redux-form submit check value is not empty ******* // 
-    // suggestions={suggestions}
-    // onSuggestionsFetchRequested={async ({ value }) => {
-    //   if (!value) {
-    //     setSuggestions([]);
-    //     return;
-    //   } 
-    // }   
