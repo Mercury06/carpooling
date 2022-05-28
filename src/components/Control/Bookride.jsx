@@ -17,7 +17,7 @@ import { setSuggestedRides } from "../../reducers/rideReducer";
 
 const Bookride = () => {
     
-    const[fromInputValue, setFromInputValue] = useState('');
+    const[fromInputValue, setFromInputValue] = useState({});
     const[toInputValue, setToInputValue] = useState('');
     const[selectedItem, setSelectedItem] = useState({});
 
@@ -62,13 +62,13 @@ const Bookride = () => {
     }
     const onSuggestSelect = (e, {item}) => {
         setSelectedItem(item)
-        setFromInputValue(item.locality)
+        setFromInputValue(item)
         dispatch(setSuggestedRides([]))
     }
 
     return (
         <div>
-            <div>from</div><input value={fromInputValue} onChange={changeHandlerFrom} type="text" name="locality" placeholder="Enter locality" autoComplete="off" /><br></br>    
+            <div>from</div><input value={fromInputValue.locality} onChange={changeHandlerFrom} type="text" name="locality" placeholder="Enter locality" autoComplete="off" /><br></br>    
             {suggestedRides && suggestedRides.length > 0
                 ? suggestedRides.map((item, i) => {
                     return (  

@@ -20,9 +20,7 @@ const RidesList = () => {
                             <p><strong>from:</strong> {item.localityFrom}</p>
                             <p><strong>toward:</strong> {item.destination}</p>
                             <p><strong>date:</strong> {moment(item.date).format("DD-MMM-YYYY")}</p>
-                        </div>
-                        //           title={item.volumeInfo.title}
-                        //           image={item.volumeInfo.imageLinks.smallThumbnail} />
+                        </div>                      
                     )
                 })
                 : <div > <h3>list is empty</h3></div>}

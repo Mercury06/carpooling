@@ -38,15 +38,12 @@ export const setSuggestedRides = (rides) => ({ type: SET_SUGGEST_RIDES, payload:
 export const getRidesThunkCreator = () => {
     //debugger
     return async (dispatch) => {     
-        try {   
-            //dispatch(showLoader())
-            //const response = await booksAPI.getBooks({ ...form})
+        try {              
             const rides = await findAllRides()
             console.log(rides)
             
             dispatch (setRides (rides));
-            //console.log("from thunk:", response.items)
-            //dispatch(hideLoader())  
+            
         } catch (e) {
             alert(e.response.data)
         }  
@@ -56,15 +53,12 @@ export const getRidesThunkCreator = () => {
 export const findByThunkCreator = (date) => {
     debugger
     return async (dispatch) => {     
-        try {   
-            //dispatch(showLoader())
-            //const response = await booksAPI.getBooks({ ...form})
+        try {              
             const rides = await findRidesBy(date)
             console.log("from thunk:", rides)
             
             dispatch (setRides (rides));
-            //console.log("from thunk:", response.items)
-            //dispatch(hideLoader())  
+            
         } catch (e) {
             alert(e.response.data)
         }  

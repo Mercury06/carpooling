@@ -88,11 +88,7 @@ export function findLocality (search) {
             
             //const response = await axios.post("http://localhost:9000/api/settings/findlocality", {locality: payload})
             const response = await axios.get(`http://localhost:9000/api/settings/findlocality?search=${search}`)
-                // .then(res => res.json()).then(data => {
-                // let payload = data.payload;
-                // if(payload.length < 1){
-
-                // }
+               
             dispatch(setSuggestedRides(response.data))    
             return response.data      
         
