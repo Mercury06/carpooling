@@ -12,6 +12,9 @@ const Navbar = () => {
           <NavLink to="/findall" activeClassName={s.activeLink}> Find all rides</NavLink>
         </div>
         <div className={s.item}>
+          <NavLink to="/findlocs" activeClassName={s.activeLink}> Find all localities</NavLink>
+        </div>
+        <div className={s.item}>
           <NavLink to="/findby" activeClassName={s.activeLink}> Find rides by params</NavLink>
         </div>
         <div className={s.item}>

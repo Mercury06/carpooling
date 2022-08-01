@@ -15,21 +15,21 @@ const FindLocs = () => {
 
     return (
     <>
-      
+      <button onClick={() => clickHandler()}>findLocs</button><br></br>
             <h1>Found {locs.length} results</h1>
             { locs && locs.length > 0
                 ? locs.map((item) => {
                     return (                      
                         <div className="ride_item" key={item.id}>
-                            <p><strong>from:</strong> {item.locality}</p>
-                            <p><strong>toward:</strong> {item.clarification}</p>
+                            <p><strong>locality:</strong> {item.locality}</p>
+                            <p><strong>clarification:</strong> {item.clarification}</p>
                            
                         </div>                      
                     )
                 })
                 : <div > <h3>list is empty</h3></div>}
         
-        <button onClick={() => clickHandler()}>findLocs</button><br></br>
+        
         
     </>
     )
