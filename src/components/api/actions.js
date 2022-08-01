@@ -49,7 +49,19 @@ export const findAllRides = async () => {
      try {        
          const response = await axios.get("http://localhost:9000/api/settings/findall")
          const data = response.data
-         console.dir(data)
+         console.log(data)
+         return data      
+     } catch (e) {
+         alert(e.response.data.message)
+      }  
+}
+
+export const findLocs = async () => {
+    //debugger
+     try {        
+         const response = await axios.get("http://localhost:9000/api/settings/findlocs")
+         const data = response.data
+         console.log(data)
          return data      
      } catch (e) {
          alert(e.response.data.message)
@@ -97,4 +109,21 @@ export function findLocality (search) {
         }  
     }
 }
+
+// export function findAllLocalities () {
+
+//     return async dispatch => {
+//         try {        
+            
+//             //const response = await axios.post("http://localhost:9000/api/settings/findlocality", {locality: payload})
+//             const response = await axios.get(`http://localhost:9000/api/settings/findlocality?search=${search}`)
+               
+//             dispatch(setSuggestedRides(response.data))    
+//             return response.data      
+        
+//         } catch (e) {
+//             alert(e.message)
+//         }  
+//     }
+// }
 

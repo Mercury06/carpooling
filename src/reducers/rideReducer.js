@@ -2,11 +2,13 @@ import { findAllRides, findRidesBy } from "../components/api/actions"
 
 const SET_RIDES = "SET_RIDES"
 const SET_SUGGEST_RIDES = "SET_SUGGEST_RIDES"
+const SET_LOCALITIES = "SET_LOCALITIES"
 
 
 const defaultState = {
     rides: [],
-    suggestedRides: []   
+    suggestedRides: [],
+    localities: []   
 }
 
 export default function rideReducer (state = defaultState, action) {

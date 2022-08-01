@@ -94,6 +94,26 @@ async (req, res) => {
     }
 })
 
+router.get('/findlocs',
+async (req, res) => {
+    try {    
+        const method = req.method
+        const protocol = req.protocol
+        const ip =req.ip
+        console.log("method:", method)
+        console.log("protocol:", protocol)
+        console.log("ip:", ip)
+        const locs = await Locality.find().lean()
+        //console.log(rides)
+        return res.status(200).json(locs)
+
+    } catch (e) {
+        console.log(e)
+        //res.send({message: "Server error"})
+        res.status(500).json({ message: "localities not found"})
+    }
+})
+
 router.get('/findridesby',
 async (req, res) => {
     try {
