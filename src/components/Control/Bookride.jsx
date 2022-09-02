@@ -2,42 +2,36 @@ import React, { useState } from 'react';
 //import s from './Bookride.module.css';
 import { createLocality, findLocality } from '../api/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { TextField } from '@mui/material';
-import { Stack } from '@mui/material';
-import { makeStyles } from '@emotion/styled';
-import { Autocomplete } from '@mui/material';
-import { Box } from '@mui/system';
+// import { TextField } from '@mui/material';
+// import { Stack } from '@mui/material';
+// import { makeStyles } from '@emotion/styled';
+// import { Autocomplete } from '@mui/material';
+// import { Box } from '@mui/system';
 import { setSuggestedRides } from '../../reducers/rideReducer';
-
-// const useStyles = makeStyles({
-//     paper: {
-//       border: "4px solid black"
-//     }
-//   });
 
 const Bookride = () => {
   const [fromInputValue, setFromInputValue] = useState({});
-  const [toInputValue, setToInputValue] = useState('');
+  // const [toInputValue, setToInputValue] = useState('');
   const [selectedItem, setSelectedItem] = useState({});
 
   const dispatch = useDispatch();
 
   const changeHandlerFrom = (e) => {
-    let value = e.target.value;
-    if (!value) {
+    let search = e.target.value;
+    if (!search) {
       dispatch(setSuggestedRides([]));
     }
     //setForm({ ...form, [e.target.name]: e.target.value })
-    setFromInputValue(value);
+    setFromInputValue(search);
     // console.log(inputValue)
-    dispatch(findLocality(value));
+    dispatch(findLocality(search));
   };
-  const changeHandlerTo = (e) => {
-    //setForm({ ...form, [e.target.name]: e.target.value })
-    setToInputValue(e.target.value);
-    // console.log(inputValue)
-    dispatch(findLocality(e.target.value));
-  };
+  // const changeHandlerTo = (e) => {
+  //   //setForm({ ...form, [e.target.name]: e.target.value })
+  //   setToInputValue(e.target.value);
+  //   // console.log(inputValue)
+  //   dispatch(findLocality(e.target.value));
+  // };
   //console.log(inputValue)
   const suggestedRides = useSelector((state) => state.ride.suggestedRides);
   //console.log("suggestedRides:", suggestedRides)
@@ -75,7 +69,7 @@ const Bookride = () => {
           <h3>list is empty</h3>
         </div>
       )}
-      <div>to</div>
+      {/* <div>to</div>
       <input
         value={toInputValue}
         onChange={changeHandlerTo}
@@ -94,7 +88,7 @@ const Bookride = () => {
           {' '}
           <h3>list is empty</h3>
         </div>
-      )}
+      )} */}
       {/* <button className={s.create__btn} onClick={() => createLocality({...form})}>Add</button> */}
     </div>
   );
