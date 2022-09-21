@@ -45,9 +45,6 @@ const start = async () => {
       });
     });
 
-    app.get('/', (req, res) => {
-      res.send('Some text');
-    });
     app.listen(PORT, () => {
       console.log('Server started on port', PORT);
     });

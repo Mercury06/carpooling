@@ -149,6 +149,10 @@ router.get(
   },
 );
 
+// router.get('/r', async (req, res) => {
+//   console.log('GLOBAL:', global);
+//   res.status(200).json({ message: 'from res get' });
+// });
 // router.get('/params',
 // async (req, res) => {
 //     try {

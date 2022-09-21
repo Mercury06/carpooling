@@ -96,6 +96,7 @@ export const createLocality = async ({ ...form }) => {
 export function findLocality(search) {
   return async (dispatch) => {
     try {
+      console.log('from server api search:', search);
       //const response = await axios.post("http://localhost:9000/api/settings/findlocality", {locality: payload})
       const response = await axios.get(
         `http://localhost:9000/api/settings/findlocality?search=${search}`,
