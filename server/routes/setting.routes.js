@@ -3,6 +3,7 @@ const Locality = require('../models/Locality.js');
 const Role = require('../models/Role');
 const Ride = require('../models/Ride');
 const { check, validationResult } = require('express-validator');
+const { useParams } = require('react-router-dom');
 
 const router = new Router();
 // const config = require ("config");
@@ -93,6 +94,18 @@ router.get('/findall', async (req, res) => {
   }
 });
 
+router.get('/findmyrides/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const myRides = await Ride.find({ user: id });
+    return res.status(200).json(myRides);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: 'rides not found' });
+  }
+});
+
 router.get('/findlocs', async (req, res) => {
   try {
     const locs = await Locality.find().sort({ locality: 1 });
@@ -149,9 +162,10 @@ router.get(
   },
 );
 
-// router.get('/r', async (req, res) => {
-//   console.log('GLOBAL:', global);
-//   res.status(200).json({ message: 'from res get' });
+// router.get('/r', (req, res) => {
+//   console.log('res:', res);
+//   res.status(200);
+//   res.end('hello');
 // });
 // router.get('/params',
 // async (req, res) => {
