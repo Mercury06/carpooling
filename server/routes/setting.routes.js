@@ -3,7 +3,6 @@ const Locality = require('../models/Locality.js');
 const Role = require('../models/Role');
 const Ride = require('../models/Ride');
 const { check, validationResult } = require('express-validator');
-const { useParams } = require('react-router-dom');
 
 const router = new Router();
 // const config = require ("config");
@@ -97,7 +96,7 @@ router.get('/findall', async (req, res) => {
 router.get('/findmyrides/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
+    //console.log(id);
     const myRides = await Ride.find({ user: id });
     return res.status(200).json(myRides);
   } catch (e) {

@@ -23,18 +23,31 @@ const start = async () => {
     mongoose.connect(config.get('dbUrl'), {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      // keepAlive: true,
+      // keepAliveInitialDelay: 30000,
     });
     const db = mongoose.connection;
     db.on('error', (error) => {
       console.error(error.message);
       mongoose.disconnect();
     }); // заменить на logError()
-    db.on('open', () => {
-      console.log('connected to mongoose');
+    db.on('connected', () => {
+      console.log('#connected: connected to mongoose');
     });
-
+    db.on('open', () => {
+      console.log('#open: connected to mongoose');
+    });
+    db.on('disconnected', () => {
+      console.log('mongoose disconnected');
+    });
     db.on('close', () => {
-      console.log('mongoose disconnecteed');
+      console.log('#close: mongoose disconnected');
+    });
+    db.on('fullsetup', () => {
+      console.log('#fullsetup');
+    });
+    db.on('all', () => {
+      console.log('#all');
     });
     process.on('SIGINT', function () {
       console.log('SIGINT recieved');
