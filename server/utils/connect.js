@@ -1,26 +1,11 @@
-const express = require('express');
 const mongoose = require('mongoose');
 const config = require('config');
 
-const corsMiddleware = require('./middleware/cors.middleware');
-const logger = require('./middleware/logger.js');
+//export default connect;
 
-const authRouter = require('./routes/auth.routes.js');
-const settingsRouter = require('./routes/setting.routes.js');
-
-const app = express();
-const PORT = process.env.PORT || config.get('serverPort');
-
-app.use(corsMiddleware);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(logger);
-app.use('/api/auth', authRouter);
-app.use('/api/settings', settingsRouter);
-
-const start = async () => {
+const connect = async function () {
   try {
-    mongoose.connect(config.get('dbUrl'), {
+    await mongoose.connect(config.get('dbUrl'), {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       // keepAlive: true,
@@ -51,10 +36,7 @@ const start = async () => {
     });
     process.on('SIGINT', function () {
       console.log('SIGINT recieved');
-      server.close(() => {
-        console.log('Server is closed...');
-        process.exit(0);
-      });
+      process.exit(0);
 
       //не срабатывает прерывание процесса при ctrl+C
       //mongoose.disconnect()
@@ -67,12 +49,11 @@ const start = async () => {
       console.log('SIGTERM recieved');
       process.exit(0);
     });
-    const server = app.listen(PORT, () => {
-      console.log(`Server started on port ${PORT} process id: ${process.pid}`);
-    });
-  } catch (e) {
-    console.error(e.message);
+  } catch (err) {
+    console.error(err.message);
   }
 };
 
-start();
+module.exports = {
+  connect: connect,
+};
