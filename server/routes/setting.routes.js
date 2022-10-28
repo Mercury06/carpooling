@@ -88,7 +88,6 @@ router.get('/findall', async (req, res) => {
     return res.status(200).json(rides);
   } catch (e) {
     console.log(e);
-    //res.send({message: "Server error"})
     res.status(500).json({ message: 'rides not found' });
   }
 });
@@ -112,7 +111,6 @@ router.get('/findlocs', async (req, res) => {
     return res.status(200).json(locs);
   } catch (e) {
     console.log(e);
-    //res.send({message: "Server error"})
     res.status(500).json({ message: 'localities not found' });
   }
 });
@@ -180,7 +178,6 @@ router.get(
 
 //     } catch (e) {
 //         console.log(e)
-//         //res.send({message: "Server error"})
 //         res.status(400).json({ message: "somthing wrong"})
 //     }
 // })

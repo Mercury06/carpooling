@@ -68,7 +68,7 @@ export const findLocs = async () => {
 };
 
 export const findRidesBy = async (date) => {
-  debugger;
+  //debugger;
   try {
     //const response = await axios.get(`http://localhost:9000/api/settings/findby?date=${startDateISO}`)
     const response = await axios.get(`http://localhost:9000/api/settings/findridesby?date=${date}`);
