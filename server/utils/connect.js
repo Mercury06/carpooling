@@ -37,13 +37,6 @@ const connect = async function () {
     process.on('SIGINT', function () {
       console.log('SIGINT recieved');
       process.exit(0);
-
-      //не срабатывает прерывание процесса при ctrl+C
-      //mongoose.disconnect()
-      // mongoose.connection.close(function () {
-      //   console.log('Mongoose default connection is disconnected due to application termination');
-      //   process.exit(0);
-      // });
     });
     process.on('SIGTERM', function () {
       console.log('SIGTERM recieved');
