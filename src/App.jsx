@@ -17,9 +17,6 @@ function App() {
   const isAuth = useSelector((state) => state.user.isAuth);
   const dispatch = useDispatch();
 
-  //const store = useStore()
-  //console.log("from store:", store.getState())
-
   useEffect(() => {
     dispatch(auth());
   });
