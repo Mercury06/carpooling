@@ -167,15 +167,12 @@ router.get(
 // router.get('/params',
 // async (req, res) => {
 //     try {
-
 //         console.dir(req.ip)
 //         console.log(req.method)
 //         console.log(req.protocol)
 //         console.log(req.route)
 //         console.dir(req.accepts('image/png'))
-
 //         res.json("params received:")
-
 //     } catch (e) {
 //         console.log(e)
 //         res.status(400).json({ message: "somthing wrong"})

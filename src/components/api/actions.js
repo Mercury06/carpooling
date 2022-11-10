@@ -111,16 +111,13 @@ export function findLocality(search) {
 }
 
 // export function findAllLocalities () {
-
 //     return async dispatch => {
 //         try {
-
 //             //const response = await axios.post("http://localhost:9000/api/settings/findlocality", {locality: payload})
 //             const response = await axios.get(`http://localhost:9000/api/settings/findlocality?search=${search}`)
 
 //             dispatch(setSuggestedRides(response.data))
 //             return response.data
-
 //         } catch (e) {
 //             alert(e.message)
 //         }
