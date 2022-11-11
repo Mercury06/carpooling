@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector, useStore } from 'react-redux';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
 import { auth } from './components/api/actions';
 import Login from './components/autorization/Login';
 import Registration from './components/autorization/Registration';
