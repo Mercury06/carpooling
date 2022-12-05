@@ -25,15 +25,15 @@ const Navbar = () => {
         </NavLink>
       </div>
       <div className={s.item}>
-        <NavLink to="/findby" activeClassName={s.activeLink}>
-          {' '}
-          Find rides by params
-        </NavLink>
-      </div>
-      <div className={s.item}>
         <NavLink to="/createtrip" activeClassName={s.activeLink}>
           {' '}
           Create ride as captain
+        </NavLink>
+      </div>
+      <div className={s.item}>
+        <NavLink to="/findby" activeClassName={s.activeLink}>
+          {' '}
+          Find rides by params
         </NavLink>
       </div>
       <div className={s.item}>
