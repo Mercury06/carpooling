@@ -52,8 +52,8 @@ router.post('/createride', async (req, res) => {
     //const user = '625474cdaeaabfaac86eda54';
 
     // const userRole = new Role();
-    // const adminRole = new Role({value:"Admin"})
     // await userRole.save()
+    // const adminRole = new Role({value:"Admin"})
     // await adminRole.save()
     //const date = new Date (when)
 
