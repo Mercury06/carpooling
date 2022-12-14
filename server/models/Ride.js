@@ -3,8 +3,8 @@ const { Schema, model, ObjectId } = require('mongoose');
 
 const Ride = new Schema(
   // {
-  //   // localityFrom: {type: ObjectId, ref: 'Locality', required: true},
-  //   // destination: {type: ObjectId, ref: 'Locality', required: true},
+  //   destination: {type: ObjectId, ref: 'Locality', required: true},
+  //   localityFrom: {type: ObjectId, ref: 'Locality', required: true},
   //   localityFrom: { type: String, required: true },
   //   destination: { type: String, required: true },
   //   user: { type: ObjectId, ref: 'User', required: true },
