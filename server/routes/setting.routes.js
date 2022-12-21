@@ -159,24 +159,4 @@ router.get(
   },
 );
 
-// router.get('/r', (req, res) => {
-//   console.log('res:', res);
-//   res.status(200);
-//   res.end('hello');
-// });
-// router.get('/params',
-// async (req, res) => {
-//     try {
-//         console.dir(req.ip)
-//         console.log(req.method)
-//         console.log(req.protocol)
-//         console.log(req.route)
-//         console.dir(req.accepts('image/png'))
-//         res.json("params received:")
-//     } catch (e) {
-//         console.log(e)
-//         res.status(400).json({ message: "somthing wrong"})
-//     }
-// })
-
 module.exports = router;
