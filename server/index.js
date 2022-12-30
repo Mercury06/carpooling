@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const neo4j = require('neo4j-driver');
+
 const config = require('config');
 
 const corsMiddleware = require('./middleware/cors.middleware');
@@ -18,14 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 app.use('/api/auth', authRouter);
 app.use('/api/settings', settingsRouter);
-
-///////neo4j/////////
-const uri = 'bolt://54.197.15.138:7687';
-const user = 'neo4j';
-const password = 'qwe123';
-const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
-//const session = driver.session({ database: 'neo4j' });
-const session = driver.session();
 
 const start = async () => {
   try {
