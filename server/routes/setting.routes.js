@@ -71,8 +71,7 @@ router.post('/createride', async (req, res) => {
     res.status(201).json('new ride created');
   } catch (e) {
     console.log(e);
-    //res.send({message: "Server error"})
-    res.status(500).json({ message: 'ride not created' });
+    res.status(500).json({ message: 'ride not created' }, e);
   }
 });
 
