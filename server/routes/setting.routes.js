@@ -1,21 +1,14 @@
 const Router = require('express');
-const neo4j = require('neo4j-driver');
 const Locality = require('../models/Locality.js');
 const Role = require('../models/Role');
 const Ride = require('../models/Ride');
 const { check, validationResult } = require('express-validator');
+//const { sayFunc } = require('./../db/sayFunc');
+const { getGraphData } = require('./../db/neo4j');
 
 const router = new Router();
 // const config = require ("config");
 // const secretKey = config.get("secretKey");
-
-///////neo4j/////////
-const uri = 'bolt://54.197.15.138:7687';
-const user = 'neo4j';
-const password = 'qwe123';
-const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
-//const session = driver.session({ database: 'neo4j' });
-const session = driver.session();
 
 router.post(
   '/createlocality',
@@ -74,7 +67,20 @@ router.post('/createride', async (req, res) => {
     res.status(500).json({ message: 'ride not created' }, e);
   }
 });
+///////////////////////////////////////////
+router.get('/t', async (req, res) => {
+  try {
+    const result = await getGraphData();
+    //const data = await result.json();
+    console.log('api data:', result);
+    return res.status(206).json(result);
+  } catch (e) {
+    console.log(e);
+  } finally {
+  }
+});
 
+//////////////////////////////////////////////
 router.get('/createroles', async (req, res) => {
   try {
     const userRole = new Role();
