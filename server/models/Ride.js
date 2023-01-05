@@ -25,6 +25,9 @@ const Ride = new Schema(
       localityName: { type: String, required: true },
       id: { type: ObjectId, ref: 'Locality', required: true },
     },
+    // points: [
+    //   name:
+    // ],
     user: { type: ObjectId, ref: 'User', required: true },
     seats: { type: Number, default: 1 },
     date: { type: Date, required: true },

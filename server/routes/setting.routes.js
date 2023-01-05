@@ -47,10 +47,17 @@ router.post(
 );
 
 router.post('/createride', async (req, res) => {
-  console.log('from api create ride');
-  console.log(req.body);
+  // console.log('from api create ride');
+  // console.log(req.body);
   try {
     const { localityFrom, destination, date, user } = req.body;
+    console.log('localityFrom.id:', localityFrom.id);
+    console.log('destination.id:', destination.id);
+    console.log('user:', user);
+
+    const result = await getGraphData(localityFrom.id, destination.id);
+    console.log('apii data:', result);
+    return res.status(206).json(result);
     //const user = '625474cdaeaabfaac86eda54';
 
     // const userRole = new Role();
@@ -58,10 +65,11 @@ router.post('/createride', async (req, res) => {
     // const adminRole = new Role({value:"Admin"})
     // await adminRole.save()
     //const date = new Date (when)
-
-    const ride = new Ride({ localityFrom, destination, date, user });
-    await ride.save();
-    res.status(201).json('new ride created');
+    //const
+    //debugger;
+    // const ride = new Ride({ localityFrom, destination, date, user });
+    // await ride.save();
+    // res.status(201).json('new ride created');
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: 'ride not created' }, e);
@@ -70,7 +78,7 @@ router.post('/createride', async (req, res) => {
 ///////////////////////////////////////////
 router.get('/t', async (req, res) => {
   try {
-    const result = await getGraphData();
+    const result = await getGraphData('Гороховец', 'Покров');
     //const data = await result.json();
     console.log('api data:', result);
     return res.status(206).json(result);

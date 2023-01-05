@@ -55,48 +55,44 @@ const session = driver.session();
 // }
 // getGraphData();
 
-const fromPromise = () =>
+// const fromPromise = (cityNameFrom, cityNameTo) =>
+//   new Promise(function (resolve, reject) {
+//     //const cityName = 'Сергиев Посад';
+//     //const readQuery = `MATCH (City {name: $cityName})-[:LINKED*1..3]-(city:City) RETURN city`;
+//     const readQuery = `MATCH p= (n:City3{name: $cityNameFrom})-[:TOWARD*]->(m:City3{name: $cityNameTo}) return nodes(p)`;
+//     const cities = [];
+//     session.run(readQuery, { cityNameFrom, cityNameTo }).then(function (result) {
+//       //const cities = [];
+//       // debugger;
+//       result.records.forEach(function (record) {
+//         cities.push({
+//           title: record._fields[0].properties.name,
+//         });
+//         //console.log(record._fields[0].properties);
+//       });
+//       //console.log('cities:', cities);
+//       resolve(cities);
+//     });
+//     // .finally(() => {
+//     //   session.close();
+//     //   console.log('session closed');
+//     // });
+//   });
+
+const fromPromise = (cityNameFrom, cityNameTo) =>
   new Promise(function (resolve, reject) {
-    const cityName = 'Сергиев Посад';
-    const readQuery = `MATCH (City {name: $cityName})-[:LINKED*1..3]-(city:City) RETURN city`;
+    //const readQuery = `MATCH p= (n:City3{name: $cityNameFrom})-[:TOWARD*]->(m:City3{name: $cityNameTo}) return nodes(p)`;
+    const readQuery = `MATCH p= (n:City3{mongoId: $cityNameFrom})-[:TOWARD*]->(m:City3{mongoId: $cityNameTo}) return nodes(p)`;
     const cities = [];
-    session.run(readQuery, { cityName }).then(function (result) {
-      //const cities = [];
-      // debugger;
-      result.records.forEach(function (record) {
+    session.run(readQuery, { cityNameFrom, cityNameTo }).then(function (result) {
+      result.records[0]._fields[0].forEach(function (record) {
         cities.push({
-          title: record._fields[0].properties.name,
+          title: record.properties.name,
         });
-        //console.log(record._fields[0].properties);
       });
-      //console.log('cities:', cities);
       resolve(cities);
     });
   });
-//fromPromise.then((thenData) => console.log('thenData:', thenData));
-// console.log('fromPromise:', fromPromise);
-// console.log(typeof fromPromise);
-// async function getGraphData() {
-//   const cityName = 'Milan';
-//   const readQuery = `MATCH (City {name: $cityName})-[:LINKED*1..3]-(city:City) RETURN city`;
-//   //const cities = [];
-//   try {
-//     const cities = [];
-//     debugger;
-//     const result = await session.run(readQuery, { cityName });
-//     result.records.forEach(function (record) {
-//       cities.push({
-//         title: record._fields[0].properties.name,
-//       });
-//     });
-//     console.log('cities:', cities);
-//     return cities;
-//   } catch (err) {
-//     console.log(err);
-//     return err;
-//   }
-// }
-
 // getGraphData();
 // module.exports.getGraphData = getGraphData;
 module.exports.getGraphData = fromPromise;
