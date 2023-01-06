@@ -87,7 +87,8 @@ const fromPromise = (cityNameFrom, cityNameTo) =>
     session.run(readQuery, { cityNameFrom, cityNameTo }).then(function (result) {
       result.records[0]._fields[0].forEach(function (record) {
         cities.push({
-          title: record.properties.name,
+          localityName: record.properties.name,
+          mongoId: record.properties.mongoId,
         });
       });
       resolve(cities);

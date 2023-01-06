@@ -55,21 +55,12 @@ router.post('/createride', async (req, res) => {
     console.log('destination.id:', destination.id);
     console.log('user:', user);
 
-    const result = await getGraphData(localityFrom.id, destination.id);
-    console.log('apii data:', result);
-    return res.status(206).json(result);
-    //const user = '625474cdaeaabfaac86eda54';
+    const points = await getGraphData(localityFrom.id, destination.id);
+    console.log('apii data:', points);
 
-    // const userRole = new Role();
-    // await userRole.save()
-    // const adminRole = new Role({value:"Admin"})
-    // await adminRole.save()
-    //const date = new Date (when)
-    //const
-    //debugger;
-    // const ride = new Ride({ localityFrom, destination, date, user });
-    // await ride.save();
-    // res.status(201).json('new ride created');
+    const ride = new Ride({ localityFrom, destination, points, date, user });
+    await ride.save();
+    res.status(201).json('new ride created');
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: 'ride not created' }, e);
