@@ -60,10 +60,10 @@ router.post('/createride', async (req, res) => {
 
     const ride = new Ride({ localityFrom, destination, points, date, user });
     await ride.save();
-    res.status(201).json('new ride created');
+    return res.status(201).json('new ride created');
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: 'ride not created' }, e);
+    return res.status(500).json({ message: 'ride not created' }, e);
   }
 });
 ///////////////////////////////////////////
