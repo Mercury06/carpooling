@@ -29,6 +29,7 @@ const Ride = new Schema(
       {
         localityName: { type: String },
         mongoId: { type: ObjectId, ref: 'Locality' },
+        _id: false,
       },
     ],
     user: { type: ObjectId, ref: 'User', required: true },
