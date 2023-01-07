@@ -2,6 +2,7 @@ const Router = require('express');
 const Locality = require('../models/Locality.js');
 const Role = require('../models/Role');
 const Ride = require('../models/Ride');
+const Ask = require('../models/Ask');
 const { check, validationResult } = require('express-validator');
 //const { sayFunc } = require('./../db/sayFunc');
 const { getGraphData } = require('./../db/neo4j');
@@ -66,31 +67,22 @@ router.post('/createride', async (req, res) => {
     return res.status(500).json({ message: 'ride not created' }, e);
   }
 });
-///////////////////////////////////////////
-router.get('/t', async (req, res) => {
+router.post('/createask', async (req, res) => {
   try {
-    const result = await getGraphData('Гороховец', 'Покров');
-    //const data = await result.json();
-    console.log('api data:', result);
-    return res.status(206).json(result);
-  } catch (e) {
-    console.log(e);
-  } finally {
-  }
-});
+    const { localityFrom, destination, date, user } = req.body;
+    console.log('localityFrom.id:', localityFrom.id);
+    console.log('destination.id:', destination.id);
+    console.log('user:', user);
 
-//////////////////////////////////////////////
-router.get('/createroles', async (req, res) => {
-  try {
-    const userRole = new Role();
-    const adminRole = new Role({ value: 'Admin' });
-    await userRole.save();
-    await adminRole.save();
-    res.json('roles created');
+    const points = await getGraphData(localityFrom.id, destination.id);
+    console.log('apii data:', points);
+
+    const ride = new Ask({ localityFrom, destination, points, date, user });
+    await ride.save();
+    return res.status(201).json('new ask created');
   } catch (e) {
     console.log(e);
-    //res.send({message: "Server error"})
-    res.status(500).json({ message: 'roles not created' });
+    return res.status(500).json({ message: 'ask not created' }, e);
   }
 });
 
@@ -102,6 +94,16 @@ router.get('/findall', async (req, res) => {
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: 'rides not found' });
+  }
+});
+router.get('/findmyask', async (req, res) => {
+  try {
+    const asks = await Ask.find();
+    //console.log(rides)
+    return res.status(200).json(asks);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: 'asks not found' });
   }
 });
 

@@ -10,7 +10,13 @@ const Ask = new Schema(
       localityName: { type: String, required: true },
       id: { type: ObjectId, ref: 'Locality', required: true },
     },
-
+    points: [
+      {
+        localityName: { type: String },
+        mongoId: { type: ObjectId, ref: 'Locality' },
+        _id: false,
+      },
+    ],
     user: { type: ObjectId, ref: 'User', required: true },
     seats: { type: Number, default: 1 },
     date: { type: Date, required: true },
