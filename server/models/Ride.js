@@ -1,22 +1,7 @@
 const { Schema, model, ObjectId } = require('mongoose');
-//const User = require('./User.js');
 
 const Ride = new Schema(
-  // {
-  //   destination: {type: ObjectId, ref: 'Locality', required: true},
-  //   localityFrom: {type: ObjectId, ref: 'Locality', required: true},
-  //   localityFrom: { type: String, required: true },
-  //   destination: { type: String, required: true },
-  //   user: { type: ObjectId, ref: 'User', required: true },
-  //   seats: { type: Number, default: 1 },
-  //   date: { type: Date, required: true },
-  //   completed: { type: Boolean, default: false }, // ride status
-  //   //time: [{type: String, ref: 'Role'}],
-  //   comment: { type: String, minlength: 5 },
-  // },
   {
-    // localityFrom: {type: ObjectId, ref: 'Locality', required: true},
-    // destination: {type: ObjectId, ref: 'Locality', required: true},
     localityFrom: {
       localityName: { type: String, required: true },
       id: { type: ObjectId, ref: 'Locality', required: true },
@@ -33,7 +18,23 @@ const Ride = new Schema(
       },
     ],
     user: { type: ObjectId, ref: 'User', required: true },
-    seats: { type: Number, default: 1 },
+    seats_declared: { type: Number, default: 1 },
+    seats_available: { type: Number, default: 1 }, //if 0 all seats booked
+    passengers: [
+      {
+        user: { type: ObjectId, ref: 'User' },
+        seats_booked: { type: Number, default: 1 },
+        startPoint: {
+          localityName: { type: String, required: true },
+          id: { type: ObjectId, ref: 'Locality', required: true },
+        },
+        endPoint: {
+          localityName: { type: String, required: true },
+          id: { type: ObjectId, ref: 'Locality', required: true },
+        },
+        _id: false,
+      },
+    ],
     date: { type: Date, required: true },
     completed: { type: Boolean, default: false }, // ride status
     //time: [{type: String, ref: 'Role'}],
