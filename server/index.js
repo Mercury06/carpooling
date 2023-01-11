@@ -8,6 +8,7 @@ const logger = require('./middleware/logger.js');
 
 const authRouter = require('./routes/auth.routes.js');
 const settingsRouter = require('./routes/setting.routes.js');
+const Ride = require('./models/Ride');
 
 const app = express();
 const PORT = process.env.PORT || config.get('serverPort');
