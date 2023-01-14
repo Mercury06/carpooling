@@ -9,7 +9,10 @@ const logger = require('./middleware/logger.js');
 const authRouter = require('./routes/auth.routes.js');
 const settingsRouter = require('./routes/setting.routes.js');
 const Ride = require('./models/Ride');
-
+////////////////////////////////////////////////
+const { EventEmitter } = require('events');
+const emitter = new EventEmitter();
+////////////////////////////////////////////////
 const app = express();
 const PORT = process.env.PORT || config.get('serverPort');
 
@@ -28,8 +31,13 @@ const start = async () => {
       // keepAlive: true,
       // keepAliveInitialDelay: 30000,
     });
-    //Ride.watch().on('change', (data) => console.log(data)); //edit перенести в middleware
+
     const db = mongoose.connection;
+    Ride.watch().on('change', (next) => emitter.emit('my-event', next.fullDocument)); //edit перенести в middleware
+    emitter.on('my-event', (data) => {
+      console.log('data from emitter:', data);
+    });
+
     db.on('error', (error) => {
       console.error(error.message);
       mongoose.disconnect();

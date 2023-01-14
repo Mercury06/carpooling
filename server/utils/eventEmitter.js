@@ -10,5 +10,5 @@ emitter.on('error', (err) => {
   console.log(err.message);
 });
 
-emitter.emit('me-event', data);
+emitter.emit('my-event', data);
 emitter.emit('error', new Error('some emitter error'));
