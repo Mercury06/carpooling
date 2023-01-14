@@ -6,7 +6,6 @@ const Ask = require('../models/Ask');
 const { check, validationResult } = require('express-validator');
 //const { sayFunc } = require('./../db/sayFunc');
 const { getGraphData } = require('./../db/neo4j');
-const { mongoStream } = require('../db/stream.js');
 
 const router = new Router();
 // const config = require ("config");
@@ -53,18 +52,15 @@ router.post('/createride', async (req, res) => {
   // console.log(req.body);
   try {
     const { localityFrom, destination, date, user } = req.body;
-    console.log('localityFrom.id:', localityFrom.id);
-    console.log('destination.id:', destination.id);
+    // console.log('localityFrom.id:', localityFrom.id);
+    // console.log('destination.id:', destination.id);
     console.log('user:', user);
 
     const points = await getGraphData(localityFrom.id, destination.id);
     console.log('apii data:', points);
-    const result = mongoStream();
-    console.log('result:', result);
+
     const ride = new Ride({ localityFrom, destination, points, date, user });
     await ride.save();
-    const result2 = mongoStream();
-    console.log('result:', result2);
     return res.status(201).json('new ride created');
   } catch (e) {
     console.log(e);

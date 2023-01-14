@@ -28,7 +28,7 @@ const start = async () => {
       // keepAlive: true,
       // keepAliveInitialDelay: 30000,
     });
-    //Ride.watch().on('change', (data) => console.log(data));
+    //Ride.watch().on('change', (data) => console.log(data)); //edit перенести в middleware
     const db = mongoose.connection;
     db.on('error', (error) => {
       console.error(error.message);
