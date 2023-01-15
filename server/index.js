@@ -33,11 +33,14 @@ const start = async () => {
     });
 
     const db = mongoose.connection;
-    Ride.watch().on('change', (next) => emitter.emit('my-event', next.fullDocument)); //edit перенести в middleware
-    emitter.on('my-event', (data) => {
-      console.log('data from emitter:', data);
-    });
-
+    ////////////////////////////////////////////////
+    // Ride.watch().on('change', (next) => emitter.emit('my-event', next.fullDocument)); //edit перенести в middleware
+    // emitter.on('my-event', (data) => {
+    //   console.log('data from emitter:', data);
+    // });
+    // const resulty = Ride.watch(); //edit перенести в middleware
+    // resulty.on('change', (next) => console.log('inside_next:', next));
+    ///////////////////////////////////////////////
     db.on('error', (error) => {
       console.error(error.message);
       mongoose.disconnect();
