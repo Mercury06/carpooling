@@ -58,7 +58,7 @@ router.post('/createride', async (req, res) => {
 
     //const points = await getGraphData(localityFrom.id, destination.id);
     const { cities, direction } = await getGraphData(localityFrom.id, destination.id);
-    console.log('apii data:', cities);
+    //console.log('apii data:', cities);
     const points = cities;
     const ride = new Ride({ localityFrom, destination, points, direction, date, user });
     await ride.save();
@@ -75,11 +75,11 @@ router.post('/createask', async (req, res) => {
     console.log('destination.id:', destination.id);
     console.log('user:', user);
 
-    const points = await getGraphData(localityFrom.id, destination.id);
-    console.log('apii data:', points);
-
-    const ride = new Ask({ localityFrom, destination, points, date, user });
-    await ride.save();
+    const { cities, direction } = await getGraphData(localityFrom.id, destination.id);
+    //console.log('apii data:', cities);
+    const points = cities;
+    const ask = new Ask({ localityFrom, destination, points, direction, date, user });
+    await ask.save();
     return res.status(201).json('new ask created');
   } catch (e) {
     console.log(e);
@@ -97,6 +97,7 @@ router.get('/findall', async (req, res) => {
     res.status(500).json({ message: 'rides not found' });
   }
 });
+
 router.get('/findmyask', async (req, res) => {
   try {
     const asks = await Ask.find();
