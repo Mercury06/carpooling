@@ -56,10 +56,11 @@ router.post('/createride', async (req, res) => {
     // console.log('destination.id:', destination.id);
     console.log('user:', user);
 
-    const points = await getGraphData(localityFrom.id, destination.id);
-    console.log('apii data:', points);
-
-    const ride = new Ride({ localityFrom, destination, points, date, user });
+    //const points = await getGraphData(localityFrom.id, destination.id);
+    const { cities, direction } = await getGraphData(localityFrom.id, destination.id);
+    console.log('apii data:', cities);
+    const points = cities;
+    const ride = new Ride({ localityFrom, destination, points, direction, date, user });
     await ride.save();
     return res.status(201).json('new ride created');
   } catch (e) {

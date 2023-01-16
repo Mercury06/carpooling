@@ -17,6 +17,7 @@ const Ride = new Schema(
         _id: false,
       },
     ],
+    direction: { type: String, required: true },
     user: { type: ObjectId, ref: 'User', required: true },
     seats_declared: { type: Number, default: 1 },
     seats_available: { type: Number, default: 1 }, //if 0 all seats booked
