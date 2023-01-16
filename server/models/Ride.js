@@ -21,6 +21,7 @@ const Ride = new Schema(
     user: { type: ObjectId, ref: 'User', required: true },
     seats_declared: { type: Number, default: 1 },
     seats_available: { type: Number, default: 1 }, //if 0 all seats booked
+    asks: [],
     passengers: [
       {
         user: { type: ObjectId, ref: 'User' },

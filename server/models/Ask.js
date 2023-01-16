@@ -17,9 +17,11 @@ const Ask = new Schema(
         _id: false,
       },
     ],
+    direction: { type: String, required: true },
     user: { type: ObjectId, ref: 'User', required: true },
     seats: { type: Number, default: 1 },
     date: { type: Date, required: true },
+    offers: [],
     completed: { type: Boolean, default: false }, // ride status
     //time: [{type: String, ref: 'Role'}],
     comment: { type: String, minlength: 5 },
