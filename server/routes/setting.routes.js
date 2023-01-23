@@ -134,12 +134,16 @@ router.get('/findlocs', async (req, res) => {
 
 router.get('/findridesby', async (req, res) => {
   try {
+    console.log('req.query:', req.query);
     let date = req.query.date;
+    let localityFrom = req.query.localityFrom;
+    let destination = req.query.destination;
+
     //const search = await Ride.find({date: date})
     //const search = await Ride.find({date:{$gte:"2022-06-06"}})
     //const search = await Ride.find({date:{$gte:"2022-05-20", $lte:"2022-06-01"}})
-    const search = await Ride.find({ date: date });
-    console.log(search);
+    const search = await Ride.find({ date: date, localityFrom, destination });
+    //console.log(search);
     return res.status(200).json(search);
   } catch (e) {
     console.log(e);
