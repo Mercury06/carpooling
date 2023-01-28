@@ -60,7 +60,14 @@ router.post('/createride', async (req, res) => {
     const { cities, direction } = await getGraphData(localityFrom.id, destination.id);
     //console.log('apii data:', cities);
     const points = cities;
-    const ride = new Ride({ localityFrom, destination, points, direction, date, user });
+    const ride = new Ride({
+      localityFrom,
+      destination,
+      points,
+      direction,
+      date,
+      user,
+    });
     await ride.save();
     return res.status(201).json('new ride created');
   } catch (e) {
@@ -78,7 +85,14 @@ router.post('/createask', async (req, res) => {
     const { cities, direction } = await getGraphData(localityFrom.id, destination.id);
     //console.log('apii data:', cities);
     const points = cities;
-    const ask = new Ask({ localityFrom, destination, points, direction, date, user });
+    const ask = new Ask({
+      localityFrom,
+      destination,
+      points,
+      direction,
+      date,
+      user,
+    });
     await ask.save();
     return res.status(201).json('new ask created');
   } catch (e) {
@@ -98,9 +112,10 @@ router.get('/findall', async (req, res) => {
   }
 });
 
-router.get('/findmyask', async (req, res) => {
+router.get('/findmyask/:id', async (req, res) => {
   try {
-    const asks = await Ask.find();
+    const { id } = req.params;
+    const asks = await Ask.find({ user: id });
     //console.log(rides)
     return res.status(200).json(asks);
   } catch (e) {
@@ -134,20 +149,24 @@ router.get('/findlocs', async (req, res) => {
 
 router.get('/findridesby', async (req, res) => {
   try {
-    console.log('req.query:', req.query);
+    //console.log('req.query:', req.query);
     let date = req.query.date;
     let localityFrom = req.query.localityFrom;
+    //console.log(localityFrom);
     let destination = req.query.destination;
+    //console.log(destination);
 
-    //const search = await Ride.find({date: date})
-    //const search = await Ride.find({date:{$gte:"2022-06-06"}})
-    //const search = await Ride.find({date:{$gte:"2022-05-20", $lte:"2022-06-01"}})
-    const search = await Ride.find({ date: date, localityFrom, destination });
-    //console.log(search);
+    const search = await Ride.find({
+      'localityFrom.localityName': localityFrom,
+      'destination.localityName': destination,
+      //date: new Date('2023-01-21'),
+      date,
+    });
+
+    console.log(search);
     return res.status(200).json(search);
   } catch (e) {
     console.log(e);
-    //res.send({message: "Server error"})
     res.status(500).json({ message: 'rides not found' });
   }
 });

@@ -4,19 +4,21 @@ const mongoose = require('mongoose');
 const config = require('config');
 
 const corsMiddleware = require('./middleware/cors.middleware');
+const eventEmitter = require('./middleware/eventMiddleware');
 const logger = require('./middleware/logger.js');
 
 const authRouter = require('./routes/auth.routes.js');
 const settingsRouter = require('./routes/setting.routes.js');
-const Ride = require('./models/Ride');
+//const Ride = require('./models/Ride');
 ////////////////////////////////////////////////
-const { EventEmitter } = require('events');
-const emitter = new EventEmitter();
+// const { EventEmitter } = require('events');
+// const emitter = new EventEmitter();
 ////////////////////////////////////////////////
 const app = express();
 const PORT = process.env.PORT || config.get('serverPort');
 
 app.use(corsMiddleware);
+app.use(eventEmitter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
