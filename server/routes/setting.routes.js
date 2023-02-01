@@ -4,12 +4,9 @@ const Role = require('../models/Role');
 const Ride = require('../models/Ride');
 const Ask = require('../models/Ask');
 const { check, validationResult } = require('express-validator');
-//const { sayFunc } = require('./../db/sayFunc');
 const { getGraphData } = require('./../db/neo4j');
 
 const router = new Router();
-// const config = require ("config");
-// const secretKey = config.get("secretKey");
 
 router.post(
   '/createlocality',
@@ -60,6 +57,7 @@ router.post('/createride', async (req, res) => {
     const { cities, direction } = await getGraphData(localityFrom.id, destination.id);
     //console.log('apii data:', cities);
     const points = cities;
+
     const ride = new Ride({
       localityFrom,
       destination,
@@ -70,11 +68,16 @@ router.post('/createride', async (req, res) => {
     });
     await ride.save();
     return res.status(201).json('new ride created');
+    //return res.status(206).json({ message: 'new ride created', redirect_path: '/subscribe' });
+    //return res.redirect('/subscribe');
+    // res.writeHead(302, { Location: 'http://localhost:3000/subscribe' });
+    // res.end();
   } catch (e) {
     console.log(e);
-    return res.status(500).json({ message: 'ride not created' }, e);
+    return res.status(500).json({ message: 'ride not created' });
   }
 });
+
 router.post('/createask', async (req, res) => {
   try {
     const { localityFrom, destination, date, user } = req.body;
@@ -116,6 +119,17 @@ router.get('/findmyask/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const asks = await Ask.find({ user: id });
+    //console.log(rides)
+    return res.status(200).json(asks);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: 'asks not found' });
+  }
+});
+router.get('/findasks', async (req, res) => {
+  try {
+    //const { id } = req.params;
+    const asks = await Ask.find();
     //console.log(rides)
     return res.status(200).json(asks);
   } catch (e) {

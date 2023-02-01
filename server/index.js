@@ -1,24 +1,22 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const config = require('config');
 
 const corsMiddleware = require('./middleware/cors.middleware');
-const eventEmitter = require('./middleware/eventMiddleware');
+//const eventEmitter = require('./middleware/eventMiddleware');
 const logger = require('./middleware/logger.js');
 
 const authRouter = require('./routes/auth.routes.js');
 const settingsRouter = require('./routes/setting.routes.js');
-//const Ride = require('./models/Ride');
-////////////////////////////////////////////////
-// const { EventEmitter } = require('events');
-// const emitter = new EventEmitter();
-////////////////////////////////////////////////
+
 const app = express();
 const PORT = process.env.PORT || config.get('serverPort');
 
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsMiddleware);
-app.use(eventEmitter);
+//app.use(eventEmitter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
@@ -35,14 +33,7 @@ const start = async () => {
     });
 
     const db = mongoose.connection;
-    ////////////////////////////////////////////////
-    // Ride.watch().on('change', (next) => emitter.emit('my-event', next.fullDocument)); //edit перенести в middleware
-    // emitter.on('my-event', (data) => {
-    //   console.log('data from emitter:', data);
-    // });
-    // const resulty = Ride.watch(); //edit перенести в middleware
-    // resulty.on('change', (next) => console.log('inside_next:', next));
-    ///////////////////////////////////////////////
+
     db.on('error', (error) => {
       console.error(error.message);
       mongoose.disconnect();
@@ -71,13 +62,6 @@ const start = async () => {
         console.log('Server is closed...');
         process.exit(0);
       });
-
-      //не срабатывает прерывание процесса при ctrl+C
-      //mongoose.disconnect()
-      // mongoose.connection.close(function () {
-      //   console.log('Mongoose default connection is disconnected due to application termination');
-      //   process.exit(0);
-      // });
     });
     process.on('SIGTERM', function () {
       console.log('SIGTERM recieved');
