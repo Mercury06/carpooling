@@ -17,7 +17,7 @@ const Ask = new Schema(
         _id: false,
       },
     ],
-    direction: { type: String, required: true },
+    direction: { type: String, required: false },
     user: { type: ObjectId, ref: 'User', required: true },
     seats: { type: Number, default: 1 },
     date: { type: Date, required: true },

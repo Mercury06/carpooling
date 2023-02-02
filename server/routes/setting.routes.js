@@ -85,14 +85,14 @@ router.post('/createask', async (req, res) => {
     console.log('destination.id:', destination.id);
     console.log('user:', user);
 
-    const { cities, direction } = await getGraphData(localityFrom.id, destination.id);
+    //const { cities, direction } = await getGraphData(localityFrom.id, destination.id);
     //console.log('apii data:', cities);
-    const points = cities;
+    //const points = cities;
     const ask = new Ask({
       localityFrom,
       destination,
-      points,
-      direction,
+      //points,
+      //direction,
       date,
       user,
     });
