@@ -97,7 +97,7 @@ router.post('/createask', async (req, res) => {
       user,
     });
     await ask.save();
-    return res.status(201).json('new ask created');
+    return res.status(201).json({ message: 'new ask created', status: 'OK' });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ message: 'ask not created' }, e);
