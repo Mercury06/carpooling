@@ -13,6 +13,7 @@ const Ride = require('./models/Ride');
 
 const { EventEmitter } = require('events');
 const { getSubsFromMongo } = require('./db/subsMongo');
+const { getMatchedData } = require('./utils/matcher');
 const emitter = new EventEmitter();
 
 const app = express();
@@ -50,9 +51,11 @@ const start = async () => {
     resulty.on('change', async function (next) {
       //debugger;
       let points = next.fullDocument.points;
-      let localityNameArray = points.map((item) => item.localityName);
-      const subs = await getSubsFromMongo(localityNameArray);
-      console.log('get subs mongo:', subs);
+      let route = points.map((item) => item.localityName);
+      const subs = await getSubsFromMongo(route);
+      //console.log('get subs mongo:', subs);
+      const matched = getMatchedData(route, subs);
+      console.log('matched:', matched);
       //console.log(points);
       //console.log('localityNameArray:', localityNameArray);
     });

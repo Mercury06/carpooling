@@ -210,28 +210,28 @@ router.get('/findlocality', async (req, res) => {
   }
 });
 
-router.get('/findsubs', async (req, res) => {
-  try {
-    //const arr = ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'];
-    const subs = await Ask.find({
-      $and: [
-        {
-          'localityFrom.localityName': {
-            $in: ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'],
-          },
-        },
-        {
-          'destination.localityName': {
-            $in: ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'],
-          },
-        },
-      ],
-    });
-    return res.status(200).json(subs);
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: 'rides not found' });
-  }
-});
+// router.get('/findsubs', async (req, res) => {
+//   try {
+//     //const arr = ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'];
+//     const subs = await Ask.find({
+//       $and: [
+//         {
+//           'localityFrom.localityName': {
+//             $in: ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'],
+//           },
+//         },
+//         {
+//           'destination.localityName': {
+//             $in: ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'],
+//           },
+//         },
+//       ],
+//     });
+//     return res.status(200).json(subs);
+//   } catch (e) {
+//     console.log(e);
+//     res.status(500).json({ message: 'rides not found' });
+//   }
+// });
 
 module.exports = router;
