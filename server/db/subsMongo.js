@@ -1,7 +1,7 @@
 const Ask = require('../models/Ask');
 
 const subsMongoPromise = (points) => {
-  debugger;
+  //debugger;
   return new Promise(async function (resolve, reject) {
     const subs = await Ask.find({
       $and: [
