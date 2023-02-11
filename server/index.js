@@ -12,6 +12,7 @@ const settingsRouter = require('./routes/setting.routes.js');
 const Ride = require('./models/Ride');
 
 const { EventEmitter } = require('events');
+const { getSubsFromMongo } = require('./db/subsMongo');
 const emitter = new EventEmitter();
 
 const app = express();
@@ -42,8 +43,19 @@ const start = async () => {
     //   //let points = data.fullDocument.points;
     //   //console.log('points:', points);
     // });
-    const resulty = Ride.watch(); //edit перенести
-    resulty.on('change', (next) => console.log('inside_next:', next.fullDocument.points));
+
+    // const resulty = Ride.watch(); //edit
+    // resulty.on('change', (next) => console.log('inside_next:', next.fullDocument.points));
+    const resulty = Ride.watch(); //edit
+    resulty.on('change', async function (next) {
+      //debugger;
+      let points = next.fullDocument.points;
+      let localityNameArray = points.map((item) => item.localityName);
+      const subs = await getSubsFromMongo(localityNameArray);
+      console.log('get subs mongo:', subs);
+      //console.log(points);
+      //console.log('localityNameArray:', localityNameArray);
+    });
 
     db.on('error', (error) => {
       console.error(error.message);

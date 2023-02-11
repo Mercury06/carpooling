@@ -1,7 +1,8 @@
 const Router = require('express');
 const Locality = require('../models/Locality.js');
-const Role = require('../models/Role');
+//const Role = require('../models/Role');
 const Ride = require('../models/Ride');
+
 const Ask = require('../models/Ask');
 const { check, validationResult } = require('express-validator');
 const { getGraphData } = require('./../db/neo4j');
@@ -206,6 +207,30 @@ router.get('/findlocality', async (req, res) => {
     console.log(e);
     //res.send({message: "Server error"})
     res.status(400).json({ message: 'search error' });
+  }
+});
+
+router.get('/findsubs', async (req, res) => {
+  try {
+    //const arr = ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'];
+    const subs = await Ask.find({
+      $and: [
+        {
+          'localityFrom.localityName': {
+            $in: ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'],
+          },
+        },
+        {
+          'destination.localityName': {
+            $in: ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'],
+          },
+        },
+      ],
+    });
+    return res.status(200).json(subs);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: 'rides not found' });
   }
 });
 
