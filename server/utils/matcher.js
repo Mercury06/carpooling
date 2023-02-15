@@ -1,7 +1,7 @@
 function findMatchingSubscriptions(route, subscriptions) {
   const subroutesSet = prepareSubroutesSet(route);
-  //console.log('subroutesSet inside:', subroutesSet);
-  //console.log('subscriptions inside:', subscriptions);
+  console.log('subroutesSet inside:', subroutesSet);
+  console.log('subscriptions inside:', subscriptions);
   return subscriptions.filter((s) =>
     subroutesSet.has(makeKey(s.localityFrom.localityName, s.destination.localityName)),
   );
