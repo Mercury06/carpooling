@@ -1,6 +1,6 @@
 const neo4j = require('neo4j-driver');
 
-const uri = 'bolt://3.92.179.182:7687';
+const uri = 'bolt://3.82.112.16:7687';
 const user = 'neo4j';
 const password = 'qwe123';
 const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));

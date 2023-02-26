@@ -29,5 +29,12 @@ const subsMongoPromise = (points) => {
 //     resolve(subs);
 //   });
 // };
+const pushOffersMongo = () => {
+  //debugger;
+  return new Promise(async function (resolve, reject) {
+    const subs = await Ask.find({});
 
+    resolve(subs);
+  });
+};
 module.exports.getSubsFromMongo = subsMongoPromise;
