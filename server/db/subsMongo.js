@@ -29,12 +29,23 @@ const subsMongoPromise = (points) => {
 //     resolve(subs);
 //   });
 // };
-const pushOffersMongo = () => {
+const addOffersToMongo = (matched, applicant) => {
   //debugger;
   return new Promise(async function (resolve, reject) {
-    const subs = await Ask.find({});
-
-    resolve(subs);
+    const asksArray = matched.map((ask) => ask._id);
+    const signed = Ask.updateMany(
+      { _id: { $in: asksArray } },
+      {
+        $push: {
+          offers: applicant,
+        },
+      },
+    );
+    resolve(signed);
   });
 };
-module.exports.getSubsFromMongo = subsMongoPromise;
+//module.exports.getSubsFromMongo = subsMongoPromise;
+module.exports = {
+  getSubsFromMongo: subsMongoPromise,
+  addOffersToMongo,
+};

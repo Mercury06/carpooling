@@ -12,7 +12,7 @@ const settingsRouter = require('./routes/setting.routes.js');
 const Ride = require('./models/Ride');
 
 const { EventEmitter } = require('events');
-const { getSubsFromMongo } = require('./db/subsMongo');
+const { getSubsFromMongo, addOffersToMongo } = require('./db/subsMongo');
 const { getMatchedData } = require('./utils/matcher');
 const emitter = new EventEmitter();
 
@@ -56,8 +56,9 @@ const start = async () => {
       //console.log('get subs mongo:', subs);
       const matched = getMatchedData(route, subs);
       console.log('matched:', matched);
-      //console.log(points);
-      //console.log('localityNameArray:', localityNameArray);
+      let applicant = next.fullDocument;
+      const signed = await addOffersToMongo(matched, applicant);
+      console.log('signed:', signed);
     });
 
     db.on('error', (error) => {
