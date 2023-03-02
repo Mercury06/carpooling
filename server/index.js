@@ -50,15 +50,17 @@ const start = async () => {
     const resulty = Ride.watch(); //edit
     resulty.on('change', async function (next) {
       //debugger;
-      let points = next.fullDocument.points;
-      let route = points.map((item) => item.localityName);
-      const subs = await getSubsFromMongo(route);
-      //console.log('get subs mongo:', subs);
-      const matched = getMatchedData(route, subs);
-      console.log('matched:', matched);
-      let applicant = next.fullDocument;
-      const signed = await addOffersToMongo(matched, applicant);
-      console.log('signed:', signed);
+      if (next.operationType === 'insert') {
+        let points = next.fullDocument.points;
+        let route = points.map((item) => item.localityName);
+        const subs = await getSubsFromMongo(route);
+        //console.log('get subs mongo:', subs);
+        const matched = getMatchedData(route, subs);
+        console.log('matched:', matched);
+        let applicant = next.fullDocument;
+        const signed = await addOffersToMongo(matched, applicant);
+        console.log('signed:', signed);
+      }
     });
 
     db.on('error', (error) => {
