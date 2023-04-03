@@ -38,13 +38,6 @@ const start = async () => {
 
     const db = mongoose.connection;
 
-    // Ride.watch().on('change', (next) => emitter.emit('my-event', next.fullDocument)); //edit перенести
-    // emitter.on('my-event', (data) => {
-    //   //console.log('data from emitter:', data.fullDocument);
-    //   //let points = data.fullDocument.points;
-    //   //console.log('points:', points);
-    // });
-
     // const resulty = Ride.watch(); //edit
     // resulty.on('change', (next) => console.log('inside_next:', next.fullDocument.points));
     const resulty = Ride.watch(); //edit
