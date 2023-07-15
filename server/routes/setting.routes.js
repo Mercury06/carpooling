@@ -188,10 +188,9 @@ router.get("/findridesby", async (req, res) => {
       ],
     });
     //console.log("seArch:", search);
-    findMatchingRides(search);
-    //let route = search.map((item) => item.points.localityName);
-    //console.log("roUte:", route);
-    return res.status(200).json(search);
+    const matchedRides = findMatchingRides(search, localityFrom, destination);
+    console.log("matchedRides:", matchedRides);
+    return res.status(200).json(matchedRides);
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "rides not found" });

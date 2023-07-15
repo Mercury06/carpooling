@@ -26,15 +26,28 @@ function makeKey(from, dst) {
 }
 
 function findMatchingRides(searchedRides, localityFrom, destination) {
-  // const preparedRides = new Set();
+  const preparedRides = [];
+  // console.log("localityFrom inside:", localityFrom);
+  // console.log("destination inside:", destination);
   const modifiedRides = searchedRides.forEach((ride) => {
     let points = ride.points;
     //console.log("points in rides:", points);
     let route = points.map((item) => item.localityName);
     //console.log("route in rides:", route);
     const subroutesSet = prepareSubroutesSet(route);
-    console.log("findMatchingRides:", subroutesSet);
+    //console.log("findMatchingRides:", subroutesSet);
+    const result = function findMatched(route) {
+      //console.log("inside result:", `${localityFrom}:${destination}`);
+      if (subroutesSet.has(`${localityFrom}:${destination}`)) {
+        preparedRides.push(ride);
+      } else {
+        console.log("notmatched!");
+      }
+    };
+    result();
+    //console.log("preparedRidesSet:", preparedRides);
   });
+  return preparedRides;
 }
 
 module.exports = {
