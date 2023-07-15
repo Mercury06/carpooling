@@ -1,17 +1,39 @@
-const Ask = require('../models/Ask');
+const Ask = require("../models/Ask");
 
 const subsMongoPromise = (points) => {
-  //debugger;
+  // debugger;
   return new Promise(async function (resolve, reject) {
     const subs = await Ask.find({
       $and: [
         {
-          'localityFrom.localityName': {
+          "localityFrom.localityName": {
             $in: points,
           },
         },
         {
-          'destination.localityName': {
+          "destination.localityName": {
+            $in: points,
+          },
+        },
+      ],
+    });
+
+    resolve(subs);
+  });
+};
+
+const ridesMongoPromise = (points) => {
+  // debugger;
+  return new Promise(async function (resolve, reject) {
+    const rides = await Ask.find({
+      $and: [
+        {
+          "localityFrom.localityName": {
+            $in: points,
+          },
+        },
+        {
+          "destination.localityName": {
             $in: points,
           },
         },
@@ -39,7 +61,7 @@ const addOffersToMongo = (matched, applicant) => {
         $push: {
           offers: applicant,
         },
-      },
+      }
     );
     resolve(signed);
   });
