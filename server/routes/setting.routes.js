@@ -2,8 +2,8 @@ const Router = require("express");
 const Locality = require("../models/Locality.js");
 //const Role = require('../models/Role');
 const Ride = require("../models/Ride");
-
 const Ask = require("../models/Ask");
+const Dialog = require("../models/Dialog.js");
 const { check, validationResult } = require("express-validator");
 const { getGraphData } = require("./../db/neo4j");
 const { findMatchingRides } = require("../utils/matcher.js");
@@ -91,9 +91,9 @@ router.post("/createride", async (req, res) => {
 router.post("/createask", async (req, res) => {
   try {
     const { localityFrom, destination, date, user } = req.body;
-    console.log("localityFrom.id:", localityFrom.id);
-    console.log("destination.id:", destination.id);
-    console.log("user:", user);
+    // console.log("localityFrom.id:", localityFrom.id);
+    // console.log("destination.id:", destination.id);
+    // console.log("user:", user);
 
     //const { cities, direction } = await getGraphData(localityFrom.id, destination.id);
     //console.log('apii data:', cities);
@@ -111,6 +111,26 @@ router.post("/createask", async (req, res) => {
   } catch (e) {
     console.log(e);
     return res.status(500).json({ message: "ask not created" }, e);
+  }
+});
+
+router.post("/createdialog", async (req, res) => {
+  try {
+    const { participants, content } = req.body;
+    console.log("participants", participants);
+    console.log("content", content);
+
+    const dialog = new Dialog({
+      participants,
+      content,
+    });
+    await dialog.save();
+    return res
+      .status(201)
+      .json({ message: "new dialog created", status: "OK" });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "dialog not created" }, e);
   }
 });
 
@@ -189,7 +209,7 @@ router.get("/findridesby", async (req, res) => {
     });
     //console.log("seArch:", search);
     const matchedRides = findMatchingRides(search, localityFrom, destination);
-    console.log("matchedRides:", matchedRides);
+    //console.log("matchedRides:", matchedRides);
     return res.status(200).json(matchedRides);
   } catch (e) {
     console.log(e);
@@ -220,29 +240,5 @@ router.get("/findlocality", async (req, res) => {
     res.status(400).json({ message: "search error" });
   }
 });
-
-// router.get('/findsubs', async (req, res) => {
-//   try {
-//     //const arr = ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'];
-//     const subs = await Ask.find({
-//       $and: [
-//         {
-//           'localityFrom.localityName': {
-//             $in: ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'],
-//           },
-//         },
-//         {
-//           'destination.localityName': {
-//             $in: ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'],
-//           },
-//         },
-//       ],
-//     });
-//     return res.status(200).json(subs);
-//   } catch (e) {
-//     console.log(e);
-//     res.status(500).json({ message: 'rides not found' });
-//   }
-// });
 
 module.exports = router;
