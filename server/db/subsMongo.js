@@ -1,4 +1,5 @@
 const Ask = require("../models/Ask");
+const Ride = require("../models/Ride");
 
 const subsMongoPromise = (points) => {
   // debugger;
@@ -66,8 +67,26 @@ const addOffersToMongo = (matched, applicant) => {
     resolve(signed);
   });
 };
+
+const addAskToRideMongo = (rideId, applicant) => {
+  debugger;
+  return new Promise(async function (resolve, reject) {
+    //const asksArray = matched.map((ask) => ask._id);
+    const signed = Ride.updateMany(
+      { _id: rideId },
+      {
+        $push: {
+          asks: applicant,
+        },
+      }
+    );
+    resolve(signed);
+  });
+};
+
 //module.exports.getSubsFromMongo = subsMongoPromise;
 module.exports = {
   getSubsFromMongo: subsMongoPromise,
   addOffersToMongo,
+  addAskToRideMongo,
 };

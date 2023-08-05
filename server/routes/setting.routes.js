@@ -7,6 +7,7 @@ const Dialog = require("../models/Dialog.js");
 const { check, validationResult } = require("express-validator");
 const { getGraphData } = require("./../db/neo4j");
 const { findMatchingRides } = require("../utils/matcher.js");
+const { addAskToRideMongo } = require("../db/subsMongo.js");
 
 const router = new Router();
 
@@ -78,10 +79,6 @@ router.post("/createride", async (req, res) => {
     });
     await ride.save();
     return res.status(201).json("new ride created");
-    //return res.status(206).json({ message: 'new ride created', redirect_path: '/subscribe' });
-    //return res.redirect('/subscribe');
-    // res.writeHead(302, { Location: 'http://localhost:3000/subscribe' });
-    // res.end();
   } catch (e) {
     console.log(e);
     return res.status(500).json({ message: "ride not created" });
@@ -106,11 +103,29 @@ router.post("/createask", async (req, res) => {
       date,
       user,
     });
-    await ask.save();
-    return res.status(201).json({ message: "new ask created", status: "OK" });
+    const result = await ask.save();
+    //console.log("askSaveResult:", result);
+    return res
+      .status(201)
+      .json({ message: "new ask created", status: "OK", result });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ message: "ask not created" }, e);
+  }
+});
+
+router.post("/addasktoride", async (req, res) => {
+  try {
+    const { rideId, applicant } = req.body;
+    // console.log("rideId:", rideId);
+    // console.log("applicant:", applicant);
+    const result = await addAskToRideMongo(rideId, applicant);
+    return res
+      .status(201)
+      .json({ message: "ask added to ride", status: "OK", result });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "ask not added" }, e);
   }
 });
 
