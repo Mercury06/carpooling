@@ -1,32 +1,33 @@
-const { Schema, model, ObjectId } = require('mongoose');
+const { Schema, model, ObjectId } = require("mongoose");
 
 const Ask = new Schema(
   {
     localityFrom: {
       localityName: { type: String, required: true },
-      id: { type: ObjectId, ref: 'Locality', required: true },
+      id: { type: ObjectId, ref: "Locality", required: true },
     },
     destination: {
       localityName: { type: String, required: true },
-      id: { type: ObjectId, ref: 'Locality', required: true },
+      id: { type: ObjectId, ref: "Locality", required: true },
     },
     points: [
       {
         localityName: { type: String },
-        mongoId: { type: ObjectId, ref: 'Locality' },
+        mongoId: { type: ObjectId, ref: "Locality" },
         _id: false,
       },
     ],
     direction: { type: String, required: false },
-    user: { type: ObjectId, ref: 'User', required: true },
+    user: { type: ObjectId, ref: "User", required: true },
     seats: { type: Number, default: 1 },
     date: { type: Date, required: true },
+    confirmed: { type: Boolean, default: false },
     offers: [],
     completed: { type: Boolean, default: false }, // ride status
     //time: [{type: String, ref: 'Role'}],
     comment: { type: String, minlength: 5 },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-module.exports = model('Ask', Ask);
+module.exports = model("Ask", Ask);
