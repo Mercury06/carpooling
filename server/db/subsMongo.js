@@ -44,14 +44,17 @@ const ridesMongoPromise = (points) => {
     resolve(subs);
   });
 };
-// const subsMongoPromise = async (points) => {
-//   //debugger;
-//   return new Promise(function (resolve, reject) {
-//     const subs = ['Glasgow', 'Carlisle', 'Penrith', 'Kendal', 'Lancaster', 'Manchester'];
 
-//     resolve(subs);
-//   });
-// };
+const findOffersByIdArray = (offersId) => {
+  // debugger;
+  //console.log("offers inside action:", offersId);
+  return new Promise(async function (resolve, reject) {
+    const ridesAsOffers = await Ride.find({ _id: { $in: offersId } });
+
+    resolve(ridesAsOffers);
+  });
+};
+
 const addOffersToMongo = (matched, applicant) => {
   //debugger;
   return new Promise(async function (resolve, reject) {
@@ -68,12 +71,12 @@ const addOffersToMongo = (matched, applicant) => {
   });
 };
 
-const addAskToRideMongo = (rideId, applicant) => {
+const addAskToRideMongo = (rideItemId, applicant) => {
   debugger;
   return new Promise(async function (resolve, reject) {
     //const asksArray = matched.map((ask) => ask._id);
     const signed = Ride.updateMany(
-      { _id: rideId },
+      { _id: rideItemId },
       {
         $push: {
           asks: applicant,
@@ -87,6 +90,7 @@ const addAskToRideMongo = (rideId, applicant) => {
 //module.exports.getSubsFromMongo = subsMongoPromise;
 module.exports = {
   getSubsFromMongo: subsMongoPromise,
+  findOffersByIdArray,
   addOffersToMongo,
   addAskToRideMongo,
 };

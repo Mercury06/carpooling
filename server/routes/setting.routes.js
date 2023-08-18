@@ -7,7 +7,10 @@ const Dialog = require("../models/Dialog.js");
 const { check, validationResult } = require("express-validator");
 const { getGraphData } = require("./../db/neo4j");
 const { findMatchingRides } = require("../utils/matcher.js");
-const { addAskToRideMongo } = require("../db/subsMongo.js");
+const {
+  addAskToRideMongo,
+  findOffersByIdArray,
+} = require("../db/subsMongo.js");
 
 const router = new Router();
 
@@ -116,16 +119,18 @@ router.post("/createask", async (req, res) => {
 
 router.post("/addasktoride", async (req, res) => {
   try {
-    const { rideId, applicant } = req.body;
+    const { rideItemId, applicant } = req.body;
     // console.log("rideId:", rideId);
     // console.log("applicant:", applicant);
-    const result = await addAskToRideMongo(rideId, applicant);
+    const result = await addAskToRideMongo(rideItemId, applicant);
     return res
-      .status(201)
+      .status(200)
       .json({ message: "ask added to ride", status: "OK", result });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({ message: "ask not added" }, e);
+    return res
+      .status(400)
+      .json({ message: "ask not added", status: "error" }, e);
   }
 });
 
@@ -171,6 +176,19 @@ router.get("/findmyask/:id", async (req, res) => {
     res.status(500).json({ message: "asks not found" });
   }
 });
+
+// router.get("/getoffers/:id", async (req, res) => {          //offers lready exist (delete)
+//   try {
+//     const { id } = req.params;
+//     const asks = await Ask.find({ user: id });
+//     console.log(rides)
+//     return res.status(200).json(asks);
+//   } catch (e) {
+//     console.log(e);
+//     res.status(500).json({ message: "asks not found" });
+//   }
+// });
+
 router.get("/findasks", async (req, res) => {
   try {
     //const { id } = req.params;
@@ -189,6 +207,21 @@ router.get("/findmyrides/:id", async (req, res) => {
     //console.log(id);
     const myRides = await Ride.find({ user: id });
     return res.status(200).json(myRides);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "rides not found" });
+  }
+});
+
+router.post("/findoffers", async (req, res) => {
+  try {
+    const payload = req.body;
+    console.log("payload:", payload);
+    const result = await findOffersByIdArray(payload);
+    console.log("resulty:", result);
+    // console.log("offersIdArray:", offersIdArray);
+    // const offers = await Ride.find({ user: id });
+    return res.status(200).json(result);
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "rides not found" });

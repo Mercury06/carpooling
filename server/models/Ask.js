@@ -21,8 +21,9 @@ const Ask = new Schema(
     user: { type: ObjectId, ref: "User", required: true },
     seats: { type: Number, default: 1 },
     date: { type: Date, required: true },
-    confirmed: { type: Boolean, default: false },
     offers: [],
+    confirmed: { type: Boolean, default: false }, // ride status
+    agreeded: [], // ride who confirmed only 1 element
     completed: { type: Boolean, default: false }, // ride status
     //time: [{type: String, ref: 'Role'}],
     comment: { type: String, minlength: 5 },
