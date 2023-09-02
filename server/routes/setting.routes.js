@@ -10,6 +10,9 @@ const { findMatchingRides } = require("../utils/matcher.js");
 const {
   addAskToRideMongo,
   findOffersByIdArray,
+  findAsksByIdArray,
+  removeItemFromAsks,
+  confirmAskToRideMongo,
 } = require("../db/subsMongo.js");
 
 const router = new Router();
@@ -154,17 +157,7 @@ router.post("/createdialog", async (req, res) => {
   }
 });
 
-router.get("/findall", async (req, res) => {
-  try {
-    const rides = await Ride.find();
-    //console.log(rides)
-    return res.status(200).json(rides);
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "rides not found" });
-  }
-});
-
+//return all asks by user id for asks container
 router.get("/findmyask/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -177,6 +170,16 @@ router.get("/findmyask/:id", async (req, res) => {
   }
 });
 
+// router.get("/timer", async (req, res) => {
+//   try {
+//     setTimeout(() => {
+//       return res.status(200).json("response from timeOut");
+//     }, 6000);
+//   } catch (e) {
+//     console.log(e);
+//     res.status(500).json({ message: "asks not found" });
+//   }
+// });
 // router.get("/getoffers/:id", async (req, res) => {          //offers lready exist (delete)
 //   try {
 //     const { id } = req.params;
@@ -189,21 +192,58 @@ router.get("/findmyask/:id", async (req, res) => {
 //   }
 // });
 
-router.get("/findasks", async (req, res) => {
+// router.post("/remove", async (req, res) => {
+//   try {
+//     const result = await removeItemFromAsks();
+//     return res.status(200).json({ message: "removed", status: "OK", result });
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(400).json({ message: "not removed", status: "error" }, e);
+//   }
+// });
+
+router.post("/confirm-ask", async (req, res) => {
   try {
-    //const { id } = req.params;
-    const asks = await Ask.find();
-    //console.log(rides)
-    return res.status(200).json(asks);
+    const payload = req.body;
+    //console.log("payload confirm-ask:", payload);
+    const result = await confirmAskToRideMongo(payload);
+    console.log("resulty:", result);
+    return res.status(200).json(result);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "rides not found" });
+  }
+});
+
+router.get("/findaskbyid/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log("id in params:", id);
+  try {
+    const ask = await Ask.find({ _id: id });
+    return res.status(200).json(ask);
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "asks not found" });
   }
 });
 
-router.get("/findmyrides/:id", async (req, res) => {
+router.post("/findasks", async (req, res) => {
   try {
-    const { id } = req.params;
+    const payload = req.body;
+    console.log("payload:", payload);
+    const result = await findAsksByIdArray(payload);
+    console.log("resulty:", result);
+    return res.status(200).json(result);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "rides not found" });
+  }
+});
+
+//return all rides by user id for rides container
+router.get("/findmyrides/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
     //console.log(id);
     const myRides = await Ride.find({ user: id });
     return res.status(200).json(myRides);
@@ -213,6 +253,18 @@ router.get("/findmyrides/:id", async (req, res) => {
   }
 });
 
+//find ride item by itemId
+router.get("/findridebyid/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const ride = await Ride.find({ _id: id });
+    console.log(ride);
+    return res.status(200).json(ride);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "rides not found" });
+  }
+});
 router.post("/findoffers", async (req, res) => {
   try {
     const payload = req.body;
@@ -239,7 +291,7 @@ router.get("/findlocs", async (req, res) => {
   }
 });
 
-router.get("/findridesby", async (req, res) => {
+router.get("/findridesbysearchparams", async (req, res) => {
   try {
     //console.log('req.query:', req.query);
     let date = req.query.date;
