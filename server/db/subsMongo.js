@@ -101,20 +101,17 @@ const confirmAskToRideMongo = (payload) => {
   //debugger;
   const { rideItemId, askItem } = payload;
   const askItemId = askItem._id;
-  console.log("rideItemId in payload", rideItemId);
-  console.log("askItem._id in payload", askItemId);
+  // console.log("rideItemId in payload", rideItemId);
+  // console.log("askItem._id in payload", askItemId);
   return new Promise(async function (resolve, reject) {
-    //const asksArray = matched.map((ask) => ask._id);
     const signed = Ride.updateMany(
       { _id: rideItemId },
       {
         $push: {
-          //passengers: { _id: "64f18ea04a6acd3bac23e9ab" },
           passengers: askItem,
         },
         $pull: {
           asks: { _id: askItemId },
-          //asks: askItem,
         },
       }
     );
@@ -122,21 +119,28 @@ const confirmAskToRideMongo = (payload) => {
   });
 };
 
-// const removeItemFromAsks = () => {
-//   debugger;
-//   return new Promise(async function (resolve, reject) {
-//     //const asksArray = matched.map((ask) => ask._id);
-//     const signed = Ride.updateMany(
-//       { _id: "64f04ec3f6b336a01f5e7a12" },
-//       {
-//         $pull: {
-//           asks: { _id: "64f0c11e131cda60689976aa" },
-//         },
-//       }
-//     );
-//     resolve(signed);
-//   });
-// };
+const modifyAskAfterConfirmMongo = (payload) => {
+  //debugger;
+  console.log("in subsMongoModify:", payload);
+  // const { rideItemId, askItem } = payload;
+  // const askItemId = askItem._id;
+  // // console.log("rideItemId in payload", rideItemId);
+  // // console.log("askItem._id in payload", askItemId);
+  // return new Promise(async function (resolve, reject) {
+  //   const signed = Ride.updateMany(
+  //     { _id: rideItemId },
+  //     {
+  //       $push: {
+  //         passengers: askItem,
+  //       },
+  //       $pull: {
+  //         asks: { _id: askItemId },
+  //       },
+  //     }
+  //   );
+  //   resolve(signed);
+  // });
+};
 
 //module.exports.getSubsFromMongo = subsMongoPromise;
 module.exports = {
