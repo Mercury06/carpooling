@@ -13,6 +13,7 @@ const {
   findAsksByIdArray,
   removeItemFromAsks,
   confirmAskToRideMongo,
+  modifyAskAfterConfirmMongo,
 } = require("../db/subsMongo.js");
 
 const router = new Router();
@@ -206,9 +207,10 @@ router.post("/confirm-ask", async (req, res) => {
   try {
     const payload = req.body;
     //console.log("payload confirm-ask:", payload);
-    const result = await confirmAskToRideMongo(payload);
-    console.log("resulty:", result);
-    return res.status(200).json(result);
+    await confirmAskToRideMongo(payload);
+    await modifyAskAfterConfirmMongo(payload);
+    //console.log("resulty:", result);
+    return res.status(200).json("ask confirmed");
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "rides not found" });
