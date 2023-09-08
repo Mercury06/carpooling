@@ -18,7 +18,8 @@ const { getMatchedData } = require("./utils/matcher");
 const emitter = new EventEmitter();
 
 const app = express();
-const PORT = process.env.PORT || config.get("serverPort");
+// const PORT = process.env.PORT || config.get("serverPort");
+const PORT = process.env.PORT;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsMiddleware);
@@ -95,7 +96,8 @@ const start = async () => {
                   process.argv: ${process.argv}
                   process.platform: ${process.platform}
                   process.env.PORT: ${process.env.PORT} 
-                  process.env.SECRET_KEY: ${process.env.SECRET_KEY}`);
+                  process.env.SECRET_KEY: ${process.env.SECRET_KEY}
+                  process.env.PORT: ${process.env.PORT}`);
     });
   } catch (e) {
     console.error(e.message);
