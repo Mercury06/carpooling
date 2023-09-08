@@ -8,7 +8,8 @@ const { check, validationResult } = require("express-validator");
 const authMiddleware = require("./../middleware/authMiddleware"); //добавить 2м параметром к app.get("/users", authMiddleware, controller.getUsers)
 
 const router = new Router(); //создаем объект
-const secretKey = config.get("secretKey") || process.env.SECRET_KEY;
+// const secretKey = config.get("secretKey") || process.env.SECRET_KEY;
+const secretKey = process.env.SECRET_KEY;
 
 router.post(
   "/registration",
