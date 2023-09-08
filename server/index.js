@@ -20,6 +20,7 @@ const emitter = new EventEmitter();
 const app = express();
 // const PORT = process.env.PORT || config.get("serverPort");
 const PORT = process.env.PORT;
+const DB_URL = process.env.DB_URL;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsMiddleware);
@@ -31,7 +32,8 @@ app.use("/api/settings", settingsRouter);
 
 const start = async () => {
   try {
-    mongoose.connect(config.get("dbUrl"), {
+    // mongoose.connect(config.get("dbUrl"), {
+    mongoose.connect(DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       // keepAlive: true,
@@ -97,6 +99,7 @@ const start = async () => {
                   process.platform: ${process.platform}
                   process.env.PORT: ${process.env.PORT} 
                   process.env.SECRET_KEY: ${process.env.SECRET_KEY}
+                  process.env.DB_URL: ${process.env.DB_URL}
                   process.env.PORT: ${process.env.PORT}`);
     });
   } catch (e) {
