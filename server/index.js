@@ -89,7 +89,12 @@ const start = async () => {
       process.exit(0);
     });
     const server = app.listen(PORT, () => {
-      console.log(`Server started on port ${PORT} process id: ${process.pid}`);
+      console.log(`Server started on port ${PORT} 
+                  process id: ${process.pid} 
+                  process.argv: ${process.argv}
+                  process.platform: ${process.platform}
+                  process.env.PORT: ${process.env.PORT} 
+                  process.env.SECRET_KEY: ${process.env.SECRET_KEY}`);
     });
   } catch (e) {
     console.error(e.message);
