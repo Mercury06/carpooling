@@ -33,12 +33,15 @@ app.use("/api/settings", settingsRouter);
 const start = async () => {
   try {
     // mongoose.connect(config.get("dbUrl"), {
-    mongoose.connect(DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      // keepAlive: true,
-      // keepAliveInitialDelay: 30000,
-    });
+    mongoose.connect(
+      "mongodb+srv://username:cloud_project95@cluster1.zmlrt.mongodb.net/Cluster1?retryWrites=true&w=majority",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        // keepAlive: true,
+        // keepAliveInitialDelay: 30000,
+      }
+    );
 
     const db = mongoose.connection;
 

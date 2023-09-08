@@ -7,12 +7,15 @@ const DB_URL = process.env.DB_URL;
 const connect = async function () {
   try {
     // await mongoose.connect(config.get('dbUrl'), {
-    await mongoose.connect(DB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      // keepAlive: true,
-      // keepAliveInitialDelay: 30000,
-    });
+    await mongoose.connect(
+      "mongodb+srv://username:cloud_project95@cluster1.zmlrt.mongodb.net/Cluster1?retryWrites=true&w=majority",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        // keepAlive: true,
+        // keepAliveInitialDelay: 30000,
+      }
+    );
     const db = mongoose.connection;
     db.on("error", (error) => {
       console.error(error.message);
