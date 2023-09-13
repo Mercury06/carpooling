@@ -14,6 +14,8 @@ const {
   removeItemFromAsks,
   confirmAskToRideMongo,
   modifyAskAfterConfirmMongo,
+  deleteConfirmationInRide,
+  modifyAskAfterUnconfirm,
 } = require("../db/subsMongo.js");
 
 const router = new Router();
@@ -217,6 +219,20 @@ router.post("/confirm-ask", async (req, res) => {
   }
 });
 
+router.post("/unconfirm", async (req, res) => {
+  try {
+    const payload = req.body;
+    //console.log("payload unconfirm:", payload);
+    await deleteConfirmationInRide(payload);
+    await modifyAskAfterUnconfirm(payload);
+    //console.log("resulty:", result);
+    return res.status(200).json("confirmation rejected");
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "unconfirm exception" });
+  }
+});
+
 router.get("/findaskbyid/:id", async (req, res) => {
   const { id } = req.params;
   console.log("id in params:", id);
@@ -286,6 +302,12 @@ router.get("/findlocs", async (req, res) => {
   try {
     const locs = await Locality.find().sort({ locality: 1 });
     //console.log(rides)
+    // res.on("finish", () => {
+    //   console.log("res finish");
+    // });
+    // res.on("close", () => {
+    //   console.log("res close");
+    // });
     return res.status(200).json(locs);
   } catch (e) {
     console.log(e);

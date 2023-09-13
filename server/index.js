@@ -93,17 +93,14 @@ const start = async () => {
       process.exit(0);
     });
     const server = app.listen(PORT, () => {
+      process.stdout.write(`stdout: server started on port ${PORT}\n`);
       console.log(`Server started on port ${PORT} 
                   process id: ${process.pid} 
                   process.argv: ${process.argv}
-                  process.platform: ${process.platform}
-                  process.env.PORT: ${process.env.PORT} 
-                  process.env.SECRET_KEY: ${process.env.SECRET_KEY}
-                  process.env.DB_URL: ${process.env.DB_URL}
-                  process.env.PORT: ${process.env.PORT}`);
+                  process.platform: ${process.platform}`);
     });
   } catch (e) {
-    console.error(e.message);
+    process.stderr.write("I have got the STDERR:", e.message);
   }
 };
 

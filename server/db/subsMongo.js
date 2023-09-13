@@ -1,32 +1,11 @@
 const Ask = require("../models/Ask");
 const Ride = require("../models/Ride");
 
+//find ask matched the route
 const subsMongoPromise = (points) => {
   // debugger;
   return new Promise(async function (resolve, reject) {
     const subs = await Ask.find({
-      $and: [
-        {
-          "localityFrom.localityName": {
-            $in: points,
-          },
-        },
-        {
-          "destination.localityName": {
-            $in: points,
-          },
-        },
-      ],
-    });
-
-    resolve(subs);
-  });
-};
-//check
-const ridesMongoPromise = (points) => {
-  // debugger;
-  return new Promise(async function (resolve, reject) {
-    const rides = await Ask.find({
       $and: [
         {
           "localityFrom.localityName": {
@@ -97,8 +76,9 @@ const addAskToRideMongo = (rideItemId, applicant) => {
   });
 };
 
-const confirmAskToRideMongo = (payload) => {
+const deleteConfirmationInRide = (payload) => {
   //debugger;
+  //console.log("payload in deleteConfirmationInRide");
   const { rideItem, askItem } = payload;
   const rideItemId = rideItem._id;
   const askItemId = askItem._id;
@@ -108,11 +88,8 @@ const confirmAskToRideMongo = (payload) => {
     const signed = Ride.updateMany(
       { _id: rideItemId },
       {
-        $push: {
-          passengers: askItem,
-        },
         $pull: {
-          asks: { _id: askItemId },
+          passengers: { _id: askItemId },
         },
       }
     );
@@ -145,6 +122,28 @@ const modifyAskAfterConfirmMongo = (payload) => {
   });
 };
 
+const modifyAskAfterUnconfirm = (payload) => {
+  //debugger;
+  //console.log("in modifyAskAfterUnconfirm:", payload);
+  const { rideItem, askItem } = payload;
+  const askItemId = askItem._id;
+  const rideItemId = rideItem._id;
+  // console.log("rideItemId in payload", rideItemId);
+  // console.log("askItem._id in payload", askItemId);
+  return new Promise(async function (resolve, reject) {
+    const signed = Ask.updateMany(
+      { _id: askItemId },
+      {
+        confirmed: false,
+        $pull: {
+          agreeded: { _id: rideItemId },
+        },
+      }
+    );
+    resolve(signed);
+  });
+};
+
 //module.exports.getSubsFromMongo = subsMongoPromise;
 module.exports = {
   getSubsFromMongo: subsMongoPromise,
@@ -153,6 +152,8 @@ module.exports = {
   addOffersToMongo,
   addAskToRideMongo,
   modifyAskAfterConfirmMongo,
+  deleteConfirmationInRide,
+  modifyAskAfterUnconfirm,
   // removeItemFromAsks,
-  confirmAskToRideMongo,
+  // confirmAskToRideMongo,
 };
