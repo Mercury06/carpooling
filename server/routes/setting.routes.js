@@ -214,7 +214,7 @@ router.post("/confirm-ask", async (req, res) => {
     //console.log("resulty:", result);
     return res.status(200).json("ask confirmed");
   } catch (e) {
-    console.log(e);
+    process.stdout.write(e);
     res.status(500).json({ message: "rides not found" });
   }
 });

@@ -76,6 +76,30 @@ const addAskToRideMongo = (rideItemId, applicant) => {
   });
 };
 
+const confirmAskToRideMongo = (payload) => {
+  //debugger;
+  //console.log("payload in deleteConfirmationInRide");
+  const { rideItem, askItem } = payload;
+  const rideItemId = rideItem._id;
+  const askItemId = askItem._id;
+  // console.log("rideItemId in payload", rideItemId);
+  // console.log("askItem._id in payload", askItemId);
+  return new Promise(async function (resolve, reject) {
+    const signed = Ride.updateMany(
+      { _id: rideItemId },
+      {
+        $push: {
+          passengers: askItem,
+        },
+        $pull: {
+          asks: { _id: askItemId },
+        },
+      }
+    );
+    resolve(signed);
+  });
+};
+
 const deleteConfirmationInRide = (payload) => {
   //debugger;
   //console.log("payload in deleteConfirmationInRide");
@@ -155,5 +179,5 @@ module.exports = {
   deleteConfirmationInRide,
   modifyAskAfterUnconfirm,
   // removeItemFromAsks,
-  // confirmAskToRideMongo,
+  confirmAskToRideMongo,
 };
