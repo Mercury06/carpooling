@@ -275,8 +275,8 @@ router.get("/findmyrides/:id", async (req, res) => {
 router.get("/findridebyid/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const ride = await Ride.find({ _id: id });
-    console.log(ride);
+    const ride = await Ride.findOne({ _id: id });
+    // console.log(ride);
     return res.status(200).json(ride);
   } catch (e) {
     console.log(e);

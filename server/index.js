@@ -95,7 +95,7 @@ const start = async () => {
     const server = app.listen(PORT, () => {
       process.stdout.write(`stdout: server started on port ${PORT}\n`);
       console.log(`Server started on port ${PORT} 
-                  process id: ${process.pid} 
+                  process id: ${process.pid}
                   process.argv: ${process.argv}
                   process.platform: ${process.platform}`);
     });
