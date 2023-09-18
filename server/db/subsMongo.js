@@ -106,30 +106,29 @@ const deleteConfirmationInRide = (payload) => {
   const { confirmedOffer, askItem } = payload;
   const confirmedOfferId = confirmedOffer._id;
   const askItemId = askItem._id;
-  console.log("rideItemId in payload", confirmedOfferId);
-  console.log("askItem._id in payload", askItemId);
-  return 1;
-  // return new Promise(async function (resolve, reject) {
-  //   const signed = Ride.updateMany(
-  //     { _id: rideItemId },
-  //     {
-  //       $pull: {
-  //         passengers: { _id: askItemId },
-  //       },
-  //     }
-  //   );
-  //   resolve(signed);
-  // });
+  // console.log("rideItemId in payload", confirmedOfferId);
+  // console.log("askItemId in payload", askItemId);
+  return new Promise(async function (resolve, reject) {
+    const signed = Ride.updateMany(
+      { _id: confirmedOfferId },
+      {
+        $pull: {
+          passengers: { _id: askItemId },
+        },
+      }
+    );
+    resolve(signed);
+  });
 };
 
 const modifyAskAfterConfirmMongo = (payload) => {
   //debugger;
-  console.log("in subsMongoModify:", payload);
+  // console.log("in subsMongoModify:", payload);
   const { confirmedOffer, askItem } = payload;
   const askItemId = askItem._id;
   const confirmedOfferId = confirmedOffer._id;
-  console.log("confirmedOfferId in modify", confirmedOfferId);
-  console.log("askItemId in modify", askItemId);
+  // console.log("confirmedOfferId in modify", confirmedOfferId);
+  // console.log("askItemId in modify", askItemId);
   return -1;
   // return new Promise(async function (resolve, reject) {
   //   const signed = Ask.updateMany(
@@ -150,19 +149,18 @@ const modifyAskAfterConfirmMongo = (payload) => {
 
 const modifyAskAfterUnconfirm = (payload) => {
   //debugger;
-  //console.log("in modifyAskAfterUnconfirm:", payload);
-  const { rideItem, askItem } = payload;
+  const { confirmedOffer, askItem } = payload;
   const askItemId = askItem._id;
-  const rideItemId = rideItem._id;
-  // console.log("rideItemId in payload", rideItemId);
-  // console.log("askItem._id in payload", askItemId);
+  const confirmedOfferId = confirmedOffer._id;
+  console.log("confirmedOfferId in modifyAskAfterUnconfirm", confirmedOfferId);
+  console.log("askItemId in modifyAskAfterUnconfirm", askItemId);
   return new Promise(async function (resolve, reject) {
     const signed = Ask.updateMany(
       { _id: askItemId },
       {
         confirmed: false,
         $pull: {
-          agreeded: { _id: rideItemId },
+          agreeded: { _id: confirmedOfferId },
         },
       }
     );

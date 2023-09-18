@@ -221,7 +221,7 @@ router.post("/confirm-ask", async (req, res) => {
 
 router.post("/unconfirm", async (req, res) => {
   try {
-    const payload = req.body;
+    const { payload } = req.body;
     //console.log("payload unconfirm:", payload);
     await deleteConfirmationInRide(payload);
     await modifyAskAfterUnconfirm(payload);
