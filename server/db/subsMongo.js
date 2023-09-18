@@ -78,18 +78,19 @@ const addAskToRideMongo = (rideItemId, applicant) => {
 
 const confirmAskToRideMongo = (payload) => {
   //debugger;
-  //console.log("payload in deleteConfirmationInRide");
-  const { rideItem, askItem } = payload;
-  const rideItemId = rideItem._id;
-  const askItemId = askItem._id;
-  // console.log("rideItemId in payload", rideItemId);
-  // console.log("askItem._id in payload", askItemId);
+  const { state } = payload;
+  //console.log("state in method:", state);
+  const rideItemId = state.rideItem._id;
+  const askItemId = state.askItem._id;
+
+  console.log("rideItemId in method", rideItemId);
+  console.log("askItem._id in method", askItemId);
   return new Promise(async function (resolve, reject) {
     const signed = Ride.updateMany(
       { _id: rideItemId },
       {
         $push: {
-          passengers: askItem,
+          passengers: state.askItem,
         },
         $pull: {
           asks: { _id: askItemId },
@@ -124,27 +125,25 @@ const deleteConfirmationInRide = (payload) => {
 const modifyAskAfterConfirmMongo = (payload) => {
   //debugger;
   // console.log("in subsMongoModify:", payload);
-  const { confirmedOffer, askItem } = payload;
-  const askItemId = askItem._id;
-  const confirmedOfferId = confirmedOffer._id;
-  // console.log("confirmedOfferId in modify", confirmedOfferId);
-  // console.log("askItemId in modify", askItemId);
-  return -1;
-  // return new Promise(async function (resolve, reject) {
-  //   const signed = Ask.updateMany(
-  //     { _id: askItemId },
-  //     {
-  //       confirmed: true,
-  //       $push: {
-  //         agreeded: rideItem,
-  //       },
-  //       $pull: {
-  //         offers: { _id: rideItemId },
-  //       },
-  //     }
-  //   );
-  //   resolve(signed);
-  // });
+  const { state } = payload;
+  const rideItemId = state.rideItem._id;
+  const askItemId = state.askItem._id;
+
+  return new Promise(async function (resolve, reject) {
+    const signed = Ask.updateMany(
+      { _id: askItemId },
+      {
+        confirmed: true,
+        $push: {
+          agreeded: state.rideItem,
+        },
+        $pull: {
+          offers: { _id: rideItemId },
+        },
+      }
+    );
+    resolve(signed);
+  });
 };
 
 const modifyAskAfterUnconfirm = (payload) => {

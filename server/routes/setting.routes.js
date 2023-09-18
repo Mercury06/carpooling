@@ -208,10 +208,10 @@ router.get("/findmyask/:id", async (req, res) => {
 router.post("/confirm-ask", async (req, res) => {
   try {
     const payload = req.body;
-    //console.log("payload confirm-ask:", payload);
+    // console.log(payload);
     await confirmAskToRideMongo(payload);
     await modifyAskAfterConfirmMongo(payload);
-    //console.log("resulty:", result);
+
     return res.status(200).json("ask confirmed");
   } catch (e) {
     process.stdout.write(e);
