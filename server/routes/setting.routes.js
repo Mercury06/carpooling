@@ -16,6 +16,8 @@ const {
   modifyAskAfterConfirmMongo,
   deleteConfirmationInRide,
   modifyAskAfterUnconfirm,
+  deleteRide,
+  modifyAskAfterDeleteRide,
 } = require("../db/subsMongo.js");
 
 const router = new Router();
@@ -91,6 +93,20 @@ router.post("/createride", async (req, res) => {
   } catch (e) {
     console.log(e);
     return res.status(500).json({ message: "ride not created" });
+  }
+});
+
+router.post("/delete-ride", async (req, res) => {
+  try {
+    const { payload } = req.body;
+    //console.log("payload delete ride:", payload);
+    await deleteRide(payload);
+    await modifyAskAfterDeleteRide(payload);
+
+    return res.status(200).json("ride deleted");
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ message: "unconfirm exception" });
   }
 });
 
@@ -172,38 +188,6 @@ router.get("/findmyask/:id", async (req, res) => {
     res.status(500).json({ message: "asks not found" });
   }
 });
-
-// router.get("/timer", async (req, res) => {
-//   try {
-//     setTimeout(() => {
-//       return res.status(200).json("response from timeOut");
-//     }, 6000);
-//   } catch (e) {
-//     console.log(e);
-//     res.status(500).json({ message: "asks not found" });
-//   }
-// });
-// router.get("/getoffers/:id", async (req, res) => {          //offers lready exist (delete)
-//   try {
-//     const { id } = req.params;
-//     const asks = await Ask.find({ user: id });
-//     console.log(rides)
-//     return res.status(200).json(asks);
-//   } catch (e) {
-//     console.log(e);
-//     res.status(500).json({ message: "asks not found" });
-//   }
-// });
-
-// router.post("/remove", async (req, res) => {
-//   try {
-//     const result = await removeItemFromAsks();
-//     return res.status(200).json({ message: "removed", status: "OK", result });
-//   } catch (e) {
-//     console.log(e);
-//     return res.status(400).json({ message: "not removed", status: "error" }, e);
-//   }
-// });
 
 router.post("/confirm-ask", async (req, res) => {
   try {

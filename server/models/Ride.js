@@ -22,21 +22,7 @@ const Ride = new Schema(
     seats_declared: { type: Number, default: 1 },
     seats_available: { type: Number, default: 1 }, //if 0 all seats booked
     asks: [],
-    passengers: [
-      // {
-      //   user: { type: ObjectId, ref: 'User' },
-      //   seats_booked: { type: Number, default: 1 },
-      //   startPoint: {
-      //     localityName: { type: String, required: true },
-      //     id: { type: ObjectId, ref: 'Locality', required: true },
-      //   },
-      //   endPoint: {
-      //     localityName: { type: String, required: true },
-      //     id: { type: ObjectId, ref: 'Locality', required: true },
-      //   },
-      //   _id: false,
-      // },
-    ],
+    passengers: [],
     date: { type: Date, required: true },
     completed: { type: Boolean, default: false }, // ride status
     //time: [{type: String, ref: 'Role'}],

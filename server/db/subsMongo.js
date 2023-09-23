@@ -122,6 +122,42 @@ const deleteConfirmationInRide = (payload) => {
   });
 };
 
+const deleteRide = (payload) => {
+  //debugger;
+  //console.log("payload in deleteConfirmationInRide", payload);
+  const rideId = payload._id;
+  console.log("payload._id:", rideId);
+
+  return new Promise(async function (resolve, reject) {
+    const signed = Ride.deleteOne({ _id: rideId });
+    resolve(signed);
+  });
+};
+
+const modifyAskAfterDeleteRide = (payload) => {
+  //debugger;
+  console.log("in modifyAskAfterDeleteRide:", payload);
+  const passengersIdArray = payload.passengers.map((item) => item._id);
+  console.log("passengersIdArray:", passengersIdArray);
+  // const { state } = payload;
+  // const rideItemId = state.rideItem._id;
+  // const askItemId = state.askItem._id;
+
+  return new Promise(async function (resolve, reject) {
+    const signed = Ask.updateMany(
+      { _id: { $in: passengersIdArray } },
+      {
+        confirmed: false,
+        $set: {
+          agreeded: [],
+        },
+      },
+      {}
+    );
+    resolve(signed);
+  });
+};
+
 const modifyAskAfterConfirmMongo = (payload) => {
   //debugger;
   // console.log("in subsMongoModify:", payload);
@@ -176,6 +212,8 @@ module.exports = {
   addAskToRideMongo,
   modifyAskAfterConfirmMongo,
   deleteConfirmationInRide,
+  deleteRide,
+  modifyAskAfterDeleteRide,
   modifyAskAfterUnconfirm,
   // removeItemFromAsks,
   confirmAskToRideMongo,
