@@ -156,17 +156,34 @@ router.post("/addasktoride", async (req, res) => {
   }
 });
 
-router.post("/createdialog", async (req, res) => {
+router.get("/fetch-dialog/:id", async (req, res) => {
   try {
-    const { participants, content } = req.body;
+    const id = req.params.id;
+    console.log("req.params.id", id);
+    console.log("req.params", req.params);
+
+    const result = await Dialog.find({ referedAsk: id });
+    console.log("result:", result);
+    return res.status(201).json({ data: result, status: "OK" });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "" }, e);
+  }
+});
+
+router.post("/update-dialog", async (req, res) => {
+  try {
+    const { participants, rideId, author, content } = req.body.payload;
     console.log("participants", participants);
+    console.log("referedRide", referedRide);
+    console.log("author", author);
     console.log("content", content);
 
-    const dialog = new Dialog({
-      participants,
-      content,
-    });
-    await dialog.save();
+    // const dialog = new Dialog({
+    //   participants,
+    //   content,
+    // });
+    // await dialog.save();
     return res
       .status(201)
       .json({ message: "new dialog created", status: "OK" });

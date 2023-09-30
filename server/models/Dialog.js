@@ -3,10 +3,12 @@ const { Schema, model, ObjectId } = require("mongoose");
 const Dialog = new Schema(
   {
     participants: [{ type: ObjectId, ref: "User", required: true }],
-    content: [
+    // referedRide: { type: ObjectId, ref: "Ride", required: true },
+    referedAsk: { type: ObjectId, ref: "Ask", required: true },
+    body: [
       {
         author: { type: ObjectId, ref: "User", required: true },
-        body: { type: String, required: true },
+        content: { type: String, required: true },
         created_at: { type: Date },
         read: { type: Boolean, default: false },
       },
