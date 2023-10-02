@@ -8,7 +8,7 @@ const Dialog = new Schema(
     body: [
       {
         author: { type: ObjectId, ref: "User", required: true },
-        content: { type: String, required: true },
+        content: { type: String },
         created_at: { type: Date },
         read: { type: Boolean, default: false },
       },

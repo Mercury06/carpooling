@@ -1,4 +1,5 @@
 const Ask = require("../models/Ask");
+const Dialog = require("../models/Dialog");
 const Ride = require("../models/Ride");
 
 //find ask matched the route
@@ -182,6 +183,25 @@ const modifyAskAfterConfirmMongo = (payload) => {
   });
 };
 
+const updateDialog = (author, content, participants, referedAsk) => {
+  //debugger;
+
+  return new Promise(async function (resolve, reject) {
+    const signed = Dialog.updateMany(
+      { referedAsk: referedAsk },
+      {
+        $push: {
+          body: {
+            author: author,
+            content: content,
+          },
+        },
+      }
+    );
+    resolve(signed);
+  });
+};
+
 const modifyAskAfterUnconfirm = (payload) => {
   //debugger;
   const { confirmedOffer, askItem } = payload;
@@ -213,6 +233,7 @@ module.exports = {
   modifyAskAfterConfirmMongo,
   deleteConfirmationInRide,
   deleteRide,
+  updateDialog,
   modifyAskAfterDeleteRide,
   modifyAskAfterUnconfirm,
   // removeItemFromAsks,

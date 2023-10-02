@@ -18,6 +18,7 @@ const {
   modifyAskAfterUnconfirm,
   deleteRide,
   modifyAskAfterDeleteRide,
+  updateDialog,
 } = require("../db/subsMongo.js");
 
 const router = new Router();
@@ -156,40 +157,91 @@ router.post("/addasktoride", async (req, res) => {
   }
 });
 
-router.get("/fetch-dialog/:id", async (req, res) => {
+router.post("/fetch-dialog", async (req, res) => {
   try {
-    const id = req.params.id;
-    console.log("req.params.id", id);
-    console.log("req.params", req.params);
-
-    const result = await Dialog.find({ referedAsk: id });
-    console.log("result:", result);
-    return res.status(201).json({ data: result, status: "OK" });
+    // const id = req.params.id;
+    // console.log("req.params", req.params);
+    const { author, content, participants, referedAsk } = req.body;
+    console.log("payload in fetch-dialog", req.body);
+    const result = await Dialog.findOne({ referedAsk: referedAsk });
+    if (!result) {
+      console.log("!result");
+      const dialog = new Dialog({
+        participants,
+        referedAsk,
+        body: [
+          {
+            author: author,
+            content: content,
+            // created_at: { type: Date },
+            // read: { type: Boolean, default: false },
+          },
+        ],
+      });
+      await dialog.save();
+      res
+        .status(201)
+        .json({ status: "OK", message: "new dialog created", data: dialog });
+    } else {
+      // console.log("resulty:", result);
+      res.status(200).json({
+        data: result,
+        status: "OK",
+        message: "data found in database",
+      });
+    }
   } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: "" }, e);
+    return res.status(500).json({ message: "", error: e });
   }
 });
 
 router.post("/update-dialog", async (req, res) => {
+  debugger;
   try {
-    const { participants, rideId, author, content } = req.body.payload;
-    console.log("participants", participants);
-    console.log("referedRide", referedRide);
-    console.log("author", author);
-    console.log("content", content);
+    const { author, content, participants, referedAsk } = req.body;
+    // console.log("req.body", req.body);
+    // console.log("participants:", participants);
+    // console.log("referedRide:", referedAsk);
+    // console.log("author:", author);
+    // console.log("content:", content);
 
     // const dialog = new Dialog({
     //   participants,
-    //   content,
+    //   referedAsk,
+    //   body: [
+    //     {
+    //       author: author,
+    //       content: content,
+    //       // created_at: { type: Date },
+    //       // read: { type: Boolean, default: false },
+    //     },
+    //   ],
     // });
     // await dialog.save();
+    // const signed = Dialog.updateMany(
+    //   { referedAsk: referedAsk },
+    //   {
+    //     $push: {
+    //       body: {
+    //         author: author,
+    //         content: content,
+    //       },
+    //     },
+    //   }
+    // );
+    // const updateResult = await updateDialog(
+    //   author,
+    //   content,
+    //   participants,
+    //   referedAsk
+    // );
+    // console.log("updateResult:", updateResult);
     return res
       .status(201)
-      .json({ message: "new dialog created", status: "OK" });
+      .json({ message: "new dialog created", status: "OK", data: dialog });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({ message: "dialog not created" }, e);
+    return res.status(500).json({ message: "", error: e });
   }
 });
 
