@@ -53,7 +53,7 @@ const addOffersToMongo = (matched, applicant) => {
       { _id: { $in: asksArray } },
       {
         $push: {
-          offers: applicant,
+          offers: JSON.parse(applicant),
         },
       }
     );
@@ -62,7 +62,7 @@ const addOffersToMongo = (matched, applicant) => {
 };
 
 const addAskToRideMongo = (rideItemId, applicant) => {
-  debugger;
+  // debugger;
   return new Promise(async function (resolve, reject) {
     //const asksArray = matched.map((ask) => ask._id);
     const signed = Ride.updateMany(
@@ -84,8 +84,8 @@ const confirmAskToRideMongo = (payload) => {
   const rideItemId = state.rideItem._id;
   const askItemId = state.askItem._id;
 
-  console.log("rideItemId in method", rideItemId);
-  console.log("askItem._id in method", askItemId);
+  // console.log("rideItemId in method", rideItemId);
+  // console.log("askItem._id in method", askItemId);
   return new Promise(async function (resolve, reject) {
     const signed = Ride.updateMany(
       { _id: rideItemId },
@@ -95,6 +95,29 @@ const confirmAskToRideMongo = (payload) => {
         },
         $pull: {
           asks: { _id: askItemId },
+        },
+      }
+    );
+    resolve(signed);
+  });
+};
+
+const modifyAskAfterConfirmMongo = (payload) => {
+  // debugger;
+  const { state } = payload;
+  const askItemId = state.askItem._id;
+  const rideItemId = state.rideItem._id;
+
+  return new Promise(async function (resolve, reject) {
+    const signed = Ask.updateMany(
+      { _id: askItemId },
+      {
+        confirmed: true,
+        $push: {
+          agreeded: state.rideItem,
+        },
+        $pull: {
+          offers: { _id: rideItemId },
         },
       }
     );
@@ -154,30 +177,6 @@ const modifyAskAfterDeleteRide = (payload) => {
         },
       },
       {}
-    );
-    resolve(signed);
-  });
-};
-
-const modifyAskAfterConfirmMongo = (payload) => {
-  //debugger;
-  // console.log("in subsMongoModify:", payload);
-  const { state } = payload;
-  const rideItemId = state.rideItem._id;
-  const askItemId = state.askItem._id;
-
-  return new Promise(async function (resolve, reject) {
-    const signed = Ask.updateMany(
-      { _id: askItemId },
-      {
-        confirmed: true,
-        $push: {
-          agreeded: state.rideItem,
-        },
-        $pull: {
-          offers: { _id: rideItemId },
-        },
-      }
     );
     resolve(signed);
   });

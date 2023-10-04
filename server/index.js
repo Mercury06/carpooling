@@ -53,7 +53,7 @@ const start = async () => {
         //console.log('get subs mongo:', subs);
         const matched = getMatchedData(route, subs);
         console.log("matched:", matched);
-        let applicant = next.fullDocument;
+        let applicant = JSON.stringify(next.fullDocument);
         const signed = await addOffersToMongo(matched, applicant);
         console.log("signed:", signed);
       }

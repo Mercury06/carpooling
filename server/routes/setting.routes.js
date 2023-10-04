@@ -159,13 +159,10 @@ router.post("/addasktoride", async (req, res) => {
 
 router.post("/fetch-dialog", async (req, res) => {
   try {
-    // const id = req.params.id;
-    // console.log("req.params", req.params);
     const { author, content, participants, referedAsk } = req.body;
     console.log("payload in fetch-dialog", req.body);
     const result = await Dialog.findOne({ referedAsk: referedAsk });
     if (!result) {
-      console.log("!result");
       const dialog = new Dialog({
         participants,
         referedAsk,
@@ -183,7 +180,6 @@ router.post("/fetch-dialog", async (req, res) => {
         .status(201)
         .json({ status: "OK", message: "new dialog created", data: dialog });
     } else {
-      // console.log("resulty:", result);
       res.status(200).json({
         data: result,
         status: "OK",
@@ -205,19 +201,6 @@ router.post("/update-dialog", async (req, res) => {
     // console.log("author:", author);
     // console.log("content:", content);
 
-    // const dialog = new Dialog({
-    //   participants,
-    //   referedAsk,
-    //   body: [
-    //     {
-    //       author: author,
-    //       content: content,
-    //       // created_at: { type: Date },
-    //       // read: { type: Boolean, default: false },
-    //     },
-    //   ],
-    // });
-    // await dialog.save();
     // const signed = Dialog.updateMany(
     //   { referedAsk: referedAsk },
     //   {
