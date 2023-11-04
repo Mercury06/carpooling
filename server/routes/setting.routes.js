@@ -7,22 +7,16 @@ const Dialog = require("../models/Dialog.js");
 const { check, validationResult } = require("express-validator");
 const { getGraphData } = require("./../db/neo4j");
 const { findMatchingRides } = require("../utils/matcher.js");
-const {
-  addAskToRideMongo,
-  findOffersByIdArray,
-  findAsksByIdArray,
-  removeItemFromAsks,
-  confirmAskToRideMongo,
-  modifyAskAfterConfirmMongo,
-  deleteConfirmationInRide,
-  modifyAskAfterUnconfirm,
-  deleteRide,
-  modifyAskAfterDeleteRide,
-  updateDialog,
-} = require("../db/subsMongo.js");
+const database = require("../db/dbQuery.js");
+
+const emitter3 = require("./../utils/emitter.js");
 
 const router = new Router();
 
+router.get("/db", async (req, res) => {
+  console.log("database:", database);
+  return res.status(201).json({ message: "Locality was added" });
+});
 router.post(
   "/createlocality",
   [
@@ -101,8 +95,8 @@ router.post("/delete-ride", async (req, res) => {
   try {
     const { payload } = req.body;
     //console.log("payload delete ride:", payload);
-    await deleteRide(payload);
-    await modifyAskAfterDeleteRide(payload);
+    await database.deleteRide(payload);
+    await database.modifyAskAfterDeleteRide(payload);
 
     return res.status(200).json("ride deleted");
   } catch (e) {
@@ -145,7 +139,7 @@ router.post("/addasktoride", async (req, res) => {
     const { rideItemId, applicant } = req.body;
     // console.log("rideId:", rideId);
     // console.log("applicant:", applicant);
-    const result = await addAskToRideMongo(rideItemId, applicant);
+    const result = await database.addAskToRideMongo(rideItemId, applicant);
     return res
       .status(200)
       .json({ message: "ask added to ride", status: "OK", result });
@@ -160,8 +154,9 @@ router.post("/addasktoride", async (req, res) => {
 router.post("/fetch-dialog", async (req, res) => {
   try {
     const { author, content, participants, referedAsk } = req.body;
-    console.log("payload in fetch-dialog", req.body);
+    // console.log("payload in fetch-dialog", req.body);
     const result = await Dialog.findOne({ referedAsk: referedAsk });
+    // console.log("result.data:", result);
     if (!result) {
       const dialog = new Dialog({
         participants,
@@ -170,20 +165,20 @@ router.post("/fetch-dialog", async (req, res) => {
           {
             author: author,
             content: content,
-            // created_at: { type: Date },
-            // read: { type: Boolean, default: false },
           },
         ],
       });
       await dialog.save();
-      res
-        .status(201)
-        .json({ status: "OK", message: "new dialog created", data: dialog });
+      res.status(201).json({
+        status: "OK",
+        message: "new dialog created",
+        data: dialog,
+      });
     } else {
       res.status(200).json({
-        data: result,
         status: "OK",
         message: "data found in database",
+        data: result,
       });
     }
   } catch (e) {
@@ -195,33 +190,19 @@ router.post("/update-dialog", async (req, res) => {
   debugger;
   try {
     const { author, content, participants, referedAsk } = req.body;
-    // console.log("req.body", req.body);
-    // console.log("participants:", participants);
-    // console.log("referedRide:", referedAsk);
-    // console.log("author:", author);
-    // console.log("content:", content);
+    console.log("req.body", req.body);
+    console.log("participants:", participants);
+    console.log("referedAsk:", referedAsk);
+    console.log("author:", author);
+    console.log("content:", content);
 
-    // const signed = Dialog.updateMany(
-    //   { referedAsk: referedAsk },
-    //   {
-    //     $push: {
-    //       body: {
-    //         author: author,
-    //         content: content,
-    //       },
-    //     },
-    //   }
-    // );
-    // const updateResult = await updateDialog(
-    //   author,
-    //   content,
-    //   participants,
-    //   referedAsk
-    // );
-    // console.log("updateResult:", updateResult);
-    return res
-      .status(201)
-      .json({ message: "new dialog created", status: "OK", data: dialog });
+    const updateResult = await database.updateDialog(
+      author,
+      content,
+      referedAsk
+    );
+    console.log("updateResult:", updateResult);
+    return res.status(200).json({ message: "dialog updated", status: "OK" });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ message: "", error: e });
@@ -245,8 +226,8 @@ router.post("/confirm-ask", async (req, res) => {
   try {
     const payload = req.body;
     // console.log(payload);
-    await confirmAskToRideMongo(payload);
-    await modifyAskAfterConfirmMongo(payload);
+    await database.confirmAskToRideMongo(payload);
+    await database.modifyAskAfterConfirmMongo(payload);
 
     return res.status(200).json("ask confirmed");
   } catch (e) {
@@ -259,8 +240,8 @@ router.post("/unconfirm", async (req, res) => {
   try {
     const { payload } = req.body;
     //console.log("payload unconfirm:", payload);
-    await deleteConfirmationInRide(payload);
-    await modifyAskAfterUnconfirm(payload);
+    await database.deleteConfirmationInRide(payload);
+    await database.modifyAskAfterUnconfirm(payload);
     //console.log("resulty:", result);
     return res.status(200).json("confirmation rejected");
   } catch (e) {
@@ -273,20 +254,20 @@ router.get("/findaskbyid/:id", async (req, res) => {
   const { id } = req.params;
   console.log("id in params:", id);
   try {
-    const ask = await Ask.find({ _id: id });
+    const ask = await Ask.findOne({ _id: id });
     return res.status(200).json(ask);
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "asks not found" });
+    res.status(500).json({ message: "ask not found" });
   }
 });
 
 router.post("/findasks", async (req, res) => {
   try {
     const payload = req.body;
-    console.log("payload:", payload);
-    const result = await findAsksByIdArray(payload);
-    console.log("resulty:", result);
+    // console.log("payload:", payload);
+    const result = await database.findAsksByIdArray(payload);
+    // console.log("resulty:", result);
     return res.status(200).json(result);
   } catch (e) {
     console.log(e);
@@ -300,6 +281,9 @@ router.get("/findmyrides/:id", async (req, res) => {
   try {
     //console.log(id);
     const myRides = await Ride.find({ user: id });
+    emitter3.send("run3");
+    // console.log("emitter3", emitter3);
+    // emitter3.emit("start", { mes: "run3" });
     return res.status(200).json(myRides);
   } catch (e) {
     console.log(e);
@@ -322,9 +306,9 @@ router.get("/findridebyid/:id", async (req, res) => {
 router.post("/findoffers", async (req, res) => {
   try {
     const payload = req.body;
-    console.log("payload:", payload);
-    const result = await findOffersByIdArray(payload);
-    console.log("resulty:", result);
+    // console.log("payload:", payload);
+    const result = await database.findOffersByIdArray(payload);
+    // console.log("resulty:", result);
     // console.log("offersIdArray:", offersIdArray);
     // const offers = await Ride.find({ user: id });
     return res.status(200).json(result);

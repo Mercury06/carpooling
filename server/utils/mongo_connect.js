@@ -1,17 +1,14 @@
 const mongoose = require("mongoose");
-const config = require("config");
+// const config = require("config");
+require("dotenv").config();
 const DB_URL = process.env.DB_URL;
 
-//export default connect; process.env.PORT
-
-const connect = async function () {
+const mongoConnect = async () => {
   try {
     // await mongoose.connect(config.get('dbUrl'), {
-    await mongoose.connect(DB_URLgit, {
+    mongoose.connect(DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      // keepAlive: true,
-      // keepAliveInitialDelay: 30000,
     });
     const db = mongoose.connection;
     db.on("error", (error) => {
@@ -36,19 +33,11 @@ const connect = async function () {
     db.on("all", () => {
       console.log("#all");
     });
-    process.on("SIGINT", function () {
-      console.log("SIGINT recieved");
-      process.exit(0);
-    });
-    process.on("SIGTERM", function () {
-      console.log("SIGTERM recieved");
-      process.exit(0);
-    });
   } catch (err) {
     console.error(err.message);
   }
 };
 
 module.exports = {
-  connect,
+  mongoConnect,
 };

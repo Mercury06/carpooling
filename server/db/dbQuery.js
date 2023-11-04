@@ -3,10 +3,11 @@ const Dialog = require("../models/Dialog");
 const Ride = require("../models/Ride");
 
 //find ask matched the route
-const subsMongoPromise = (points) => {
+const getRegisteredSubs = (points) => {
   // debugger;
   return new Promise(async function (resolve, reject) {
     const subs = await Ask.find({
+      confirmed: false,
       $and: [
         {
           "localityFrom.localityName": {
@@ -182,7 +183,7 @@ const modifyAskAfterDeleteRide = (payload) => {
   });
 };
 
-const updateDialog = (author, content, participants, referedAsk) => {
+const updateDialog = (author, content, referedAsk) => {
   //debugger;
 
   return new Promise(async function (resolve, reject) {
@@ -222,9 +223,8 @@ const modifyAskAfterUnconfirm = (payload) => {
   });
 };
 
-//module.exports.getSubsFromMongo = subsMongoPromise;
 module.exports = {
-  getSubsFromMongo: subsMongoPromise,
+  getRegisteredSubs,
   findOffersByIdArray,
   findAsksByIdArray,
   addOffersToMongo,

@@ -1,4 +1,4 @@
-function findMatchingSubscriptions(route, subscriptions) {
+function findMatchingSubs(route, subscriptions) {
   const subroutesSet = prepareSubroutesSet(route);
   //console.log('subroutesSet inside:', subroutesSet);
   //console.log('subscriptions inside:', subscriptions);
@@ -51,6 +51,6 @@ function findMatchingRides(searchedRides, localityFrom, destination) {
 }
 
 module.exports = {
-  getMatchedData: findMatchingSubscriptions,
+  getMatchedData: findMatchingSubs,
   findMatchingRides,
 };

@@ -1,4 +1,5 @@
 const { Schema, model, ObjectId } = require("mongoose");
+const uuid = require("uuid");
 
 const Dialog = new Schema(
   {
@@ -7,10 +8,12 @@ const Dialog = new Schema(
     referedAsk: { type: ObjectId, ref: "Ask", required: true },
     body: [
       {
+        id: { type: String, unique: true, default: uuid.v4 },
         author: { type: ObjectId, ref: "User", required: true },
         content: { type: String },
         created_at: { type: Date },
         read: { type: Boolean, default: false },
+        _id: false,
       },
     ],
   },
