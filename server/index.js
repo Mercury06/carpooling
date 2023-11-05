@@ -2,11 +2,7 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 
-const bodyParser = require("body-parser");
-// const mongoose = require("mongoose");
-
 require("dotenv").config();
-const config = require("config");
 
 const corsMiddleware = require("./middleware/cors.middleware");
 const logger = require("./middleware/logger.js");
@@ -16,15 +12,12 @@ const authRouter = require("./routes/auth.routes.js");
 const settingsRouter = require("./routes/setting.routes.js");
 const sseRouter = require("./routes/sse.routes.js");
 const Ride = require("./models/Ride");
-
-const emitter3 = require("./utils/emitter");
+const bodyParser = require("body-parser");
 
 const database = require("./db/dbQuery");
 const { getMatchedData } = require("./utils/matcher");
 
-// const PORT = process.env.PORT || config.get("serverPort");
-const PORT = process.env.PORT;
-const DB_URL = process.env.DB_URL;
+const PORT = process.env.PORT || 9000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsMiddleware);
@@ -34,44 +27,6 @@ app.use(logger);
 app.use(sseRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/settings", settingsRouter);
-
-// app.get("/stream", (req, res) => {
-//   console.log("****i*****", i);
-
-//   req.socket.addListener("close", function () {
-//     console.log("connection closed by client...");
-//     res.end();
-//   });
-
-//   res.writeHead(200, {
-//     Connection: "keep-alive",
-//     "Content-Type": "text/event-stream",
-//     "Cache-Control": "no-cache",
-//   });
-//   i++;
-
-//   console.log("client connected...");
-//   // res.setHeader("Connection", "keep-alive");
-//   // res.setHeader("Content-Type", "text/event-stream");
-//   // res.setHeader("Cache-Control", "no-cache");
-//   res.write("data: some data \n\n");
-//   // res.write("id: some id \n\n");
-//   // emitter1.emit("start", { mes1: "run" });
-//   // setInterval(() => {
-//   //   res.write("data: some data in interval \n\n");
-//   // }, 5000);
-
-//   emitter3.on("start5", (mes) => {
-//     console.log("mes.on:", mes);
-//     res.write(`data: ${JSON.stringify(mes)} \n\n`);
-//     res.write(`data: some data inside emitter3 \n\n`);
-//     // res.write(`id: 1 \n\n`);
-//     // res.write("data: some data inside \n\n");
-//     // res.write("id: some id inside \n\n");
-//   });
-//   // console.log("******SERVER******", server);
-//   // console.log("******res.connection.server******", res.socket.server);
-// });
 
 const start = async () => {
   try {
@@ -111,7 +66,7 @@ const start = async () => {
                                     process.argv: ${process.argv}`);
     });
   } catch (e) {
-    process.stderr.write("I have got the STDERR:", e.message);
+    process.stderr.write("some error occured:", e.message);
   }
 };
 
@@ -174,10 +129,7 @@ start();
 //         process.abort();
 //       }, 1000).unref();
 //     });
-//     // const connections = server.getConnections(function (error, count) {
-//     //   console.log("server.getConnections:", count);
-//     // });
-//     // console.log("connections:", connections);
+//
 //     server.listen(PORT, () => {
 //       process.stdout.write(`stdout: server started on port ${PORT}\n
 //                                     process id: ${process.pid}
