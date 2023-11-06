@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 // const config = require("config");
 require("dotenv").config();
 const DB_URL = process.env.DB_URL;
+const DBListener = require("./mongoListener");
 
 const mongoConnect = async () => {
   try {
@@ -11,6 +12,7 @@ const mongoConnect = async () => {
       useUnifiedTopology: true,
     });
     const db = mongoose.connection;
+    DBListener.init();
     db.on("error", (error) => {
       console.error(error.message);
       mongoose.disconnect();

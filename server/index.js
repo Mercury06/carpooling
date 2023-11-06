@@ -6,16 +6,12 @@ require("dotenv").config();
 
 const corsMiddleware = require("./middleware/cors.middleware");
 const logger = require("./middleware/logger.js");
-const connectionModule = require("./utils/mongo_connect.js");
+const connectionModule = require("./utils/mongoConnect.js");
 
 const authRouter = require("./routes/auth.routes.js");
 const settingsRouter = require("./routes/setting.routes.js");
 const sseRouter = require("./routes/sse.routes.js");
-const Ride = require("./models/Ride");
 const bodyParser = require("body-parser");
-
-const database = require("./db/dbQuery");
-const { getMatchedData } = require("./utils/matcher");
 
 const PORT = process.env.PORT || 9000;
 
@@ -28,27 +24,9 @@ app.use(sseRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/settings", settingsRouter);
 
-const start = async () => {
+async function start() {
   try {
-    // console.log("mongoDbConnection", mongoDbConnection);
     connectionModule.mongoConnect();
-    const resulty = Ride.watch(); //edit
-    resulty.on("change", async function (next) {
-      //  debugger;
-      if (next.operationType === "insert") {
-        let points = next.fullDocument.points;
-        let route = points.map((item) => item.localityName);
-        //console.log("route:", route);
-        const subs = await database.getRegisteredSubs(route);
-        console.log("get subs mongo*******:", subs);
-        const matched = getMatchedData(route, subs);
-        console.log("matched*******:", matched);
-        let applicant = JSON.stringify(next.fullDocument);
-        const signed = await database.addOffersToMongo(matched, applicant);
-        console.log("signed:", signed);
-      }
-    });
-
     process.on("uncaughtException", (err) => {
       process.stderr.write("I have got the STDERR:", err.message);
       server.close(() => process.exit(1));
@@ -56,19 +34,16 @@ const start = async () => {
         process.abort();
       }, 1000).unref();
     });
-    // const connections = server.getConnections(function (error, count) {
-    //   console.log("server.getConnections:", count);
-    // });
-    // console.log("connections:", connections);
+
     server.listen(PORT, () => {
-      process.stdout.write(`stdout: server started on port ${PORT}\n
-                                    process id: ${process.pid}
-                                    process.argv: ${process.argv}`);
+      process.stdout.write(
+        `stdout: server started on port ${PORT} process id: ${process.pid}\n`
+      );
     });
   } catch (e) {
     process.stderr.write("some error occured:", e.message);
   }
-};
+}
 
 start();
 
