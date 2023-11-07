@@ -13,11 +13,6 @@ sseRouter.get("/send-message", (req, res) => {
   res.end("ok");
 });
 
-// sseRouter.get("/send-message", (req, res) => {
-//   console.log("req.query:", req.query);
-//   res.end("ok");
-// });
-
 module.exports = sseRouter;
 
 // sseRouter.get("/stream", (req, res) => {
