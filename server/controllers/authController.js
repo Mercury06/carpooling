@@ -17,7 +17,7 @@ class AuthController {
       const user = await User.findOne({ username });
 
       if (!user) {
-        return res.status(400).json({ message: "User not foundy" });
+        return res.status(400).json({ message: "User not found" });
       }
 
       const isPassValid = bcrypt.compareSync(password, user.password);
@@ -29,7 +29,7 @@ class AuthController {
       }
 
       const token = jwt.sign({ id: user._id, roles: user.roles }, secretKey, {
-        expiresIn: "1h",
+        expiresIn: "300s",
       });
       return res.json({
         token,
@@ -85,7 +85,7 @@ class AuthController {
   async auth(req, res) {
     try {
       const user = await User.findOne({ _id: req.user.id });
-      const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "1h" });
+      const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "300s" });
       return res.json({
         token,
         user: {

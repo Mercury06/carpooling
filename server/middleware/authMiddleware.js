@@ -5,6 +5,8 @@ const config = require("config");
 const secretKey = process.env.SECRET_KEY;
 
 module.exports = function (req, res, next) {
+  console.log("req in authMW:", req.user);
+  console.log("req.headers.authorization:", req.headers.authorization);
   if (req.method === "OPTIONS") {
     next();
   }
@@ -13,11 +15,16 @@ module.exports = function (req, res, next) {
     if (!token) {
       return res.status(401).json({ message: "Auth error" });
     }
-    const decoded = jwt.verify(token, secretKey);
-    req.user = decoded;
-    next();
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err)
+        return res
+          .status(403)
+          .json({ success: false, message: "jwt verify error" });
+      req.user = decoded;
+      next();
+    });
   } catch (e) {
     console.log(e);
-    return res.status(403).json({ message: "User not authoryyyzed" });
+    return res.status(403).json({ message: "User not authorized" });
   }
 };

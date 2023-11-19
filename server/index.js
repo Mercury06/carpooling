@@ -24,24 +24,32 @@ app.use(sseRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/busines", businesRouter);
 
+process.on("uncaughtException", (err) => {
+  process.stderr.write("uncaughtException:", err.message);
+  server.close(() => process.exit(1));
+  setTimeout(() => {
+    process.abort();
+  }, 1000).unref();
+});
+process.on("unhandledRejection", (reason, promise) => {
+  process.stderr.write("unhandledRejection:", err.message);
+  server.close(() => process.exit(1));
+  setTimeout(() => {
+    process.abort();
+  }, 1000).unref();
+});
+process.on("SIGINT", function () {
+  console.log("SIGINT recieved");
+  process.exit(0);
+});
+process.on("SIGTERM", function () {
+  console.log("SIGTERM recieved");
+  process.exit(0);
+});
+
 async function start() {
   try {
     connectionModule.mongoConnect();
-    process.on("uncaughtException", (err) => {
-      process.stderr.write("I have got the STDERR:", err.message);
-      server.close(() => process.exit(1));
-      setTimeout(() => {
-        process.abort();
-      }, 1000).unref();
-    });
-    process.on("SIGINT", function () {
-      console.log("SIGINT recieved");
-      process.exit(0);
-    });
-    process.on("SIGTERM", function () {
-      console.log("SIGTERM recieved");
-      process.exit(0);
-    });
 
     server.listen(PORT, () => {
       process.stdout.write(

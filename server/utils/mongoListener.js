@@ -1,6 +1,6 @@
 const Ride = require("./../models/Ride");
 const { getMatchedData } = require("./matcher");
-const database = require("./../db/dbQuery");
+const dbService = require("../db/dbQuery");
 
 class DBListener {
   init() {
@@ -12,12 +12,12 @@ class DBListener {
         let points = next.fullDocument.points;
         let route = points.map((item) => item.localityName);
         //console.log("route:", route);
-        const subs = await database.getRegisteredSubs(route);
+        const subs = await dbService.getRegisteredSubs(route);
         console.log("get subs mongo*******:", subs);
         const matched = getMatchedData(route, subs);
         console.log("matched*******:", matched);
         let applicant = JSON.stringify(next.fullDocument);
-        const signed = await database.addOffersToMongo(matched, applicant);
+        const signed = await dbService.addOffersToMongo(matched, applicant);
         console.log("signed:", signed);
       }
     });

@@ -1,12 +1,8 @@
 const Router = require("express");
-const Locality = require("../models/Locality.js");
+const sse = require("./../utils/sse.js");
 //const Role = require('../models/Role');
 const { check, validationResult } = require("express-validator");
-const Dialog = require("../models/Dialog.js");
 
-const { getGraphData } = require("../db/neo4j.js");
-const { findMatchingRides } = require("../utils/matcher.js");
-const database = require("../db/dbQuery.js");
 const RideController = require("../controllers/rideController.js");
 
 const emitter3 = require("../utils/emitter.js");
@@ -67,5 +63,12 @@ router.get(
 );
 
 router.get("/findlocality", RideController.findLocality);
+
+router.get("/sse-ping", (req, res) => {
+  const client = req.query.client;
+  console.log("client in query:", client);
+  sse.send(client);
+  res.send("ok");
+});
 
 module.exports = router;

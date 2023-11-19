@@ -2,6 +2,11 @@ const User = require("../models/User");
 const Role = require("../models/Role");
 const Ride = require("../models/Ride");
 const Ask = require("../models/Ask");
+const Dialog = require("../models/Dialog.js");
+const Locality = require("../models/Locality.js");
+const dbService = require("../db/dbQuery.js");
+const { findMatchingRides } = require("../utils/matcher.js");
+const { getGraphData } = require("../db/neo4j.js");
 const bcrypt = require("bcryptjs");
 const { check, validationResult } = require("express-validator");
 const config = require("config");
@@ -10,7 +15,7 @@ const config = require("config");
 const secretKey = process.env.SECRET_KEY;
 
 class RideController {
-  async createlocality(req, res) {
+  async createlocality(req, res, next) {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -34,7 +39,7 @@ class RideController {
       res.status(500).json({ message: "Error message" });
     }
   }
-  async createride(req, res) {
+  async createride(req, res, next) {
     try {
       const { localityFrom, destination, date, user } = req.body;
       // console.log('localityFrom.id:', localityFrom.id);
@@ -64,12 +69,12 @@ class RideController {
       return res.status(500).json({ message: "ride not created" });
     }
   }
-  async deleteRide(req, res) {
+  async deleteRide(req, res, next) {
     try {
       const { payload } = req.body;
       //console.log("payload delete ride:", payload);
-      await database.deleteRide(payload);
-      await database.modifyAskAfterDeleteRide(payload);
+      await dbService.deleteRide(payload);
+      await dbService.modifyAskAfterDeleteRide(payload);
 
       return res.status(200).json("ride deleted");
     } catch (e) {
@@ -78,7 +83,7 @@ class RideController {
     }
   }
 
-  async createAsk(req, res) {
+  async createAsk(req, res, next) {
     try {
       const { localityFrom, destination, date, user } = req.body;
       // console.log("localityFrom.id:", localityFrom.id);
@@ -106,12 +111,12 @@ class RideController {
       return res.status(500).json({ message: "ask not created" }, e);
     }
   }
-  async addAskToRide(req, res) {
+  async addAskToRide(req, res, next) {
     try {
       const { rideItemId, applicant } = req.body;
       // console.log("rideId:", rideId);
       // console.log("applicant:", applicant);
-      const result = await database.addAskToRideMongo(rideItemId, applicant);
+      const result = await dbService.addAskToRideMongo(rideItemId, applicant);
       return res
         .status(200)
         .json({ message: "ask added to ride", status: "OK", result });
@@ -122,7 +127,7 @@ class RideController {
         .json({ message: "ask not added", status: "error" }, e);
     }
   }
-  async fetchDialog(req, res) {
+  async fetchDialog(req, res, next) {
     try {
       const { author, content, participants, referedAsk } = req.body;
       // console.log("payload in fetch-dialog", req.body);
@@ -148,7 +153,7 @@ class RideController {
       } else {
         res.status(200).json({
           status: "OK",
-          message: "data found in database",
+          message: "dialog found in database",
           data: result,
         });
       }
@@ -156,17 +161,17 @@ class RideController {
       return res.status(500).json({ message: "", error: e });
     }
   }
-  async updateDialog(req, res) {
+  async updateDialog(req, res, next) {
     //debugger;
     try {
       const { author, content, participants, referedAsk } = req.body;
-      console.log("req.body", req.body);
-      console.log("participants:", participants);
-      console.log("referedAsk:", referedAsk);
-      console.log("author:", author);
-      console.log("content:", content);
+      //   console.log("req.body", req.body);
+      //   console.log("participants:", participants);
+      //   console.log("referedAsk:", referedAsk);
+      //   console.log("author:", author);
+      //   console.log("content:", content);
 
-      const updateResult = await database.updateDialog(
+      const updateResult = await dbService.updateDialog(
         author,
         content,
         referedAsk
@@ -178,7 +183,7 @@ class RideController {
       return res.status(500).json({ message: "", error: e });
     }
   }
-  async findMyAsk(req, res) {
+  async findMyAsk(req, res, next) {
     try {
       const { id } = req.params;
       const asks = await Ask.find({ user: id });
@@ -189,12 +194,12 @@ class RideController {
       res.status(500).json({ message: "asks not found" });
     }
   }
-  async confirmAsk(req, res) {
+  async confirmAsk(req, res, next) {
     try {
       const payload = req.body;
       // console.log(payload);
-      await database.confirmAskToRideMongo(payload);
-      await database.modifyAskAfterConfirmMongo(payload);
+      await dbService.confirmAskToRideMongo(payload);
+      await dbService.modifyAskAfterConfirmMongo(payload);
 
       return res.status(200).json("ask confirmed");
     } catch (e) {
@@ -202,12 +207,12 @@ class RideController {
       res.status(500).json({ message: "rides not found" });
     }
   }
-  async unconfirmAsk(req, res) {
+  async unconfirmAsk(req, res, next) {
     try {
       const { payload } = req.body;
       //console.log("payload unconfirm:", payload);
-      await database.deleteConfirmationInRide(payload);
-      await database.modifyAskAfterUnconfirm(payload);
+      await dbService.deleteConfirmationInRide(payload);
+      await dbService.modifyAskAfterUnconfirm(payload);
       //console.log("resulty:", result);
       return res.status(200).json("confirmation rejected");
     } catch (e) {
@@ -215,7 +220,7 @@ class RideController {
       res.status(500).json({ message: "unconfirm exception" });
     }
   }
-  async findAskById(req, res) {
+  async findAskById(req, res, next) {
     const { id } = req.params;
     console.log("id in params:", id);
     try {
@@ -226,11 +231,11 @@ class RideController {
       res.status(500).json({ message: "ask not found" });
     }
   }
-  async findAsks(req, res) {
+  async findAsks(req, res, next) {
     try {
       const payload = req.body;
       // console.log("payload:", payload);
-      const result = await database.findAsksByIdArray(payload);
+      const result = await dbService.findAsksByIdArray(payload);
       // console.log("resulty:", result);
       return res.status(200).json(result);
     } catch (e) {
@@ -238,7 +243,7 @@ class RideController {
       res.status(500).json({ message: "asks not found" });
     }
   }
-  async findMyRides(req, res) {
+  async findMyRides(req, res, next) {
     const { id } = req.params;
     try {
       //console.log(id);
@@ -252,7 +257,7 @@ class RideController {
       res.status(500).json({ message: "rides not found" });
     }
   }
-  async findRideById(req, res) {
+  async findRideById(req, res, next) {
     const { id } = req.params;
     try {
       const ride = await Ride.findOne({ _id: id });
@@ -263,11 +268,11 @@ class RideController {
       res.status(500).json({ message: "rides not found" });
     }
   }
-  async findOffers(req, res) {
+  async findOffers(req, res, next) {
     try {
       const payload = req.body;
       // console.log("payload:", payload);
-      const result = await database.findOffersByIdArray(payload);
+      const result = await dbService.findOffersByIdArray(payload);
       // console.log("resulty:", result);
       // console.log("offersIdArray:", offersIdArray);
       // const offers = await Ride.find({ user: id });
@@ -277,7 +282,7 @@ class RideController {
       res.status(500).json({ message: "rides not found" });
     }
   }
-  async findLocs(req, res) {
+  async findLocs(req, res, next) {
     try {
       const locs = await Locality.find().sort({ locality: 1 });
 
@@ -287,7 +292,7 @@ class RideController {
       res.status(500).json({ message: "localities not found" });
     }
   }
-  async findLocality(req, res) {
+  async findLocality(req, res, next) {
     try {
       // const searchName = req.query.search
       // let locality = await Locality.find({})
@@ -310,7 +315,7 @@ class RideController {
       res.status(400).json({ message: "search error" });
     }
   }
-  async findRidesBySearchParams(req, res) {
+  async findRidesBySearchParams(req, res, next) {
     try {
       //console.log('req.query:', req.query);
       let date = req.query.date;
