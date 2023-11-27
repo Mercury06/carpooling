@@ -1,12 +1,16 @@
 const Router = require("express");
 const sse = require("./../utils/sse.js");
+const authMiddleware = require("../middleware/authMiddleware.js");
 
 const sseRouter = new Router();
 
-sseRouter.get("/stream", (req, res) => {
-  const username = req.query.username;
-  console.log("sseRouter param", username);
-  sse.init(req, res, username);
+sseRouter.get("/stream/:userId", (req, res) => {
+  // console.log("USERID inside ROUTER:", userId);
+  // console.log("USERID inside ROUTER:", req.params);
+  // sseRouter.get("/stream", (req, res) => {
+  // const username = req.query.username;
+  // console.log("sseRouter param", username);
+  sse.init(req, res);
 });
 
 sseRouter.get("/send-message", (req, res) => {

@@ -186,7 +186,7 @@ class RideController {
   async findMyAsk(req, res, next) {
     try {
       const { id } = req.params;
-      const asks = await Ask.find({ user: id });
+      const asks = await Ask.find({ user: parseInt(id) });
       //console.log(rides)
       return res.status(200).json(asks);
     } catch (e) {
@@ -224,7 +224,7 @@ class RideController {
     const { id } = req.params;
     console.log("id in params:", id);
     try {
-      const ask = await Ask.findOne({ _id: id });
+      const ask = await Ask.findOne({ _id: parseInt(id) });
       return res.status(200).json(ask);
     } catch (e) {
       console.log(e);
@@ -247,7 +247,7 @@ class RideController {
     const { id } = req.params;
     try {
       //console.log(id);
-      const myRides = await Ride.find({ user: id });
+      const myRides = await Ride.find({ user: parseInt(id) });
 
       // console.log("emitter3", emitter3);
       // emitter3.emit("start", { mes: "run3" });
@@ -260,7 +260,7 @@ class RideController {
   async findRideById(req, res, next) {
     const { id } = req.params;
     try {
-      const ride = await Ride.findOne({ _id: id });
+      const ride = await Ride.findOne({ _id: parseInt(id) });
       // console.log(ride);
       return res.status(200).json(ride);
     } catch (e) {

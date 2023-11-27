@@ -20,7 +20,7 @@ app.use(corsMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
-app.use(sseRouter);
+app.use("/api", sseRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/busines", businesRouter);
 

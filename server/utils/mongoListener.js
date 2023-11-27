@@ -1,13 +1,14 @@
-const Ride = require("./../models/Ride");
+// const Ride = require("./../models/Ride");
 const { getMatchedData } = require("./matcher");
 const dbService = require("../db/dbQuery");
 
 class DBListener {
-  init() {
+  init(cursor) {
     console.log("DBListener init...");
-    const event = Ride.watch();
-    event.on("change", async function (next) {
+    // console.log("changeRideCollectionEvent in init method:", cursor);
+    cursor.on("change", async function (next) {
       //  debugger;
+      console.log("***next****", next);
       if (next.operationType === "insert") {
         let points = next.fullDocument.points;
         let route = points.map((item) => item.localityName);

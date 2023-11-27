@@ -5,8 +5,6 @@ const config = require("config");
 const secretKey = process.env.SECRET_KEY;
 
 module.exports = function (req, res, next) {
-  console.log("req in authMW:", req.user);
-  console.log("req.headers.authorization:", req.headers.authorization);
   if (req.method === "OPTIONS") {
     next();
   }

@@ -1,5 +1,4 @@
 const EventEmitter = require("events");
-const uuid = require("uuid");
 
 let streamCount = 0;
 
@@ -9,23 +8,25 @@ class SSE extends EventEmitter {
     this.connections = [];
   }
 
-  init(req, res, username) {
+  init(req, res) {
+    const { userId } = req.params;
     res.writeHead(200, {
       Connection: "keep-alive",
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
     });
     console.log("client connected init...");
-    const client = { id: uuid.v4(), res };
+    const client = { id: userId, res };
     this.connections.push(client);
     console.log("connections length", this.connections.length);
-    // console.log("connections after push", this.connections);
+    console.log("connections after push", this.connections);
 
     let id = 0;
-    res.write(`data: some data \n\n`);
-    // setInterval(() => {
-    //   res.write("data: some data in interval \n\n");
-    // }, 3000);
+    // res.write(`data: some data \n\n`);
+    const mes = { message: "some data" };
+    setInterval(() => {
+      res.write(`data: ${JSON.stringify(mes)} \n\n`);
+    }, 3000);
     const dataListener = (data) => {
       console.log("data init:", data);
       if (data.event) {
@@ -41,7 +42,7 @@ class SSE extends EventEmitter {
       //res.end()
       --streamCount;
       console.log("Stream closed");
-      console.log(`Client ${username} closed the stream...`);
+      // console.log(`Client ${username} closed the stream...`);
     });
     console.log(`Stream ${++streamCount} created...`);
   }
@@ -59,5 +60,4 @@ class SSE extends EventEmitter {
   }
 }
 
-const sse = new SSE();
-module.exports = sse;
+module.exports = new SSE();
