@@ -1,13 +1,27 @@
 const EventEmitter = require("events");
 
-let streamCount = 0;
-
 class SSE extends EventEmitter {
   constructor() {
     super();
-    this.connections = [];
+    // this.connections = [];
+    this.connections = new Map();
   }
+  removeHandler(userId) {
+    if (this.connections.has(`${userId}`)) {
+      console.log(`client ${userId} found in connections...`);
+      this.connections.delete(`${userId}`);
+    }
 
+    // console.log("connections after subscribe", this.connections);
+    console.log("connections size after remove", this.connections.size);
+  }
+  subscribe(client) {
+    // this.connections.push(client);
+    // this.connections.set(`${client.id}`, `${client.res}`);
+    this.connections.set(`${client.id}`, client.res);
+    // console.log("connections after subscribe", this.connections);
+    console.log("connections size", this.connections.size);
+  }
   init(req, res) {
     const { userId } = req.params;
     res.writeHead(200, {
@@ -15,13 +29,10 @@ class SSE extends EventEmitter {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
     });
-    console.log("client connected init...");
+    console.log(`client ${userId} connected`);
     const client = { id: userId, res };
-    this.connections.push(client);
-    console.log("connections length", this.connections.length);
-    console.log("connections after push", this.connections);
+    this.subscribe(client);
 
-    let id = 0;
     // res.write(`data: some data \n\n`);
     const mes = { message: "some data" };
     setInterval(() => {
@@ -38,13 +49,14 @@ class SSE extends EventEmitter {
     };
     this.on("data", dataListener);
     req.on("close", () => {
+      console.log(`USER ${userId} closed connection...`);
       this.removeListener("data", dataListener);
+      this.removeHandler(userId);
       //res.end()
-      --streamCount;
       console.log("Stream closed");
       // console.log(`Client ${username} closed the stream...`);
     });
-    console.log(`Stream ${++streamCount} created...`);
+    // console.log(`new stream created...`);
   }
 
   //   send(data) {
