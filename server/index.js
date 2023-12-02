@@ -15,6 +15,9 @@ const bodyParser = require("body-parser");
 
 const PORT = process.env.PORT || 9000;
 
+// const sse = require("./utils/sse.js");
+// const emitter1 = new MyEmitter();
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsMiddleware);
 app.use(express.json());
@@ -50,7 +53,11 @@ process.on("SIGTERM", function () {
 async function start() {
   try {
     connectionModule.mongoConnect();
-
+    /////////////////////////////////
+    // setInterval(() => {
+    //   sse.emit("kiss");
+    // }, 3000);
+    ///////////////////////////////////
     server.listen(PORT, () => {
       process.stdout.write(
         `stdout: server started on port ${PORT} process id: ${process.pid}\n`

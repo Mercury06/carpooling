@@ -13,12 +13,12 @@ sseRouter.get("/stream/:userId", (req, res) => {
 //   res.end("ok");
 // });
 
-sseRouter.get("/send-message/:id", (req, res) => {
-  const { userId } = req.params;
-  let data = req.query;
-  sse.send({ data });
-  res.end("ok");
-});
+// sseRouter.get("/send-message/:id", (req, res) => {
+//   const { userId } = req.params;
+//   let data = req.query;
+//   sse.send({ data });
+//   res.end("ok");
+// });
 
 module.exports = sseRouter;
 
