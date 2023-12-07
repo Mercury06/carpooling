@@ -10,7 +10,6 @@ const { getGraphData } = require("../db/neo4j.js");
 const bcrypt = require("bcryptjs");
 const { check, validationResult } = require("express-validator");
 const config = require("config");
-const sse = require("../utils/sse.js");
 
 // const secretKey = config.get("secretKey") || process.env.SECRET_KEY;
 const secretKey = process.env.SECRET_KEY;
@@ -45,7 +44,7 @@ class RideController {
       const { localityFrom, destination, date, user } = req.body;
       // console.log('localityFrom.id:', localityFrom.id);
       // console.log('destination.id:', destination.id);
-      console.log("user:", user);
+      // console.log("user:", user);
 
       //const points = await getGraphData(localityFrom.id, destination.id);
       const { cities, direction } = await getGraphData(
@@ -188,10 +187,6 @@ class RideController {
     try {
       const { id } = req.params;
       const asks = await Ask.find({ user: id });
-      //////////////////////////
-      sse.newMatchRideEvent(asks);
-      //////////////////////////
-      //console.log(rides)
       return res.status(200).json(asks);
     } catch (e) {
       console.log(e);

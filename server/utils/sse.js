@@ -1,5 +1,14 @@
 const EventEmitter = require("events");
 
+const EventName = Object.freeze({
+  ASK: "ASK",
+  MESSAGE: "MESSAGE",
+  CONFIRM: "CONFIRM",
+  GREETING: "GREETING",
+  CANCELLED: "CANCELLED",
+  OPPORTUNE: "OPPORTUNE",
+});
+
 class SSE extends EventEmitter {
   constructor() {
     super();
@@ -16,7 +25,7 @@ class SSE extends EventEmitter {
     // console.log("connections after subscribe", this.connections);
     console.log("connections size after remove", this.connections.size);
   }
-  subscribe(client, intervalId) {
+  subscribe(client) {
     // this.connections.push(client);
     // this.connections.set(`${client.id}`, `${client.res}`);
     this.connections.set(`${client.id}`, client.res);
@@ -38,41 +47,45 @@ class SSE extends EventEmitter {
     for (let [key] of this.connections) {
       console.log("key:", key);
     }
-    // const mes = { message: "you have been initialized..." };
     res.write(
       `data: ${JSON.stringify({
         message: "you have been initialized...",
       })} \n\n`
     );
 
-    const dataListener = (asks) => {
-      console.log("dataListener catched emit:", asks);
+    const eventListener = (data) => {
+      console.log("dataListener catched emit:", data);
+      console.log("data.recieverIdArray[0]", data.recieverIdArray[0]);
+      if (this.connections.has(data.recieverIdArray[0])) {
+        console.log("HAS***********************");
+      }
+      // for (let [key] of this.connections) {
+      //   this.connections.has(`${userId}`)
+      // }
       // if (data.event) {
       //   res.write(`event: ${data.event} \n`);
       // }
-      // res.write(`event: ${data.data} \n`);
+      // res.write(`event: ${data.event} \n`);
+      // res.write(`data: ${data.data} \n`);
       // res.write("\n");
     };
-    this.on("data5", dataListener);
+    this.on("newSseEvent", eventListener);
     req.on("close", () => {
-      this.removeListener("data", dataListener);
+      this.removeListener("data", eventListener);
       this.removeHandler(userId);
       clearInterval(this.intervalId);
       // console.log("this intervals when closed", this.intervals);
       console.log(`USER ${userId} closed connection...`);
       res.write(`event: join \n`);
       // res.end();
-
-      // console.log(`Client ${username} closed the stream...`);
     });
   }
-
-  newMatchRideEvent(asks) {
-    // console.log("emitted inside class3:", message);
-    // this.emit("newMessage", { mes: message });
-    // console.log("this:", this);
-    this.emit("data5", { data: asks });
+  emitEvent(data) {
+    this.emit("newSseEvent", data);
   }
+  // newMatchRideEvent(data) {
+  //   this.emit("newSseEvent", { event: EventName.OPPORTUNE, data });
+  // }
 }
 
 module.exports = new SSE();

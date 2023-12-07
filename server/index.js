@@ -27,8 +27,8 @@ app.use("/api", sseRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/busines", businesRouter);
 
-process.on("uncaughtException", (err) => {
-  process.stderr.write("uncaughtException:", err.message);
+process.on("uncaughtException", (ex) => {
+  process.stderr.write("uncaughtException:", ex);
   server.close(() => process.exit(1));
   setTimeout(() => {
     process.abort();
