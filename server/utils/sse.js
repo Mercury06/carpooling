@@ -1,21 +1,36 @@
 const EventEmitter = require("events");
 
-const EventName = Object.freeze({
-  ASK: "ASK",
-  MESSAGE: "MESSAGE",
-  CONFIRM: "CONFIRM",
-  GREETING: "GREETING",
-  CANCELLED: "CANCELLED",
-  OPPORTUNE: "OPPORTUNE",
-});
-
 class SSE extends EventEmitter {
   constructor() {
     super();
     // this.connections = [];
     this.connections = new Map();
+    this.on("newSseEvent", this.eventListener);
   }
+  eventListener(data) {
+    console.log("eventListener initialized in constructor...:", data);
+    // if (this.connections.has(data.recieverIdArray[0])) {
 
+    // }
+    const recievers = data.recieverIdArray;
+    for (let reciever of recievers) {
+      if (this.connections.has(reciever)) {
+        console.log("VERY CATCHED************");
+        reciever = this.connections.get(reciever);
+        reciever.write(
+          `data: ${JSON.stringify({
+            message: "some data for prepared clIEnt",
+          })} \n\n`
+        );
+        // reciever.write(`event: ${JSON.stringify(data.event)} \n\n`);
+
+        reciever.write(`event: ${data.event}\n`);
+        // reciever.write(`event: opportune\n`);
+        reciever.write(`data: ${JSON.stringify(data.data)} \n`);
+        reciever.write(`\n\n`);
+      }
+    }
+  }
   removeHandler(userId) {
     if (this.connections.has(`${userId}`)) {
       this.connections.delete(`${userId}`);
@@ -53,30 +68,13 @@ class SSE extends EventEmitter {
       })} \n\n`
     );
 
-    const eventListener = (data) => {
-      console.log("dataListener catched emit:", data);
-      console.log("data.recieverIdArray[0]", data.recieverIdArray[0]);
-      if (this.connections.has(data.recieverIdArray[0])) {
-        console.log("HAS***********************");
-      }
-      // for (let [key] of this.connections) {
-      //   this.connections.has(`${userId}`)
-      // }
-      // if (data.event) {
-      //   res.write(`event: ${data.event} \n`);
-      // }
-      // res.write(`event: ${data.event} \n`);
-      // res.write(`data: ${data.data} \n`);
-      // res.write("\n");
-    };
-    this.on("newSseEvent", eventListener);
     req.on("close", () => {
-      this.removeListener("data", eventListener);
+      // this.removeListener("newSseEvent", eventListener);
       this.removeHandler(userId);
       clearInterval(this.intervalId);
       // console.log("this intervals when closed", this.intervals);
       console.log(`USER ${userId} closed connection...`);
-      res.write(`event: join \n`);
+      // res.write(`event: join \n`);
       // res.end();
     });
   }

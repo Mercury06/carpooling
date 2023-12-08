@@ -1,10 +1,10 @@
 const EventName = Object.freeze({
-  ASK: "ASK",
-  MESSAGE: "MESSAGE",
-  CONFIRM: "CONFIRM",
-  GREETING: "GREETING",
-  CANCELLED: "CANCELLED",
-  OPPORTUNE: "OPPORTUNE",
+  ASK: "ask",
+  MESSAGE: "message",
+  CONFIRM: "confirm",
+  GREETING: "greeting",
+  CANCELLED: "cancelled",
+  OPPORTUNE: "opportune",
 });
 
 class Notifier {
@@ -17,17 +17,14 @@ class Notifier {
       recieverIdArray = matched.map((el) =>
         JSON.stringify(el.user).slice(1, -1)
       );
-      recieverIdArray.forEach((el) => console.log("***el****", el));
-      //   console.log("recieverIdArray", recieverIdArray);
     }
-
     return {
       recieverIdArray,
       event: EventName.OPPORTUNE,
-      data: applicant,
-      title: "for your ask new matching ride registered",
-      // type: 1,
-      // meta: {},
+      data: {
+        newRide: applicant,
+        title: "for your ask new matching ride registered",
+      },
     };
   }
 }
