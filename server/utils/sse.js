@@ -8,14 +8,10 @@ class SSE extends EventEmitter {
     this.on("newSseEvent", this.eventListener);
   }
   eventListener(data) {
-    console.log("eventListener initialized in constructor...:", data);
-    // if (this.connections.has(data.recieverIdArray[0])) {
-
-    // }
+    console.log("eventListener recieved event...:", data);
     const recievers = data.recieverIdArray;
     for (let reciever of recievers) {
       if (this.connections.has(reciever)) {
-        console.log("VERY CATCHED************");
         reciever = this.connections.get(reciever);
         reciever.write(
           `data: ${JSON.stringify({
@@ -111,17 +107,3 @@ module.exports = new SSE();
 //     preparedClient.write(`data: ${JSON.stringify(mes)} \n\n`);
 //   }
 // });
-
-/////////////////////////*************************/////////
-
-//   send(data) {
-//     this.emit("data", data);
-//   }
-// send(clientId) {
-//   console.log("got params...");
-//   let result = this.connections.find((client) => client.id === clientId);
-//   console.log("client found in array in send method:", result);
-//   setInterval(() => {
-//     result.res.write(`data: ${JSON.stringify("got client")} \n\n`);
-//   }, 3000);
-// }

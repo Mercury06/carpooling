@@ -15,9 +15,9 @@ class DBListener {
         let points = next.fullDocument.points;
         let route = points.map((item) => item.localityName);
         //console.log("route:", route);
-        const subs = await dbService.getRegisteredSubs(route);
+        let subs = await dbService.getRegisteredSubs(route);
         // console.log("get subs mongo*******:", subs);
-        const matched = getMatchedData(route, subs);
+        let matched = getMatchedData(route, subs);
         // console.log("matched*******:", matched);
         let applicant = JSON.stringify(next.fullDocument);
         const signed = await dbService.addOffersToMongo(matched, applicant);
@@ -26,7 +26,7 @@ class DBListener {
         // console.log("_notif:", _notif);
 
         // console.log("signed:", signed);
-      }
+      } else return;
     });
   }
 }
