@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
 const User = new Schema(
   {
@@ -14,10 +14,18 @@ const User = new Schema(
     avatar: { type: String },
     rate: { type: Number, default: 5 },
     feedbacks: [{ type: String }],
-    roles: [{ type: String, ref: 'Role' }], //указываем ссылку на сущность роли
+    roles: [{ type: String, ref: "Role" }], //указываем ссылку на сущность роли
     accessFailedCount: { type: Number },
+    notifications: [
+      {
+        initiator: { type: String },
+        event: { type: String, required: true },
+        data: { type: String },
+        notified: { type: Boolean, default: false },
+      },
+    ],
   },
-  { timestamps: true },
+  { timestamps: true }
 ); //User.createdAt; User.updatedAt
 
-module.exports = model('User', User);
+module.exports = model("User", User);

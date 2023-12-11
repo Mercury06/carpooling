@@ -3,6 +3,7 @@ const Notifier = require("./Notifier");
 const { getMatchedData } = require("./matcher");
 const dbService = require("../db/dbQuery");
 const sse = require("../utils/sse");
+const EventTypes = require("../utils/constants");
 
 class DBListener {
   init(cursor) {
@@ -20,12 +21,21 @@ class DBListener {
         let matched = getMatchedData(route, subs);
         // console.log("matched*******:", matched);
         let applicant = JSON.stringify(next.fullDocument);
-        const signed = await dbService.addOffersToMongo(matched, applicant);
-        const _notif = Notifier.newMatchRideNotification(matched, applicant);
-        sse.emitEvent(_notif);
-        // console.log("_notif:", _notif);
+        let signed = await dbService.addOffersToMongo(matched, applicant);
+        console.log("signed:", signed);
+        let usersToNotify = matched.map((ask) =>
+          JSON.stringify(ask.user).slice(1, -1)
+        );
+        console.log("usersToNotify:", usersToNotify);
+        // add if signed
+        const eventType = EventTypes.OPPORTUNE;
+        await dbService.addNotifyToUser(usersToNotify, applicant, eventType);
 
-        // console.log("signed:", signed);
+        /////////////////////////////////////
+        // const _notif = Notifier.newMatchRideNotification(matched, applicant);
+        // sse.emitEvent(_notif);
+        // console.log("_notif:", _notif);
+        /////////////////////////////////////
       } else return;
     });
   }

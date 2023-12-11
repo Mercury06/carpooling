@@ -33,44 +33,40 @@ class SSE extends EventEmitter {
       console.log(`client ${userId} removed from connections...`);
     } else return;
 
-    // console.log("connections after subscribe", this.connections);
     console.log("connections size after remove", this.connections.size);
   }
   subscribe(client) {
-    // this.connections.push(client);
-    // this.connections.set(`${client.id}`, `${client.res}`);
     this.connections.set(`${client.id}`, client.res);
-    // this.intervals.push(intervalId);
-    // console.log("connections after subscribe", this.connections);
     console.log("connections size when subscribe", this.connections.size);
   }
   init(req, res) {
-    const { userId } = req.params;
     res.writeHead(200, {
       Connection: "keep-alive",
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
     });
+    const { userId } = req.params;
     console.log(`client ${userId} connected`);
     console.log("connections size when init", this.connections.size);
     const client = { id: userId, res };
     this.subscribe(client);
+    /***************temporary*******************/
     for (let [key] of this.connections) {
       console.log("key:", key);
     }
+    /***************temporary*******************/
     res.write(
       `data: ${JSON.stringify({
-        message: "you have been initialized...",
+        message: "client has been initialized...",
       })} \n\n`
     );
 
     req.on("close", () => {
       // this.removeListener("newSseEvent", eventListener);
       this.removeHandler(userId);
-      clearInterval(this.intervalId);
+      // clearInterval(this.intervalId);
       // console.log("this intervals when closed", this.intervals);
       console.log(`USER ${userId} closed connection...`);
-      // res.write(`event: join \n`);
       // res.end();
     });
   }

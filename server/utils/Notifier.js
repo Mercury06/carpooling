@@ -1,11 +1,4 @@
-const EventName = Object.freeze({
-  ASK: "ask",
-  MESSAGE: "message",
-  CONFIRM: "confirm",
-  GREETING: "greeting",
-  CANCELLED: "cancelled",
-  OPPORTUNE: "opportune",
-});
+const EventTypes = require("./constants");
 
 class Notifier {
   constructor() {}
@@ -20,7 +13,7 @@ class Notifier {
     }
     return {
       recieverIdArray,
-      event: EventName.OPPORTUNE,
+      event: EventTypes.OPPOTUNE,
       data: {
         newRide: applicant,
         title: "for your ask new matching ride registered",

@@ -2,11 +2,11 @@ const { Schema, model, ObjectId } = require("mongoose");
 
 const Notification = new Schema(
   {
-    author: { type: ObjectId, ref: "User", required: true },
     recipient: { type: ObjectId, ref: "User", required: true },
-    reference: { type: String },
-    status: { type: Boolean, default: false },
-    description: { type: String },
+    initiator: { type: String },
+    event: { type: String },
+    data: { type: String },
+    notified: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

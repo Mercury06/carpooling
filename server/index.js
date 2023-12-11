@@ -12,11 +12,7 @@ const authRouter = require("./routes/auth.routes.js");
 const businesRouter = require("./routes/busines.routes.js");
 const sseRouter = require("./routes/sse.routes.js");
 const bodyParser = require("body-parser");
-
 const PORT = process.env.PORT || 9000;
-
-// const sse = require("./utils/sse.js");
-// const emitter1 = new MyEmitter();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(corsMiddleware);
@@ -35,7 +31,7 @@ process.on("uncaughtException", (ex) => {
   }, 1000).unref();
 });
 process.on("unhandledRejection", (reason, promise) => {
-  process.stderr.write("unhandledRejection:", err.message);
+  process.stderr.write("unhandledRejection:", reason);
   server.close(() => process.exit(1));
   setTimeout(() => {
     process.abort();
@@ -53,6 +49,7 @@ process.on("SIGTERM", function () {
 async function start() {
   try {
     connectionModule.mongoConnect();
+
     /////////////////////////////////
     // setInterval(() => {
     //   sse.emit("kiss");

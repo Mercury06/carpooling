@@ -1,6 +1,7 @@
 const Ask = require("../models/Ask");
 const Dialog = require("../models/Dialog");
 const Ride = require("../models/Ride");
+const User = require("../models/User");
 
 //find ask matched the route
 const getRegisteredSubs = (points) => {
@@ -55,6 +56,25 @@ const addOffersToMongo = (matched, applicant) => {
       {
         $push: {
           offers: JSON.parse(applicant),
+        },
+      }
+    );
+    resolve(signed);
+  });
+};
+
+const addNotifyToUser = (usersToNotify, applicant, eventType) => {
+  //debugger;
+  console.log("eventType", eventType);
+  return new Promise(async function (resolve, reject) {
+    const signed = User.updateMany(
+      { _id: { $in: usersToNotify } },
+      {
+        $push: {
+          notifications: {
+            initiator: JSON.stringify(applicant),
+            event: eventType,
+          },
         },
       }
     );
@@ -228,6 +248,7 @@ module.exports = {
   findOffersByIdArray,
   findAsksByIdArray,
   addOffersToMongo,
+  addNotifyToUser,
   addAskToRideMongo,
   modifyAskAfterConfirmMongo,
   deleteConfirmationInRide,
