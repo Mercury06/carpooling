@@ -21,15 +21,19 @@ class DBListener {
         let matched = getMatchedData(route, subs);
         // console.log("matched*******:", matched);
         let applicant = JSON.stringify(next.fullDocument);
+        // console.log("next.fullDocument:", next.fullDocument);
+        let initiator = JSON.stringify(next.fullDocument._id).slice(1, -1);
         let signed = await dbService.addOffersToMongo(matched, applicant);
-        console.log("signed:", signed);
-        let usersToNotify = matched.map((ask) =>
-          JSON.stringify(ask.user).slice(1, -1)
-        );
-        console.log("usersToNotify:", usersToNotify);
+        // console.log("signed:", signed);
+        if (matched.length > 0) {
+          let usersToNotify = matched.map((ask) =>
+            JSON.stringify(ask.user).slice(1, -1)
+          );
+          const eventType = EventTypes.OPPORTUNE;
+          await dbService.addNotifyToUser(usersToNotify, initiator, eventType);
+        }
+        // console.log("usersToNotify:", usersToNotify);
         // add if signed
-        const eventType = EventTypes.OPPORTUNE;
-        await dbService.addNotifyToUser(usersToNotify, applicant, eventType);
 
         /////////////////////////////////////
         // const _notif = Notifier.newMatchRideNotification(matched, applicant);

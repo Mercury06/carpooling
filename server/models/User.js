@@ -18,7 +18,7 @@ const User = new Schema(
     accessFailedCount: { type: Number },
     notifications: [
       {
-        initiator: { type: String },
+        initiator: { type: String, required: true },
         event: { type: String, required: true },
         data: { type: String },
         notified: { type: Boolean, default: false },

@@ -23,9 +23,7 @@ class AuthController {
       const isPassValid = bcrypt.compareSync(password, user.password);
 
       if (!isPassValid) {
-        return res
-          .status(400)
-          .json({ message: "Password or email is incorrect" });
+        return res.status(400).json({ message: "incorrect password or email" });
       }
 
       const token = jwt.sign({ id: user._id, roles: user.roles }, secretKey, {

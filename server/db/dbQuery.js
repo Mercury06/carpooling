@@ -63,7 +63,7 @@ const addOffersToMongo = (matched, applicant) => {
   });
 };
 
-const addNotifyToUser = (usersToNotify, applicant, eventType) => {
+const addNotifyToUser = (usersToNotify, initiator, eventType) => {
   //debugger;
   console.log("eventType", eventType);
   return new Promise(async function (resolve, reject) {
@@ -72,7 +72,7 @@ const addNotifyToUser = (usersToNotify, applicant, eventType) => {
       {
         $push: {
           notifications: {
-            initiator: JSON.stringify(applicant),
+            initiator,
             event: eventType,
           },
         },

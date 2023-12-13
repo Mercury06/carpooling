@@ -7,6 +7,7 @@ const Locality = require("../models/Locality.js");
 const dbService = require("../db/dbQuery.js");
 const { findMatchingRides } = require("../utils/matcher.js");
 const { getGraphData } = require("../db/neo4j.js");
+const EventTypes = require("../utils/constants");
 const bcrypt = require("bcryptjs");
 const { check, validationResult } = require("express-validator");
 const config = require("config");
@@ -113,13 +114,23 @@ class RideController {
   }
   async addAskToRide(req, res, next) {
     try {
-      const { rideItemId, applicant } = req.body;
-      // console.log("rideId:", rideId);
+      const { rideItem, applicant } = req.body;
+      const rideItemId = rideItem._id;
+      // console.log("rideItemId:", rideItemId);
       // console.log("applicant:", applicant);
       const result = await dbService.addAskToRideMongo(rideItemId, applicant);
+      let usersToNotify = [];
+      usersToNotify.push(rideItem.user);
+      const eventType = EventTypes.ASK;
+      let initiator = applicant._id;
+      // console.log("usersToNotify", usersToNotify);
+      // console.log("usersToNotify", eventType);
+      // console.log("usersToNotify", initiator);
+      await dbService.addNotifyToUser(usersToNotify, initiator, eventType);
+
       return res
         .status(200)
-        .json({ message: "ask added to ride", status: "OK", result });
+        .json({ message: "ask added to ride", status: "OK" });
     } catch (e) {
       console.log(e);
       return res
@@ -164,7 +175,7 @@ class RideController {
   async updateDialog(req, res, next) {
     //debugger;
     try {
-      const { author, content, participants, referedAsk } = req.body;
+      const { author, content, referedAsk } = req.body;
       //   console.log("req.body", req.body);
       //   console.log("participants:", participants);
       //   console.log("referedAsk:", referedAsk);
@@ -196,10 +207,14 @@ class RideController {
   async confirmAsk(req, res, next) {
     try {
       const payload = req.body;
-      // console.log(payload);
+      console.log(payload);
       await dbService.confirmAskToRideMongo(payload);
       await dbService.modifyAskAfterConfirmMongo(payload);
-
+      let usersToNotify = [];
+      usersToNotify.push(payload.state.askItem.user);
+      const eventType = EventTypes.CONFIRM;
+      let initiator = payload.state.rideItem._id;
+      await dbService.addNotifyToUser(usersToNotify, initiator, eventType);
       return res.status(200).json("ask confirmed");
     } catch (e) {
       process.stdout.write(e);
