@@ -27,7 +27,7 @@ class AuthController {
       }
 
       const token = jwt.sign({ id: user._id, roles: user.roles }, secretKey, {
-        expiresIn: "300s",
+        expiresIn: "1200s",
       });
       return res.json({
         token,
@@ -83,7 +83,9 @@ class AuthController {
   async auth(req, res) {
     try {
       const user = await User.findOne({ _id: req.user.id });
-      const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: "300s" });
+      const token = jwt.sign({ id: user.id }, secretKey, {
+        expiresIn: "1200s",
+      });
       return res.json({
         token,
         user: {

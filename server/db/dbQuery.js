@@ -82,7 +82,7 @@ const addNotifyToUser = (usersToNotify, initiator, eventType) => {
   });
 };
 
-const addAskToRideMongo = (rideItemId, applicant) => {
+const addAskToRide = (rideItemId, applicant) => {
   // debugger;
   return new Promise(async function (resolve, reject) {
     //const asksArray = matched.map((ask) => ask._id);
@@ -249,7 +249,7 @@ module.exports = {
   findAsksByIdArray,
   addOffersToMongo,
   addNotifyToUser,
-  addAskToRideMongo,
+  addAskToRide,
   modifyAskAfterConfirmMongo,
   deleteConfirmationInRide,
   deleteRide,

@@ -116,21 +116,16 @@ class RideController {
     try {
       const { rideItem, applicant } = req.body;
       const rideItemId = rideItem._id;
-      // console.log("rideItemId:", rideItemId);
-      // console.log("applicant:", applicant);
-      const result = await dbService.addAskToRideMongo(rideItemId, applicant);
+      const result = await dbService.addAskToRide(rideItemId, applicant);
       let usersToNotify = [];
       usersToNotify.push(rideItem.user);
       const eventType = EventTypes.ASK;
       let initiator = applicant._id;
-      // console.log("usersToNotify", usersToNotify);
-      // console.log("usersToNotify", eventType);
-      // console.log("usersToNotify", initiator);
       await dbService.addNotifyToUser(usersToNotify, initiator, eventType);
 
       return res
         .status(200)
-        .json({ message: "ask added to ride", status: "OK" });
+        .json({ message: "ask added to ride", status: "OK", data: result });
     } catch (e) {
       console.log(e);
       return res
@@ -269,6 +264,18 @@ class RideController {
     } catch (e) {
       console.log(e);
       res.status(500).json({ message: "rides not found" });
+    }
+  }
+  async findNotifications(req, res, next) {
+    const { id } = req.params;
+    try {
+      // const notifications = await User.findOne({ _id: id });
+      const notifications = await User.find({ _id: id }, { notifications: 1 });
+      console.log("notifications", notifications);
+      return res.status(200).json(notifications);
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({ message: "notifications not found" });
     }
   }
   async findRideById(req, res, next) {

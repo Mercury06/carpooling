@@ -47,6 +47,7 @@ router.get("/findaskbyid/:id", RideController.findAskById);
 
 router.post("/findasks", RideController.findAsks);
 
+router.get("/find-notifications/:id", RideController.findNotifications);
 //return all rides by user id for rides container
 router.get("/findmyrides/:id", RideController.findMyRides);
 
