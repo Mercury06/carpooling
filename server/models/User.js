@@ -2,19 +2,17 @@ const { Schema, model } = require("mongoose");
 
 const User = new Schema(
   {
-    username: { type: String, required: true, unique: true },
+    firstName: { type: String, minlength: 2, maxlength: 11, required: true },
+    lastName: { type: String, minlength: 2, maxlength: 11, required: true },
+    email: { type: String, unique: true },
     password: { type: String, required: true },
     phone: { type: String },
-    email: { type: String },
-    fitstName: { type: String, minlength: 1, maxlength: 11 },
-    surname: { type: String, minlength: 1, maxlength: 11 },
     created: { type: Date },
-    //dateOfBirth: {type: Date},
-    age: { type: Number }, //? заменить на function от dateOfBirth
+    dateOfBirth: { type: Date },
     avatar: { type: String },
     rate: { type: Number, default: 5 },
     feedbacks: [{ type: String }],
-    roles: [{ type: String, ref: "Role" }], //указываем ссылку на сущность роли
+    roles: [{ type: String, ref: "Role" }], //role entity reference
     accessFailedCount: { type: Number },
     notifications: [
       {

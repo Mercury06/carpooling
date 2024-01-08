@@ -15,13 +15,13 @@ const secretKey = process.env.SECRET_KEY;
 router.post(
   "/registration",
   [
-    //check('email', 'Uncorrect email').isEmail(),
+    check("email", "Uncorrect email").isEmail(),
     check("username", "Username field should not be empty").notEmpty(),
     check(
       "password",
-      "Password must be longer than 3 and shorter than 12"
+      "Password must be longer than 6 and shorter than 12"
     ).isLength({
-      min: 3,
+      min: 6,
       max: 12,
     }),
   ],

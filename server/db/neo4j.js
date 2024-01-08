@@ -6,7 +6,7 @@ const password = "qwe123";
 const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
 const session = driver.session();
 
-const fromPromise = (argFrom, argTo) =>
+const getGraphQuery = (argFrom, argTo) =>
   new Promise(function (resolve, reject) {
     //const readQuery = `MATCH p= (n:City3{mongoId: $cityNameFrom})-[r*]->(m:City3{mongoId: $cityNameTo}) return nodes(p), r`;
     //const readQuery = `MATCH p= (n:City5{mongoId: $cityNameFrom})-[r*]->(m:City5{mongoId: $cityNameTo}) return nodes(p), r`;
@@ -17,15 +17,19 @@ const fromPromise = (argFrom, argTo) =>
     let direction;
     session.run(readQuery, { argFrom, argTo }).then(function (result) {
       //console.log('resulty:', result.records[0]._fields[1].type[0]);
-      result.records[0]._fields[0].forEach(function (record) {
-        cities.push({
-          localityName: record.properties.name,
-          mongoId: record.properties.mongoId,
+      console.log("result record", result.records);
+      console.log("result record length", result.records.length);
+      if (result.records && result.records.length > 0) {
+        result.records[0]._fields[0].forEach(function (record) {
+          cities.push({
+            localityName: record.properties.name,
+            mongoId: record.properties.mongoId,
+          });
         });
-      });
-      direction = result.records[0]._fields[1][0].type;
-      resolve({ cities, direction });
+        direction = result.records[0]._fields[1][0].type;
+        resolve({ cities, direction });
+      } else return;
     });
   });
 
-module.exports.getGraphData = fromPromise;
+module.exports.getGraphData = getGraphQuery;

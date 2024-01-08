@@ -9,6 +9,42 @@ const { check, validationResult } = require("express-validator");
 const secretKey = process.env.SECRET_KEY;
 
 class AuthController {
+  async registration(req, res) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array(),
+          message: "uncorrect request",
+        });
+      }
+      console.log("req.body in reg controller", req.body);
+      // const { username, password } = req.body;
+      // const candidate = await User.findOne({ username }); // проверим существует ли пользователь с таким имэил в базе
+
+      // if (candidate) {
+      //   return res
+      //     .status(400)
+      //     .json({ message: `User with login ${username} already exist` });
+      // }
+      // const hashPassword = bcrypt.hashSync(password, 8); // хэшируем пароль для безопасности
+      // const userRole = await Role.findOne({ value: "User" });
+      // const created = new Date();
+      // const user = new User({
+      //   username,
+      //   password: hashPassword,
+      //   created,
+      //   roles: [userRole.value],
+      // });
+      // await user.save(); //сохраним нового поьзователя в БД
+      return res.json({ message: "User was created" });
+    } catch (e) {
+      console.log(e);
+      //res.send({message: "Server error"})
+      res.status(500).json({ message: e.message });
+    }
+  }
+
   async login(req, res) {
     try {
       // console.log("from login");
@@ -44,42 +80,7 @@ class AuthController {
       res.status(500).json({ message: e.message });
     }
   }
-  async registration(req, res) {
-    console.log("from POST registration");
-    console.log(req.body);
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({
-          errors: errors.array(),
-          message: "Uncorrect request",
-        });
-      }
-      const { username, password } = req.body; // получим имэил и пароль из тела запроса
-      const candidate = await User.findOne({ username }); // проверим существует ли пользователь с таким имэил в базе
 
-      if (candidate) {
-        return res
-          .status(400)
-          .json({ message: `User with login ${username} already exist` });
-      }
-      const hashPassword = bcrypt.hashSync(password, 8); // хэшируем пароль для безопасности
-      const userRole = await Role.findOne({ value: "User" });
-      const created = new Date();
-      const user = new User({
-        username,
-        password: hashPassword,
-        created,
-        roles: [userRole.value],
-      });
-      await user.save(); //сохраним нового поьзователя в БД
-      return res.json({ message: "User was created" });
-    } catch (e) {
-      console.log(e);
-      //res.send({message: "Server error"})
-      res.status(500).json({ message: e.message });
-    }
-  }
   async auth(req, res) {
     try {
       const user = await User.findOne({ _id: req.user.id });
@@ -91,7 +92,6 @@ class AuthController {
         user: {
           id: user.id,
           username: user.username,
-
           avatar: user.avatar,
         },
       });

@@ -269,9 +269,11 @@ class RideController {
   async findNotifications(req, res, next) {
     const { id } = req.params;
     try {
-      // const notifications = await User.findOne({ _id: id });
-      const notifications = await User.find({ _id: id }, { notifications: 1 });
-      console.log("notifications", notifications);
+      const notifications = await User.findOne(
+        { _id: id },
+        { notifications: 1 }
+      );
+      // console.log("notifications", notifications);
       return res.status(200).json(notifications);
     } catch (e) {
       console.log(e);
