@@ -10,39 +10,40 @@ const secretKey = process.env.SECRET_KEY;
 
 class AuthController {
   async registration(req, res) {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({
-          errors: errors.array(),
-          message: "uncorrect request",
-        });
-      }
-      console.log("req.body in reg controller", req.body);
-      // const { username, password } = req.body;
-      // const candidate = await User.findOne({ username }); // проверим существует ли пользователь с таким имэил в базе
+    console.log("req.body", req.body);
+    // try {
+    //   const errors = validationResult(req);
+    //   if (!errors.isEmpty()) {
+    //     return res.status(400).json({
+    //       errors: errors.array(),
+    //       message: "uncorrect request",
+    //     });
+    //   }
+    //   const { firstName, lastName, email, password } = req.body;
+    //   const candidate = await User.findOne({ email });
 
-      // if (candidate) {
-      //   return res
-      //     .status(400)
-      //     .json({ message: `User with login ${username} already exist` });
-      // }
-      // const hashPassword = bcrypt.hashSync(password, 8); // хэшируем пароль для безопасности
-      // const userRole = await Role.findOne({ value: "User" });
-      // const created = new Date();
-      // const user = new User({
-      //   username,
-      //   password: hashPassword,
-      //   created,
-      //   roles: [userRole.value],
-      // });
-      // await user.save(); //сохраним нового поьзователя в БД
-      return res.json({ message: "User was created" });
-    } catch (e) {
-      console.log(e);
-      //res.send({message: "Server error"})
-      res.status(500).json({ message: e.message });
-    }
+    //   if (candidate) {
+    //     return res
+    //       .status(400)
+    //       .json({ message: `User with email ${email} already exist` });
+    //   }
+    //   const hashPassword = bcrypt.hashSync(password, 8);
+    //   const userRole = await Role.findOne({ value: "User" });
+    //   const created = new Date();
+    //   const user = new User({
+    //     firstName,
+    //     lastName,
+    //     email,
+    //     password: hashPassword,
+    //     created,
+    //     roles: [userRole.value],
+    //   });
+    //   await user.save();
+    //   return res.status(201).json({ message: "new user created", user });
+    // } catch (e) {
+    //   console.log(e);
+    //   res.status(400).json({ message: e.message });
+    // }
   }
 
   async login(req, res) {
