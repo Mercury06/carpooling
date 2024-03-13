@@ -5,58 +5,56 @@ const config = require("config");
 const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 
-// const secretKey = config.get("secretKey") || process.env.SECRET_KEY;
 const secretKey = process.env.SECRET_KEY;
 
 class AuthController {
   async registration(req, res) {
-    console.log("req.body", req.body);
-    // try {
-    //   const errors = validationResult(req);
-    //   if (!errors.isEmpty()) {
-    //     return res.status(400).json({
-    //       errors: errors.array(),
-    //       message: "uncorrect request",
-    //     });
-    //   }
-    //   const { firstName, lastName, email, password } = req.body;
-    //   const candidate = await User.findOne({ email });
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          errors: errors.array(),
+          message: "uncorrect request",
+        });
+      }
+      const { firstName, lastName, email, password } = req.body;
+      console.log("req.body", req.body);
+      const candidate = await User.findOne({ email });
 
-    //   if (candidate) {
-    //     return res
-    //       .status(400)
-    //       .json({ message: `User with email ${email} already exist` });
-    //   }
-    //   const hashPassword = bcrypt.hashSync(password, 8);
-    //   const userRole = await Role.findOne({ value: "User" });
-    //   const created = new Date();
-    //   const user = new User({
-    //     firstName,
-    //     lastName,
-    //     email,
-    //     password: hashPassword,
-    //     created,
-    //     roles: [userRole.value],
-    //   });
-    //   await user.save();
-    //   return res.status(201).json({ message: "new user created", user });
-    // } catch (e) {
-    //   console.log(e);
-    //   res.status(400).json({ message: e.message });
-    // }
+      if (candidate) {
+        console.log("candidate found", candidate);
+        return res
+          .status(400)
+          .json({ message: `User with email ${email} already exist` });
+      }
+      const hashPassword = bcrypt.hashSync(password, 8);
+      console.log("hashed:", hashPassword);
+      const userRole = await Role.findOne({ value: "User" });
+      const created = new Date();
+      const user = new User({
+        firstName,
+        lastName,
+        email,
+        password: hashPassword,
+        created,
+        roles: [userRole.value],
+      });
+      await user.save();
+      return res.status(201).json({ message: "new user created", user });
+    } catch (e) {
+      console.log(e);
+      res.status(400).json({ message: e.message });
+    }
   }
 
   async login(req, res) {
     try {
-      // console.log("from login");
-      // console.log("req.body:", req.body);
-      const { username, password } = req.body;
-      const user = await User.findOne({ username });
+      const { email, password } = req.body;
 
+      const user = await User.findOne({ email });
       if (!user) {
         return res.status(400).json({ message: "User not found" });
       }
-
       const isPassValid = bcrypt.compareSync(password, user.password);
 
       if (!isPassValid) {
@@ -70,9 +68,11 @@ class AuthController {
         token,
         user: {
           id: user._id,
-          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
           roles: user.roles,
-          avatar: user.avatar,
+          avatar: user.avatar || null,
         },
       });
     } catch (e) {
