@@ -37,6 +37,18 @@ const findOffersByIdArray = (offersIdArray) => {
   });
 };
 
+// static findOffersByIdArray = (offersIdArray: Array<string>): Promise<Array<IRide>> => {
+
+//   return new Promise(async function (resolve, reject) {
+//     try {
+//       const ridesAsOffers = await RideModel.find({ _id: { $in: offersIdArray } });
+//       resolve(ridesAsOffers);
+//     } catch (err){
+//       reject(err);
+//     }
+//   });
+// };
+
 const findAsksByIdArray = (asksIdArray) => {
   // debugger;
   //console.log("offers inside action:", offersId);
@@ -49,6 +61,8 @@ const findAsksByIdArray = (asksIdArray) => {
 
 const addOffersToMongo = (matched, applicant) => {
   //debugger;
+  console.log("2matched in addOffersToMongo", matched);
+  console.log("3applicant in addOffersToMongo", applicant);
   return new Promise(async function (resolve, reject) {
     const asksArray = matched.map((ask) => ask._id);
     const signed = Ask.updateMany(
@@ -101,12 +115,11 @@ const addAskToRide = (rideItemId, applicant) => {
 const confirmAskToRideMongo = (payload) => {
   //debugger;
   const { state } = payload;
-  //console.log("state in method:", state);
+  console.log("payload in $$$$$$$$$$$$$$:", payload);
+  // console.log("state in $$$$$$$$$$$$$$:", state);
   const rideItemId = state.rideItem._id;
   const askItemId = state.askItem._id;
 
-  // console.log("rideItemId in method", rideItemId);
-  // console.log("askItem._id in method", askItemId);
   return new Promise(async function (resolve, reject) {
     const signed = Ride.updateMany(
       { _id: rideItemId },
@@ -167,11 +180,9 @@ const deleteConfirmationInRide = (payload) => {
   });
 };
 
-const deleteRide = (payload) => {
+const deleteRide = (rideId) => {
   //debugger;
-  //console.log("payload in deleteConfirmationInRide", payload);
-  const rideId = payload._id;
-  console.log("payload._id:", rideId);
+  console.log("77777payload in deleteConfirmationInRide", rideId);
 
   return new Promise(async function (resolve, reject) {
     const signed = Ride.deleteOne({ _id: rideId });
@@ -181,7 +192,7 @@ const deleteRide = (payload) => {
 
 const modifyAskAfterDeleteRide = (payload) => {
   //debugger;
-  console.log("in modifyAskAfterDeleteRide:", payload);
+  console.log("88888in modifyAskAfterDeleteRide:", payload);
   const passengersIdArray = payload.passengers.map((item) => item._id);
   console.log("passengersIdArray:", passengersIdArray);
   // const { state } = payload;

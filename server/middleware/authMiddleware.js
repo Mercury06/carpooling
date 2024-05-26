@@ -19,6 +19,7 @@ module.exports = function (req, res, next) {
           .status(403)
           .json({ success: false, message: "jwt verify error" });
       req.user = decoded;
+      console.log("DECODED!", decoded);
       next();
     });
   } catch (e) {

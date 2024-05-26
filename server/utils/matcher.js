@@ -1,4 +1,6 @@
 function findMatchingSubs(route, subscriptions) {
+  console.log("$$$$$$route in findMatchingSubs:", route);
+  console.log("$$$$$$$subscriptions in findMatchingSubs:", subscriptions);
   const subroutesSet = prepareSubroutesSet(route);
   //console.log('subroutesSet inside:', subroutesSet);
   //console.log('subscriptions inside:', subscriptions);

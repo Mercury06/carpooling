@@ -15,9 +15,9 @@ class DBListener {
       if (next.operationType === "insert") {
         let points = next.fullDocument.points;
         let route = points.map((item) => item.localityName);
-        //console.log("route:", route);
+        console.log("route:", route);
         let subs = await dbService.getRegisteredSubs(route);
-        // console.log("get subs mongo*******:", subs);
+        console.log("get subs mongo*******:", subs);
         let matched = getMatchedData(route, subs);
         // console.log("matched*******:", matched);
         let applicant = JSON.stringify(next.fullDocument);

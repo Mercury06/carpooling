@@ -47,7 +47,7 @@ class RideController {
       // console.log('destination.id:', destination.id);
       // console.log("user:", user);
 
-      //const points = await getGraphData(localityFrom.id, destination.id);
+      // const points = await getGraphData(localityFrom.id, destination.id);
       const { cities, direction } = await getGraphData(
         localityFrom.id,
         destination.id
@@ -73,8 +73,9 @@ class RideController {
   async deleteRide(req, res, next) {
     try {
       const { payload } = req.body;
-      //console.log("payload delete ride:", payload);
-      await dbService.deleteRide(payload);
+      const rideIdToDelete = payload._id;
+      console.log("payload delete ride:", payload);
+      await dbService.deleteRide(rideIdToDelete);
       await dbService.modifyAskAfterDeleteRide(payload);
 
       return res.status(200).json("ride deleted");
@@ -91,14 +92,17 @@ class RideController {
       // console.log("destination.id:", destination.id);
       // console.log("user:", user);
 
-      //const { cities, direction } = await getGraphData(localityFrom.id, destination.id);
+      const { cities, direction } = await getGraphData(
+        localityFrom.id,
+        destination.id
+      );
       //console.log('apii data:', cities);
       //const points = cities;
       const ask = new Ask({
         localityFrom,
         destination,
-        //points,
-        //direction,
+        points,
+        direction,
         date,
         user,
       });
@@ -219,10 +223,9 @@ class RideController {
   async unconfirmAsk(req, res, next) {
     try {
       const { payload } = req.body;
-      //console.log("payload unconfirm:", payload);
-      await dbService.deleteConfirmationInRide(payload);
-      await dbService.modifyAskAfterUnconfirm(payload);
-      //console.log("resulty:", result);
+      console.log("payload unconfirm 789789:", payload);
+      // await dbService.deleteConfirmationInRide(payload);
+      // await dbService.modifyAskAfterUnconfirm(payload);
       return res.status(200).json("confirmation rejected");
     } catch (e) {
       console.log(e);
@@ -324,7 +327,7 @@ class RideController {
       // let payload = req.body.payload.trim();
       // let {payload} = req.body;
       let payload = req.query.search;
-      //console.log("from setting.routes.js:", payload)
+      console.log("from setting.routes.js:", payload);
       let search = payload
         ? await Locality.find({
             locality: { $regex: new RegExp("^" + payload + ".*", "i") },
@@ -334,7 +337,6 @@ class RideController {
       return res.status(200).json(search);
     } catch (e) {
       console.log(e);
-      //res.send({message: "Server error"})
       res.status(400).json({ message: "search error" });
     }
   }
